@@ -56,7 +56,7 @@ export default function Contracts() {
 
   const contractsList: ContractRecord[] = rawContracts.map((c: any) => ({
     id: c.id,
-    code: c.contractCode || `HĐ-${c.id.substring(0, 8).toUpperCase()}`,
+    code: c.contractCode,
     title: c.title,
     contractValue: Number(c.contractValue) || 0,
     contractType: c.contractType as any,

@@ -5,9 +5,8 @@ import React, { useRef, useState } from 'react';
 export default function SpotlightContainer({
   children,
   className = '',
-  spotlightColor = 'rgba(79, 70, 229, 0.08)',
-  spotlightRadius = 300,
-  showGrid = true,
+  spotlightColor = 'rgba(66, 136, 201, 0.08)',
+  spotlightRadius = 320,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -37,30 +36,15 @@ export default function SpotlightContainer({
       onMouseLeave={handleMouseLeave}
       className={`relative overflow-hidden ${className}`}
     >
-      {/* Spotlight overlay */}
+      {/* Subtle Azure Spotlight overlay */}
       <div
         className="absolute inset-0 pointer-events-none transition-opacity duration-300"
         style={{
           opacity,
           background: `radial-gradient(${spotlightRadius}px circle at ${coords.x}px ${coords.y}px, ${spotlightColor}, transparent 80%)`,
-          zIndex: 2,
+          zIndex: 1,
         }}
       />
-      
-      {/* Grid overlay */}
-      {showGrid && (
-        <div
-          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04] pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(var(--color-accent) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-            zIndex: 1,
-          }}
-        />
-      )}
-      
-      {/* Noise background overlay */}
-      <div className="noise-overlay" style={{ zIndex: 0 }} />
       
       {/* Content wrapper */}
       <div className="relative z-10 w-full h-full">
@@ -69,3 +53,4 @@ export default function SpotlightContainer({
     </div>
   );
 }
+

@@ -67,30 +67,30 @@ export default function SalesDashboard() {
     >
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card h-28 p-6 flex flex-col justify-between">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('salesDashboard.openOpportunities')}</span>
-            <Target size={16} className="text-indigo-500" />
+            <span className="text-xs font-mono font-semibold uppercase text-[var(--color-muted-fg)]">{t('salesDashboard.openOpportunities')}</span>
+            <Target size={16} className="text-[var(--color-accent)]" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
             <AnimatedCounter value={metrics?.activeOpportunities ?? 0} />
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card h-28 p-6 flex flex-col justify-between">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('salesDashboard.opportunityValue')}</span>
-            <Clock size={16} className="text-emerald-500" />
+            <span className="text-xs font-mono font-semibold uppercase text-[var(--color-muted-fg)]">{t('salesDashboard.opportunityValue')}</span>
+            <Clock size={16} className="text-emerald-400" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
             <AnimatedCounter value={metrics?.pipelineValue ?? 0} formatter={(v) => formatVND(v)} />
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card h-28 p-6 flex flex-col justify-between">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('salesDashboard.forecast30d')}</span>
-            <Target size={16} className="text-amber-500" />
+            <span className="text-xs font-mono font-semibold uppercase text-[var(--color-muted-fg)]">{t('salesDashboard.forecast30d')}</span>
+            <Target size={16} className="text-amber-400" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
             <AnimatedCounter value={metrics?.revenueForecast30Days ?? 0} formatter={(v) => formatVND(v)} />
@@ -101,8 +101,8 @@ export default function SalesDashboard() {
       {/* Asymmetric Bento Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Pipeline funnel sparklines */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('salesDashboard.myPipeline')}</h3>
+        <motion.div variants={itemVariants} className="lg:col-span-2 az-card p-6">
+          <h3 className="text-sm font-bold text-[var(--color-fg)] mb-6">{t('salesDashboard.myPipeline')}</h3>
           <div className="space-y-4">
             {activeStages.map((stg, idx) => (
               <div key={idx} className="flex items-center justify-between border-b border-[var(--color-border)] pb-3 last:border-0 last:pb-0">
@@ -117,8 +117,8 @@ export default function SalesDashboard() {
                       <BarChart data={[stg]}>
                         <defs>
                           <linearGradient id={`sparkGrad-${idx}`} x1="0" y1="0" x2="1" y2="0">
-                            <stop offset="0%" stopColor="#4F46E5" />
-                            <stop offset="100%" stopColor="#818CF8" />
+                            <stop offset="0%" stopColor="var(--color-accent)" />
+                            <stop offset="100%" stopColor="#87a7f5" />
                           </linearGradient>
                         </defs>
                         <Bar dataKey="value" fill={`url(#sparkGrad-${idx})`} radius={[4, 4, 4, 4]} />
@@ -132,9 +132,9 @@ export default function SalesDashboard() {
         </motion.div>
 
         {/* Expiring quotations */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 border-l-4 border-l-amber-500 hover-action">
+        <motion.div variants={itemVariants} className="az-card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('salesDashboard.quotationsExpiring')}</h3>
+            <h3 className="text-sm font-bold text-[var(--color-fg)]">{t('salesDashboard.quotationsExpiring')}</h3>
             <AlertCircle size={16} className="text-amber-500 animate-pulse" />
           </div>
           {quotes.length === 0 ? (
@@ -142,13 +142,13 @@ export default function SalesDashboard() {
           ) : (
             <div className="space-y-3">
               {quotes.map((q, idx) => (
-                <div key={idx} className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between hover:border-amber-500/40 transition-colors duration-200">
+                <div key={idx} className="bg-[var(--color-bg)]/80 border border-[var(--color-border)] rounded-lg p-3 flex flex-col justify-between hover:border-amber-500/40 transition-colors duration-200">
                   <div className="flex justify-between items-start">
                     <span className="text-[10px] font-mono font-bold text-[var(--color-accent)]">{q.code}</span>
-                    <span className="text-[10px] text-rose-500 font-medium bg-rose-500/5 px-2 py-0.5 rounded-full border border-rose-500/10">{t('salesDashboard.due')}: {formatDate(q.validUntil)}</span>
+                    <span className="text-[10px] text-rose-400 font-medium bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">{t('salesDashboard.due')}: {formatDate(q.validUntil)}</span>
                   </div>
                   <p className="text-xs font-semibold text-[var(--color-fg)] mt-1 truncate">{q.projectName}</p>
-                  <p className="text-xs font-mono text-emerald-500 font-semibold mt-1">{formatVND(q.grandTotal)}</p>
+                  <p className="text-xs font-mono text-emerald-400 font-semibold mt-1">{formatVND(q.grandTotal)}</p>
                 </div>
               ))}
             </div>
@@ -158,19 +158,19 @@ export default function SalesDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Leads today list */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('salesDashboard.newLeads')}</h3>
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-bold text-[var(--color-fg)] mb-6">{t('salesDashboard.newLeads')}</h3>
           {leads.length === 0 ? (
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('salesDashboard.noNewLeads')} />
           ) : (
             <div className="space-y-3">
               {leads.map((l, idx) => (
-                <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-xl hover:border-[var(--color-accent)]/20 transition-all duration-200">
+                <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)]/80 border border-[var(--color-border)] p-3 rounded-lg hover:border-[var(--color-accent)]/30 transition-all duration-200">
                   <div>
                     <h4 className="text-xs font-bold text-[var(--color-fg)]">{l.name}</h4>
                     <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5">{l.company || t('salesDashboard.individual')}</p>
                   </div>
-                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-mono font-medium border border-emerald-500/10">
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono font-semibold border border-emerald-500/20">
                     {l.status}
                   </span>
                 </div>
@@ -180,8 +180,8 @@ export default function SalesDashboard() {
         </motion.div>
 
         {/* Activity feed */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('salesDashboard.recentActivity')}</h3>
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-bold text-[var(--color-fg)] mb-6">{t('salesDashboard.recentActivity')}</h3>
           <Timeline
             className="mt-2 text-xs"
             items={[

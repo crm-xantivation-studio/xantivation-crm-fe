@@ -26,7 +26,7 @@ export function FloatingInput({
   };
 
   return (
-    <div className={`relative w-full group pt-6 pb-2 border-b border-[var(--color-border)] transition-colors duration-300 ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
+    <div className={`relative w-full group pt-3.5 pb-1 border-b border-[var(--color-border)] transition-colors duration-300 ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
       <input
         type={type}
         value={value}
@@ -35,21 +35,21 @@ export function FloatingInput({
         onBlur={handleBlur}
         required={required}
         disabled={disabled}
-        className="w-full bg-transparent py-1 transition-colors duration-300 outline-none text-[var(--color-fg)] text-base lg:text-lg"
+        className="w-full bg-transparent py-0.5 transition-colors duration-300 outline-none text-[var(--color-fg)] text-xs sm:text-sm font-medium"
         placeholder=" "
       />
       <label
         className={`absolute left-0 transition-all duration-300 pointer-events-none ${
           focused || value
-            ? 'top-0 text-xs lg:text-sm text-[var(--color-accent)] font-bold'
-            : 'top-6 text-base lg:text-lg text-[var(--color-muted-fg)]'
+            ? '-top-0.5 text-[10px] sm:text-xs text-[var(--color-accent)] font-semibold'
+            : 'top-3.5 text-xs sm:text-sm text-[var(--color-muted-fg)]'
         }`}
       >
         {label}
       </label>
-      {/* Subtle bottom glow line overlays the border exactly */}
+      {/* Bottom active line */}
       <div
-        className={`absolute bottom-[-1px] left-0 h-[2px] bg-gradient-to-r from-[var(--color-accent)] to-cyan-500 transition-all duration-300 ${
+        className={`absolute bottom-[-1px] left-0 h-[2px] bg-[var(--color-accent)] transition-all duration-300 ${
           focused ? 'w-full' : 'w-0'
         }`}
       ></div>

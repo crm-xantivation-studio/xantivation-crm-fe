@@ -112,9 +112,9 @@ export default function AdminDashboard() {
     >
       {/* 4 Bento Overview Metrics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card p-6 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('adminDashboard.leadSystem')}</span>
+            <span className="text-xs font-sans font-medium text-[var(--color-muted-fg)]">{t('adminDashboard.leadSystem')}</span>
             <Users size={16} className="text-indigo-500" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
@@ -122,9 +122,9 @@ export default function AdminDashboard() {
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card p-6 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('adminDashboard.customer')}</span>
+            <span className="text-xs font-sans font-medium text-[var(--color-muted-fg)]">{t('adminDashboard.customer')}</span>
             <Shield size={16} className="text-emerald-500" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
@@ -132,9 +132,9 @@ export default function AdminDashboard() {
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card p-6 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('adminDashboard.opportunity')}</span>
+            <span className="text-xs font-sans font-medium text-[var(--color-muted-fg)]">{t('adminDashboard.opportunity')}</span>
             <Layers size={16} className="text-amber-500" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
@@ -142,9 +142,9 @@ export default function AdminDashboard() {
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card p-6 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('adminDashboard.activeContracts')}</span>
+            <span className="text-xs font-sans font-medium text-[var(--color-muted-fg)]">{t('adminDashboard.activeContracts')}</span>
             <Activity size={16} className="text-purple-500" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
@@ -156,8 +156,8 @@ export default function AdminDashboard() {
       {/* Row 2: User Activity & AI Governance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* User Activity Chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('adminDashboard.weeklyActivity')}</h3>
+        <motion.div variants={itemVariants} className="lg:col-span-2 az-card p-6">
+          <h3 className="text-sm font-semibold text-[var(--color-fg)] mb-6">{t('adminDashboard.weeklyActivity')}</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={userActivityData} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
@@ -201,26 +201,26 @@ export default function AdminDashboard() {
         </motion.div>
 
         {/* AI Governance Toggles */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6 flex items-center gap-1.5">
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-semibold text-[var(--color-fg)] mb-6 flex items-center gap-1.5">
             <Bot size={16} /> AI Governance Controls
           </h3>
           <div className="space-y-4">
-            <div className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-xl hover:border-[var(--color-accent)]/20 transition-all duration-200">
+            <div className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-lg hover:border-[var(--color-accent)]/20 transition-all duration-200">
               <div>
                 <p className="text-xs font-semibold text-[var(--color-fg)]">Lead BANT scoring</p>
                 <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5">{t('adminDashboard.aiLeadScoring')}</p>
               </div>
               <Switch defaultChecked onChange={(chk) => handleToggleGov(chk, 'Lead BANT scoring')} />
             </div>
-            <div className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-xl hover:border-[var(--color-accent)]/20 transition-all duration-200">
+            <div className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-lg hover:border-[var(--color-accent)]/20 transition-all duration-200">
               <div>
                 <p className="text-xs font-semibold text-[var(--color-fg)]">Opp Coach assistant</p>
                 <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5">{t('adminDashboard.aiDealAnalysis')}</p>
               </div>
               <Switch defaultChecked onChange={(chk) => handleToggleGov(chk, 'Opp Coach assistant')} />
             </div>
-            <div className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-xl hover:border-[var(--color-accent)]/20 transition-all duration-200">
+            <div className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-lg hover:border-[var(--color-accent)]/20 transition-all duration-200">
               <div>
                 <p className="text-xs font-semibold text-[var(--color-fg)]">Contract Risk Audit</p>
                 <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5">{t('adminDashboard.aiContractRisk')}</p>
@@ -234,8 +234,8 @@ export default function AdminDashboard() {
       {/* Row 3: Audit Logs & Integration Status */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Audit Logs */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('adminDashboard.auditLogs')}</h3>
+        <motion.div variants={itemVariants} className="lg:col-span-2 az-card p-6">
+          <h3 className="text-sm font-semibold text-[var(--color-fg)] mb-6">{t('adminDashboard.auditLogs')}</h3>
           <Table
             dataSource={logs}
             columns={logColumns}
@@ -248,11 +248,11 @@ export default function AdminDashboard() {
         </motion.div>
 
         {/* Integration Connection status */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('adminDashboard.serviceStatus')}</h3>
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-semibold text-[var(--color-fg)] mb-6">{t('adminDashboard.serviceStatus')}</h3>
           <div className="space-y-3">
             {integrations.map((item, idx) => (
-              <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-xl hover:border-[var(--color-accent)]/20 transition-all duration-200">
+              <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-lg hover:border-[var(--color-accent)]/20 transition-all duration-200">
                 <span className="text-xs font-semibold text-[var(--color-fg)]">{item.name}</span>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 block shrink-0 animate-pulse"></span>

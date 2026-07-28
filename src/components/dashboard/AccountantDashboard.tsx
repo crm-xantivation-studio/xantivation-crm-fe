@@ -65,9 +65,9 @@ export default function AccountantDashboard() {
     >
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28 border-l-4 border-l-rose-500">
+        <motion.div variants={itemVariants} className="az-card p-6 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-rose-500">{t('accountantDashboard.totalOverdue')}</span>
+            <span className="text-xs font-sans font-medium text-rose-500">{t('accountantDashboard.totalOverdue')}</span>
             <AlertTriangle size={16} className="text-rose-500 animate-pulse" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-rose-500">
@@ -75,9 +75,9 @@ export default function AccountantDashboard() {
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card p-6 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('accountantDashboard.activeContractRevenue')}</span>
+            <span className="text-xs font-sans font-medium text-[var(--color-muted-fg)]">{t('accountantDashboard.activeContractRevenue')}</span>
             <TrendingUp size={16} className="text-emerald-500" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
@@ -85,9 +85,9 @@ export default function AccountantDashboard() {
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card p-6 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('accountantDashboard.signedContracts')}</span>
+            <span className="text-xs font-sans font-medium text-[var(--color-muted-fg)]">{t('accountantDashboard.signedContracts')}</span>
             <FileText size={16} className="text-indigo-500" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
@@ -99,8 +99,8 @@ export default function AccountantDashboard() {
       {/* Bento Grid: Charts & Lists */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cash Flow Chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('accountantDashboard.cashFlowTitle')}</h3>
+        <motion.div variants={itemVariants} className="lg:col-span-2 az-card p-6">
+          <h3 className="text-sm font-semibold text-[var(--color-fg)] mb-6">{t('accountantDashboard.cashFlowTitle')}</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={cashFlow} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
@@ -145,29 +145,29 @@ export default function AccountantDashboard() {
         </motion.div>
 
         {/* Invoice issuance alerts */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('accountantDashboard.invoiceRequests')}</h3>
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-semibold text-[var(--color-fg)] mb-6">{t('accountantDashboard.invoiceRequests')}</h3>
           <div className="space-y-3">
-            <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between hover:border-[var(--color-accent)]/20 transition-all duration-200">
+            <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col justify-between hover:border-[var(--color-accent)]/20 transition-all duration-200">
               <div className="flex justify-between items-start">
-                <span className="text-xs font-mono font-bold text-indigo-500">CON-2026-0004</span>
+                <span className="text-xs font-mono font-bold text-[var(--color-accent)]">CON-2026-0004</span>
                 <Tag color="orange">Pending</Tag>
               </div>
               <p className="text-xs font-semibold text-[var(--color-fg)] mt-1 truncate">CyberCore LLC</p>
               <div className="flex justify-between items-center mt-2 text-[10px] text-[var(--color-muted-fg)]">
                 <span>{t('accountantDashboard.milestone')}: Advance Payment 1 (30%)</span>
-                <span className="font-mono text-indigo-500 font-semibold">{formatVND(105000000)}</span>
+                <span className="font-mono text-[var(--color-accent)] font-semibold">{formatVND(105000000)}</span>
               </div>
             </div>
-            <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between hover:border-[var(--color-accent)]/20 transition-all duration-200">
+            <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col justify-between hover:border-[var(--color-accent)]/20 transition-all duration-200">
               <div className="flex justify-between items-start">
-                <span className="text-xs font-mono font-bold text-indigo-500">CON-2026-0009</span>
+                <span className="text-xs font-mono font-bold text-[var(--color-accent)]">CON-2026-0009</span>
                 <Tag color="orange">Pending</Tag>
               </div>
               <p className="text-xs font-semibold text-[var(--color-fg)] mt-1 truncate">Alpha Tech</p>
               <div className="flex justify-between items-center mt-2 text-[10px] text-[var(--color-muted-fg)]">
                 <span>{t('accountantDashboard.milestone')}: UI Design Handover</span>
-                <span className="font-mono text-indigo-500 font-semibold">{formatVND(72000000)}</span>
+                <span className="font-mono text-[var(--color-accent)] font-semibold">{formatVND(72000000)}</span>
               </div>
             </div>
           </div>
@@ -177,8 +177,8 @@ export default function AccountantDashboard() {
       {/* Row 2: Overdue vs Upcoming */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Overdue payments list */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-rose-500 mb-6 flex items-center gap-1.5">
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-semibold text-rose-500 mb-6 flex items-center gap-1.5">
             <AlertTriangle size={14} /> {t('accountantDashboard.overdueInvoices')}
           </h3>
           {overdue.length === 0 ? (
@@ -186,7 +186,7 @@ export default function AccountantDashboard() {
           ) : (
             <div className="space-y-3">
               {overdue.map((o, idx) => (
-                <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-xl hover:border-rose-500/20 transition-all duration-200">
+                <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-lg hover:border-rose-500/20 transition-all duration-200">
                   <div>
                     <h4 className="text-xs font-bold text-[var(--color-fg)]">{o.invoiceCode} - {o.account}</h4>
                     <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5">{o.milestone} • {t('accountantDashboard.due')}: {formatDate(o.dueDate)}</p>
@@ -202,8 +202,8 @@ export default function AccountantDashboard() {
         </motion.div>
 
         {/* Upcoming payments list */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-semibold text-[var(--color-fg)] mb-6">
             {t('accountantDashboard.upcomingCollections')}
           </h3>
           {upcoming.length === 0 ? (
@@ -211,7 +211,7 @@ export default function AccountantDashboard() {
           ) : (
             <div className="space-y-3">
               {upcoming.map((u, idx) => (
-                <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-xl hover:border-emerald-500/20 transition-all duration-200">
+                <div key={idx} className="flex justify-between items-center bg-[var(--color-bg)] border border-[var(--color-border)] p-3 rounded-lg hover:border-emerald-500/20 transition-all duration-200">
                   <div>
                     <h4 className="text-xs font-bold text-[var(--color-fg)]">{u.invoiceCode} - {u.account}</h4>
                     <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5">{u.milestone} • {t('accountantDashboard.due')}: {formatDate(u.dueDate)}</p>

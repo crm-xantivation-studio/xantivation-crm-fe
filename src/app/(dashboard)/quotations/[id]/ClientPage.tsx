@@ -149,7 +149,7 @@ export default function QuotationDetail({ params }: { params: Promise<{ id: stri
           </div>
 
           {/* Sub Tab Bodies */}
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 min-h-[300px]">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 min-h-[300px]">
             {activeSubTab === 'overview' && (
               <div className="space-y-8">
                 {/* Visual Pricing Banner */}

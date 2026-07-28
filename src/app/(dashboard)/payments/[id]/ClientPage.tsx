@@ -75,7 +75,7 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
     window.print();
   };
 
-  const invoiceNumber = p.invoiceCode || `INV-${p.id.substring(0, 8).toUpperCase()}`;
+  const invoiceNumber = p.invoiceCode;
   const amount = Number(p.amount) || 0;
   const dueDate = p.dueDate ? p.dueDate.substring(0, 10) : '';
   const paidAt = p.paidDate ? p.paidDate.substring(0, 16).replace('T', ' ') : undefined;
@@ -109,7 +109,7 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
       </div>
 
       {/* Stepper progress */}
-      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6">
+      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6">
         <Steps
           current={getStepIndex(p.status)}
           items={[

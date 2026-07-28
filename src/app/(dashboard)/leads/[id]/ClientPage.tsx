@@ -8,82 +8,6 @@ import { FloatingInput } from '@/components/FloatingInput';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-interface LeadRecord {
-  id: string;
-  leadCode: string;
-  firstName: string;
-  lastName: string;
-  company: string;
-  email: string;
-  phone: string;
-  source: string;
-  status: string;
-  owner: string;
-  createdAt: string;
-  bantScore: number;
-  budget: number;
-  serviceInterest: string;
-  need: string;
-  timeline: string;
-}
-
-const mockLeads: LeadRecord[] = [
-  {
-    id: '1',
-    leadCode: 'LEA-2026-00001',
-    firstName: 'Alice',
-    lastName: 'Smith',
-    company: 'Acme Corp',
-    email: 'alice@company.com',
-    phone: '0901234567',
-    source: 'WEBSITE',
-    status: 'NEW',
-    owner: 'System Admin',
-    createdAt: '2026-07-01',
-    bantScore: 75,
-    budget: 5000,
-    serviceInterest: 'WEBSITE',
-    need: 'Redesign company website',
-    timeline: '3 months',
-  },
-  {
-    id: '2',
-    leadCode: 'LEA-2026-00002',
-    firstName: 'John',
-    lastName: 'Miller',
-    company: 'Miller Tech',
-    email: 'john@miller.io',
-    phone: '0912345678',
-    source: 'FACEBOOK',
-    status: 'CONTACTED',
-    owner: 'Jane Smith',
-    createdAt: '2026-07-03',
-    bantScore: 50,
-    budget: 15000,
-    serviceInterest: 'APP_MVP',
-    need: 'Build mobile app MVP',
-    timeline: '6 months',
-  },
-  {
-    id: '3',
-    leadCode: 'LEA-2026-00003',
-    firstName: 'Sarah',
-    lastName: 'Connor',
-    company: 'Skynet Inc',
-    email: 'sarah@skynet.com',
-    phone: '0987654321',
-    source: 'LINKEDIN',
-    status: 'QUALIFIED',
-    owner: 'John Doe',
-    createdAt: '2026-07-05',
-    bantScore: 100,
-    budget: 50000,
-    serviceInterest: 'UI_UX',
-    need: 'UX audit and UI design system',
-    timeline: '1 month',
-  },
-];
-
 interface ActivityItem {
   id: string;
   type: 'CALL' | 'EMAIL' | 'MEETING' | 'NOTE';
@@ -573,8 +497,8 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
         </div>
 
         {/* Right Side: Sidebar Actions (1 col) */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-6">
+        <div className="lg:col-span-3 space-y-6">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 min-h-[400px]">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('leads.leadControlPanel')}
             </h3>

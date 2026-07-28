@@ -101,30 +101,30 @@ export default function ManagerDashboard() {
     >
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card h-28 p-6 flex flex-col justify-between">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('managerDashboard.totalPipelineValue')}</span>
-            <TrendingUp size={16} className="text-indigo-500" />
+            <span className="text-xs font-mono font-semibold uppercase text-[var(--color-muted-fg)]">{t('managerDashboard.totalPipelineValue')}</span>
+            <TrendingUp size={16} className="text-[var(--color-accent)]" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
             <AnimatedCounter value={metrics?.pipelineValue ?? 0} formatter={(v) => formatVND(v)} />
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card h-28 p-6 flex flex-col justify-between">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('managerDashboard.forecast30d')}</span>
-            <BarChart3 size={16} className="text-emerald-500" />
+            <span className="text-xs font-mono font-semibold uppercase text-[var(--color-muted-fg)]">{t('managerDashboard.forecast30d')}</span>
+            <BarChart3 size={16} className="text-emerald-400" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
             <AnimatedCounter value={metrics?.revenueForecast30Days ?? 0} formatter={(v) => formatVND(v)} />
           </h2>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+        <motion.div variants={itemVariants} className="az-card h-28 p-6 flex flex-col justify-between">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('managerDashboard.activeContracts')}</span>
-            <Users size={16} className="text-amber-500" />
+            <span className="text-xs font-mono font-semibold uppercase text-[var(--color-muted-fg)]">{t('managerDashboard.activeContracts')}</span>
+            <Users size={16} className="text-amber-400" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">
             <AnimatedCounter value={metrics?.activeContracts ?? 0} />
@@ -135,8 +135,8 @@ export default function ManagerDashboard() {
       {/* Charts Bento Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Pipeline Value chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('managerDashboard.pipelineByStage')}</h3>
+        <motion.div variants={itemVariants} className="lg:col-span-2 az-card p-6">
+          <h3 className="text-sm font-bold text-[var(--color-fg)] mb-6">{t('managerDashboard.pipelineByStage')}</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={funnel} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
@@ -180,8 +180,8 @@ export default function ManagerDashboard() {
         </motion.div>
 
         {/* Lead source Pie chart */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('managerDashboard.leadSources')}</h3>
+        <motion.div variants={itemVariants} className="az-card p-6">
+          <h3 className="text-sm font-bold text-[var(--color-fg)] mb-6">{t('managerDashboard.leadSources')}</h3>
           <div className="h-72 flex flex-col justify-between">
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
@@ -233,15 +233,15 @@ export default function ManagerDashboard() {
       {/* Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Forecast chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('managerDashboard.forecast6m')}</h3>
+        <motion.div variants={itemVariants} className="lg:col-span-2 az-card p-6">
+          <h3 className="text-sm font-bold text-[var(--color-fg)] mb-6">{t('managerDashboard.forecast6m')}</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={forecast} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
                 <defs>
                   <linearGradient id="foreGradM" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
+                    <stop offset="5%" stopColor="var(--color-accent)" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="var(--color-accent)" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="actGradM" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#10B981" stopOpacity={0.2} />
@@ -269,7 +269,7 @@ export default function ManagerDashboard() {
                     return null;
                   }}
                 />
-                <Area name={t('managerDashboard.forecast')} type="monotone" dataKey="forecast" stroke="#4F46E5" strokeWidth={2.5} fillOpacity={1} fill="url(#foreGradM)" />
+                <Area name={t('managerDashboard.forecast')} type="monotone" dataKey="forecast" stroke="var(--color-accent)" strokeWidth={2.5} fillOpacity={1} fill="url(#foreGradM)" />
                 <Area name={t('managerDashboard.actual')} type="monotone" dataKey="actual" stroke="#10B981" strokeWidth={2.5} fillOpacity={1} fill="url(#actGradM)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -277,9 +277,9 @@ export default function ManagerDashboard() {
         </motion.div>
 
         {/* Top Performers */}
-        <motion.div variants={itemVariants} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action">
+        <motion.div variants={itemVariants} className="az-card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('managerDashboard.salesTeamRanking')}</h3>
+            <h3 className="text-sm font-bold text-[var(--color-fg)]">{t('managerDashboard.salesTeamRanking')}</h3>
             <Award size={16} className="text-amber-500" />
           </div>
           <Table

@@ -59,8 +59,9 @@ export default function SharedTable<T extends { id: string }>({
   };
 
   return (
-    <div className="w-full overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-tint)] shadow-sm">
-      <table className="w-full text-left border-collapse table-auto group/table">
+    <div className="az-card w-full overflow-hidden">
+      <div className="w-full overflow-x-auto py-2 px-1">
+        <table className="w-full text-left border-collapse table-auto group/table">
         <thead>
           <tr className="border-b border-[var(--color-border)]">
             {rowSelection && (
@@ -76,13 +77,13 @@ export default function SharedTable<T extends { id: string }>({
             {columns.map((col) => (
               <th
                 key={col.key}
-                className="px-6 py-4 text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)] font-semibold"
+                className="px-6 py-4 text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium"
               >
                 {col.title}
               </th>
             ))}
             {(onEdit || onDelete) && (
-              <th className="px-6 py-4 text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)] font-semibold text-right">
+              <th className="px-6 py-4 text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium text-right">
                 {effectiveActionsLabel}
               </th>
             )}
@@ -146,7 +147,7 @@ export default function SharedTable<T extends { id: string }>({
             <tr>
               <td
                 colSpan={columns.length + (rowSelection ? 1 : 0) + ((onEdit || onDelete) ? 1 : 0)}
-                className="px-6 py-12 text-center text-xs text-[var(--color-muted-fg)] font-mono uppercase tracking-wider"
+                className="px-6 py-12 text-center text-xs text-[var(--color-muted-fg)] font-mono"
               >
                 {t('common.noData')}
               </td>
@@ -155,5 +156,6 @@ export default function SharedTable<T extends { id: string }>({
         </tbody>
       </table>
     </div>
+  </div>
   );
 }

@@ -29,63 +29,6 @@ interface LeadRecord {
   timeline: string;
 }
 
-const initialLeads: LeadRecord[] = [
-  {
-    id: '1',
-    leadCode: 'LEA-2026-00001',
-    firstName: 'Alice',
-    lastName: 'Smith',
-    company: 'Acme Corp',
-    email: 'alice@company.com',
-    phone: '0901234567',
-    source: 'WEBSITE',
-    status: 'NEW',
-    owner: 'System Admin',
-    createdAt: '2026-07-01',
-    bantScore: 75,
-    budget: 5000,
-    serviceInterest: 'WEBSITE',
-    need: 'Redesign company website',
-    timeline: '3 months',
-  },
-  {
-    id: '2',
-    leadCode: 'LEA-2026-00002',
-    firstName: 'John',
-    lastName: 'Miller',
-    company: 'Miller Tech',
-    email: 'john@miller.io',
-    phone: '0912345678',
-    source: 'FACEBOOK',
-    status: 'CONTACTED',
-    owner: 'Jane Smith',
-    createdAt: '2026-07-03',
-    bantScore: 50,
-    budget: 15000,
-    serviceInterest: 'APP_MVP',
-    need: 'Build mobile app MVP',
-    timeline: '6 months',
-  },
-  {
-    id: '3',
-    leadCode: 'LEA-2026-00003',
-    firstName: 'Sarah',
-    lastName: 'Connor',
-    company: 'Skynet Inc',
-    email: 'sarah@skynet.com',
-    phone: '0987654321',
-    source: 'LINKEDIN',
-    status: 'QUALIFIED',
-    owner: 'John Doe',
-    createdAt: '2026-07-05',
-    bantScore: 100,
-    budget: 50000,
-    serviceInterest: 'UI_UX',
-    need: 'UX audit and UI design system',
-    timeline: '1 month',
-  },
-];
-
 export default function Leads() {
   const { t } = useTranslation();
   const { data: leadsResponse, isLoading } = useLeads();
@@ -352,17 +295,17 @@ export default function Leads() {
     (filterOwner !== 'ALL' ? 1 : 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--color-fg)]">{t('leads.title')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)] mt-1">{t('leads.subtitle')}</p>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-fg)]">{t('leads.title')}</h1>
+          <p className="text-xs sm:text-sm text-[var(--color-muted-fg)] mt-0.5">{t('leads.subtitle')}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Search bar */}
-          <div className="flex items-center gap-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-xl px-3 py-2 w-full md:w-64">
-            <Search size={15} className="text-[var(--color-muted-fg)]" />
+          <div className="flex items-center gap-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg px-3 py-1.5 w-44 sm:w-64">
+            <Search size={14} className="text-[var(--color-muted-fg)] shrink-0" />
             <input
               type="text"
               placeholder={t('leads.searchPlaceholder')}
@@ -372,42 +315,41 @@ export default function Leads() {
             />
           </div>
 
-          {/* Filters Button */}
+          {/* Filters Icon Button */}
           <button
             onClick={() => setFilterDrawerOpen(true)}
-            className={`flex items-center gap-2 h-10 px-3.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+            title={t('leads.filters')}
+            className={`w-9 h-9 flex items-center justify-center rounded-lg border transition-all cursor-pointer relative shrink-0 ${
               activeFiltersCount > 0
-                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/5 text-[var(--color-accent)]'
+                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
                 : 'border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
             }`}
           >
-            <SlidersHorizontal size={14} />
-            <span>{t('leads.filters')}</span>
+            <SlidersHorizontal size={15} />
             {activeFiltersCount > 0 && (
-              <span className="w-4.5 h-4.5 rounded-full bg-[var(--color-accent)] text-white text-[9px] flex items-center justify-center font-bold animate-pulse">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--color-accent)] text-white text-[9px] flex items-center justify-center font-bold animate-pulse">
                 {activeFiltersCount}
               </span>
             )}
           </button>
 
-          {/* Import Button */}
+          {/* Import Icon Button */}
           <button
             onClick={handleImport}
-            className="flex items-center gap-2 h-10 px-3.5 text-xs font-semibold rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer"
+            title={t('leads.import')}
+            className="w-9 h-9 flex items-center justify-center rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer shrink-0"
           >
-            <Upload size={14} />
-            <span>{t('leads.import')}</span>
+            <Upload size={15} />
           </button>
 
-          {/* New Lead Button */}
-          <Button
-            type="primary"
+          {/* New Lead Icon Button */}
+          <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-2 h-10 px-4 rounded-xl cursor-pointer"
+            title={t('leads.newLead')}
+            className="w-9 h-9 flex items-center justify-center rounded-lg bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white shadow-xs transition-all cursor-pointer shrink-0"
           >
             <Plus size={16} />
-            <span>{t('leads.newLead')}</span>
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -415,7 +357,7 @@ export default function Leads() {
       <Drawer
         title={
           <div className="flex items-center justify-between w-full pr-4">
-            <span className="text-base font-bold text-[var(--color-fg)]">{t('leads.advancedFilters')}</span>
+            <span className="text-sm font-semibold text-[var(--color-fg)]">{t('leads.advancedFilters')}</span>
             {activeFiltersCount > 0 && (
               <button
                 onClick={() => {
@@ -431,7 +373,7 @@ export default function Leads() {
           </div>
         }
         placement="right"
-        width={360}
+        width={340}
         onClose={() => setFilterDrawerOpen(false)}
         open={filterDrawerOpen}
         styles={{
@@ -445,15 +387,15 @@ export default function Leads() {
           }
         }}
       >
-        <div className="space-y-6">
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
+        <div className="space-y-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
               {t('leads.leadStatus')}
             </label>
             <Select
               value={filterStatus}
               onChange={setFilterStatus}
-              className="w-full h-11"
+              className="w-full h-9"
               options={[
                 { value: 'ALL', label: t('leads.allStatuses') },
                 { value: 'NEW', label: 'New' },
@@ -464,32 +406,44 @@ export default function Leads() {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
               {t('leads.leadSource')}
             </label>
             <Select
               value={filterSource}
               onChange={setFilterSource}
-              className="w-full h-11"
+              className="w-full h-9"
               options={[
                 { value: 'ALL', label: t('leads.allSources') },
                 { value: 'WEBSITE', label: 'Website' },
                 { value: 'FACEBOOK', label: 'Facebook' },
+                { value: 'INSTAGRAM', label: 'Instagram' },
                 { value: 'LINKEDIN', label: 'LinkedIn' },
+                { value: 'X', label: 'X (Twitter)' },
+                { value: 'YOUTUBE', label: 'YouTube' },
+                { value: 'TIKTOK', label: 'TikTok' },
+                { value: 'ZALO', label: 'Zalo' },
+                { value: 'GMAIL', label: 'Gmail' },
+                { value: 'REFERRAL', label: 'Referral' },
+                { value: 'EVENT', label: 'Event' },
+                { value: 'PORTFOLIO', label: 'Portfolio' },
+                { value: 'TELEGRAM', label: 'Telegram' },
                 { value: 'MANUAL', label: 'Manual' },
+                { value: 'XANT', label: 'Xantivation' },
+                { value: 'XZ', label: 'Xaniz' },
               ]}
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
               {t('leads.assignedOwner')}
             </label>
             <Select
               value={filterOwner}
               onChange={setFilterOwner}
-              className="w-full h-11"
+              className="w-full h-9"
               options={[
                 { value: 'ALL', label: t('leads.allOwners') },
                 { value: 'System Admin', label: 'System Admin' },
@@ -503,13 +457,13 @@ export default function Leads() {
 
       {/* Bulk actions trigger bar */}
       {selectedRowKeys.length > 0 && (
-        <div className="bg-[var(--color-accent)]/5 border border-[var(--color-accent)]/20 p-3 rounded-xl flex justify-between items-center text-xs animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="bg-[var(--color-accent)]/5 border border-[var(--color-accent)]/20 p-2.5 rounded-lg flex justify-between items-center text-xs animate-in fade-in slide-in-from-top-2 duration-200">
           <span className="font-semibold text-[var(--color-fg)]">{t('leads.selectedCount',{count:selectedRowKeys.length})}</span>
           <div className="flex gap-2">
-            <button onClick={handleBulkReassign} className="px-3 py-1 bg-white hover:bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg font-semibold cursor-pointer">
+            <button onClick={handleBulkReassign} className="px-3 py-1 bg-white hover:bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg font-semibold cursor-pointer text-xs">
               {t('leads.reassignOwner')}
             </button>
-            <button onClick={handleBulkExport} className="px-3 py-1 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white rounded-lg font-semibold cursor-pointer">
+            <button onClick={handleBulkExport} className="px-3 py-1 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white rounded-lg font-semibold cursor-pointer text-xs">
               {t('leads.exportExcel')}
             </button>
           </div>
@@ -517,7 +471,7 @@ export default function Leads() {
       )}
 
       {/* Unified Table Container Canvas */}
-      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-3xl overflow-hidden shadow-sm relative">
+      <div className="az-card overflow-hidden shadow-xs relative">
         <Spin spinning={isLoading}>
           <SharedTable
             columns={columns}
@@ -534,24 +488,45 @@ export default function Leads() {
 
       {/* Create / Edit Modal */}
       <Modal
-        title={editingLead ? t('leads.edit') : t('leads.create')}
+        title={
+          <div className="flex items-center gap-2 pb-2 border-b border-[var(--color-border)]">
+            <div className="w-6 h-6 rounded-md bg-[var(--color-accent)]/15 border border-[var(--color-accent)]/30 flex items-center justify-center text-[var(--color-accent)]">
+              <Plus size={14} />
+            </div>
+            <span className="text-sm font-semibold text-[var(--color-fg)]">
+              {editingLead ? t('leads.edit') : t('leads.create')}
+            </span>
+          </div>
+        }
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
         footer={null}
-        width={600}
+        width={580}
+        styles={{
+          body: {
+            background: 'var(--color-bg)',
+            color: 'var(--color-fg)',
+            paddingTop: '8px',
+            paddingBottom: '8px',
+          },
+          header: {
+            background: 'transparent',
+            borderBottom: 'none',
+          }
+        }}
       >
-        <div className="space-y-6 pt-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-3.5 pt-1 max-h-[75vh] overflow-y-auto px-0.5">
+          <div className="grid grid-cols-2 gap-3.5">
             <div>
               <FloatingInput label={t('leads.firstName')} value={firstName} onChange={setFirstName} />
             </div>
             <div>
               <FloatingInput label={t('leads.lastName')} value={lastName} onChange={setLastName} required />
-              {errors.lastName && <p className="text-red-500 text-[10px] mt-1">{errors.lastName}</p>}
+              {errors.lastName && <p className="text-red-500 text-[10px] mt-0.5">{errors.lastName}</p>}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3.5">
             <div>
               <FloatingInput
                 label={t('leads.emailAddress')}
@@ -561,7 +536,7 @@ export default function Leads() {
                 required
                 onBlur={() => handleCheckDuplicate('email', email)}
               />
-              {errors.email && <p className="text-red-500 text-[10px] mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-red-500 text-[10px] mt-0.5">{errors.email}</p>}
             </div>
             <div>
               <FloatingInput
@@ -571,15 +546,18 @@ export default function Leads() {
                 required
                 onBlur={() => handleCheckDuplicate('phone', phone)}
               />
-              {errors.phone && <p className="text-red-500 text-[10px] mt-1">{errors.phone}</p>}
+              {errors.phone && <p className="text-red-500 text-[10px] mt-0.5">{errors.phone}</p>}
             </div>
           </div>
 
-          <FloatingInput label={t('leads.companyName')} value={company} onChange={setCompany} />
+          <div className="grid grid-cols-2 gap-3.5">
+            <FloatingInput label={t('leads.companyName')} value={company} onChange={setCompany} />
+            <FloatingInput label={t('leads.estimatedBudget')} type="number" value={budget} onChange={setBudget} />
+          </div>
 
-          <div className="grid grid-cols-2 gap-4 pt-2">
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
+          <div className="grid grid-cols-2 gap-3.5 pt-1">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
                 {t('leads.leadSource')}
               </label>
               <Select
@@ -588,23 +566,28 @@ export default function Leads() {
                 options={[
                   { value: 'WEBSITE', label: 'Website' },
                   { value: 'FACEBOOK', label: 'Facebook' },
+                  { value: 'INSTAGRAM', label: 'Instagram' },
                   { value: 'LINKEDIN', label: 'LinkedIn' },
+                  { value: 'X', label: 'X (Twitter)' },
+                  { value: 'YOUTUBE', label: 'YouTube' },
+                  { value: 'TIKTOK', label: 'TikTok' },
                   { value: 'ZALO', label: 'Zalo' },
                   { value: 'GMAIL', label: 'Gmail' },
-                  { value: 'COLD_CALL', label: 'Cold Call' },
                   { value: 'REFERRAL', label: 'Referral' },
                   { value: 'EVENT', label: 'Event' },
                   { value: 'PORTFOLIO', label: 'Portfolio' },
-                  { value: 'WORD_OF_MOUTH', label: 'Word of Mouth' },
+                  { value: 'TELEGRAM', label: 'Telegram' },
                   { value: 'MANUAL', label: 'Manual' },
+                  { value: 'XANT', label: 'Xantivation' },
+                  { value: 'XZ', label: 'Xaniz' },
                 ]}
-                className="w-full h-11"
+                className="w-full h-9 text-xs"
               />
               {errors.source && <p className="text-red-500 text-[10px]">{errors.source}</p>}
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
                 {t('leads.serviceInterest')}
               </label>
               <Select
@@ -619,16 +602,14 @@ export default function Leads() {
                   { value: 'MAINTENANCE', label: 'Maintenance SLA' },
                   { value: 'CUSTOM', label: 'Custom Requirement' },
                 ]}
-                className="w-full h-11"
+                className="w-full h-9 text-xs"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <FloatingInput label={t('leads.estimatedBudget')} type="number" value={budget} onChange={setBudget} />
-
-            <div className="flex flex-col gap-2 pt-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
+          <div className="grid grid-cols-2 gap-3.5">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
                 {t('leads.assignedOwner')}
               </label>
               <Select
@@ -639,51 +620,59 @@ export default function Leads() {
                   { value: 'Jane Smith', label: 'Jane Smith' },
                   { value: 'John Doe', label: 'John Doe' },
                 ]}
-                className="w-full h-11"
+                className="w-full h-9 text-xs"
               />
             </div>
-          </div>
 
-          {/* BANT Qualification segment */}
-          <div className="pt-4 border-t border-[var(--color-border)]/50">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)] mb-4">
-              {t('leads.bantQualification')}
-            </h4>
-            <div className="grid grid-cols-2 gap-6">
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={budgetApproved}
-                  onChange={(e) => setBudgetApproved(e.target.checked)}
-                  className="w-4 h-4 rounded accent-[var(--color-accent)] cursor-pointer"
-                />
-                <span className="text-sm text-[var(--color-fg)] select-none">{t('leads.budgetApproved')}</span>
-              </label>
-
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={authorityMarker}
-                  onChange={(e) => setAuthorityMarker(e.target.checked)}
-                  className="w-4 h-4 rounded accent-[var(--color-accent)] cursor-pointer"
-                />
-                <span className="text-sm text-[var(--color-fg)] select-none">{t('leads.authorityConfirmed')}</span>
-              </label>
-            </div>
-            <div className="space-y-4 mt-2">
-              <FloatingInput label={t('leads.describeNeed')} value={need} onChange={setNeed} />
+            <div className="pt-2">
               <FloatingInput label={t('leads.timeline')} value={timeline} onChange={setTimeline} />
             </div>
           </div>
 
+          {/* BANT Qualification segment */}
+          <div className="pt-3 border-t border-[var(--color-border)]">
+            <h4 className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-semibold mb-2.5">
+              {t('leads.bantQualification')}
+            </h4>
+            <div className="grid grid-cols-2 gap-4 mb-2.5">
+              <label className="flex items-center gap-2.5 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={budgetApproved}
+                  onChange={(e) => setBudgetApproved(e.target.checked)}
+                  className="w-3.5 h-3.5 rounded border-[var(--color-border)] accent-[var(--color-accent)] cursor-pointer"
+                />
+                <span className="text-xs font-medium text-[var(--color-fg)] select-none">{t('leads.budgetApproved')}</span>
+              </label>
+
+              <label className="flex items-center gap-2.5 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={authorityMarker}
+                  onChange={(e) => setAuthorityMarker(e.target.checked)}
+                  className="w-3.5 h-3.5 rounded border-[var(--color-border)] accent-[var(--color-accent)] cursor-pointer"
+                />
+                <span className="text-xs font-medium text-[var(--color-fg)] select-none">{t('leads.authorityConfirmed')}</span>
+              </label>
+            </div>
+
+            <FloatingInput label={t('leads.describeNeed')} value={need} onChange={setNeed} />
+          </div>
+
           {/* Submit Actions */}
-          <div className="flex justify-end gap-3 pt-4">
-            <Button onClick={() => setModalOpen(false)} className="rounded-xl cursor-pointer">
-              {t('leads.cancel')}
-            </Button>
-            <Button type="primary" onClick={handleSave} className="rounded-xl cursor-pointer">
-              {t('leads.saveChanges')}
-            </Button>
+          <div className="flex justify-end gap-2.5 pt-3 border-t border-[var(--color-border)]">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer"
+            >
+              {t('common.cancel')}
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white shadow-xs transition-all cursor-pointer"
+            >
+              {t('common.saveChanges')}
+            </button>
           </div>
         </div>
       </Modal>

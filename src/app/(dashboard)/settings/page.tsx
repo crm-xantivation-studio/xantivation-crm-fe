@@ -834,7 +834,7 @@ export default function Settings() {
       </div>
 
       {/* Sub-tab Bodies */}
-      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 min-h-[400px]">
+      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 min-h-[400px]">
         {activeSubTab === 'profile' && (
           <div className="max-w-xl space-y-6">
             <h3 className="text-sm font-semibold text-[var(--color-fg)]">Personal Information</h3>
@@ -849,23 +849,6 @@ export default function Settings() {
               </div>
               <div>
                 <FloatingInput label="Change Password (Leave blank to keep current)" type="password" value={profilePassword} onChange={setProfilePassword} />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                  Display Language
-                </label>
-                <Select
-                  value={settingsLocale}
-                  onChange={(val) => updateSettings({ locale: val })}
-                  options={[
-                    { value: 'en', label: 'English' },
-                    { value: 'vi', label: 'Tiếng Việt' },
-                    { value: 'ja', label: '日本語' },
-                    { value: 'zh', label: '中文' },
-                  ]}
-                  className="w-full h-11"
-                />
               </div>
             </div>
 
@@ -901,27 +884,27 @@ export default function Settings() {
 
             {/* Modal Edit/Create User */}
             {userModalOpen && (
-              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 w-full max-w-md space-y-6 shadow-xl">
-                  <h4 className="font-semibold text-lg text-[var(--color-fg)]">
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-2xl p-5 w-full max-w-md space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
+                  <h4 className="font-semibold text-sm text-[var(--color-fg)] pb-2 border-b border-[var(--color-border)]">
                     {editingUser ? 'Edit Account' : 'Create Employee Account'}
                   </h4>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div>
                       <FloatingInput label="Full Name" value={userNameInput} onChange={setUserNameInput} required />
-                      {userErrors.name && <p className="text-red-500 text-[10px] mt-1">{userErrors.name}</p>}
+                      {userErrors.name && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.name}</p>}
                     </div>
                     <div>
                       <FloatingInput label="Email Address" value={userEmailInput} onChange={setUserEmailInput} required />
-                      {userErrors.email && <p className="text-red-500 text-[10px] mt-1">{userErrors.email}</p>}
+                      {userErrors.email && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.email}</p>}
                     </div>
                     <div>
                       <FloatingInput label="Password" type="password" value={userPasswordInput} onChange={setUserPasswordInput} required={!editingUser} />
-                      {userErrors.password && <p className="text-red-500 text-[10px] mt-1">{userErrors.password}</p>}
+                      {userErrors.password && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.password}</p>}
                     </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">System Role</label>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">System Role</label>
                       <Select
                         value={userRoleInput}
                         onChange={setUserRoleInput}
@@ -931,14 +914,14 @@ export default function Settings() {
                           { value: 'ACCOUNTANT', label: 'Accountant' },
                           { value: 'ADMIN', label: 'Administrator' },
                         ]}
-                        className="w-full h-11"
+                        className="w-full h-9 text-xs"
                       />
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-3 pt-2">
-                    <Button onClick={() => setUserModalOpen(false)} className="rounded-xl">Cancel</Button>
-                    <Button type="primary" onClick={handleSaveUser} loading={createUserMutation.isPending || updateUserMutation.isPending} className="rounded-xl">Save</Button>
+                  <div className="flex justify-end gap-2.5 pt-3 border-t border-[var(--color-border)]">
+                    <button onClick={() => setUserModalOpen(false)} className="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer">Cancel</button>
+                    <button onClick={handleSaveUser} className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-gradient-to-r from-[var(--color-accent)] to-cyan-500 hover:opacity-90 text-white shadow-sm transition-all cursor-pointer">Save</button>
                   </div>
                 </div>
               </div>
@@ -969,23 +952,23 @@ export default function Settings() {
 
             {/* Modal Edit/Create Sales Team */}
             {teamModalOpen && (
-              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 w-full max-w-md space-y-6 shadow-xl">
-                  <h4 className="font-semibold text-lg text-[var(--color-fg)]">
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-2xl p-5 w-full max-w-md space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
+                  <h4 className="font-semibold text-sm text-[var(--color-fg)] pb-2 border-b border-[var(--color-border)]">
                     {editingTeam ? 'Edit Team' : 'Create Sales Team'}
                   </h4>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div>
                       <FloatingInput label="Team Name" value={teamNameInput} onChange={setTeamNameInput} required />
-                      {teamErrors.name && <p className="text-red-500 text-[10px] mt-1">{teamErrors.name}</p>}
+                      {teamErrors.name && <p className="text-red-500 text-[10px] mt-0.5">{teamErrors.name}</p>}
                     </div>
                     <div>
                       <FloatingInput label="Team Description" value={teamDescInput} onChange={setTeamDescInput} />
                     </div>
                     
                     <div className="flex flex-col gap-2">
-                      <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">Team Leader</label>
+                      <label className="text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">Team Leader</label>
                       <Select
                         value={teamLeaderInput}
                         onChange={setTeamLeaderInput}

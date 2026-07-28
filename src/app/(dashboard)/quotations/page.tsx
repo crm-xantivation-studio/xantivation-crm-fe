@@ -97,7 +97,7 @@ export default function Quotations() {
   // Map API response to local record format
   const quotationsList: QuotationRecord[] = rawQuotations.map((q: any) => ({
     id: q.id,
-    code: q.quotationCode || `QUO-${q.id.substring(0, 8).toUpperCase()}`,
+    code: q.quotationCode,
     version: q.version || 1,
     projectName: q.projectName,
     serviceType: q.serviceType,
