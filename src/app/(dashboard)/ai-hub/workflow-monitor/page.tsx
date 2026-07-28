@@ -162,8 +162,8 @@ export default function WorkflowMonitor() {
   const [logPage, setLogPage] = useState(1);
   const [selectedLog, setSelectedLog] = useState<AgentExecutionLog | null>(null);
   const [sseConnected, setSseConnected] = useState(false);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const sseRef = useRef<EventSource | null>(null);
 
   const { data: logsRes, isLoading, refetch } = useExecutionLogs(logPage, 20);

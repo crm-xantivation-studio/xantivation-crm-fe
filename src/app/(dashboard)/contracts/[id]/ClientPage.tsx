@@ -119,7 +119,7 @@ export default function ContractDetail({ params }: { params: Promise<{ id: strin
   // Convert payments from API format
   const paymentsList: PaymentScheduleRecord[] = (c.payments || []).map((p) => ({
     id: p.id,
-    invoiceNumber: p.invoiceCode,
+    invoiceNumber: p.invoiceCode || '',
     amount: Number(p.amount) || 0,
     dueDate: p.dueDate ? p.dueDate.substring(0, 10) : '',
     paidAt: p.paidDate ? p.paidDate.substring(0, 16).replace('T', ' ') : undefined,
