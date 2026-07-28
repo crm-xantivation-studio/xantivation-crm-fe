@@ -69,21 +69,6 @@ export default function AiHubDashboard() {
           <p className="text-sm text-[var(--color-muted-fg)]">{t('aiHub.dashboardSubtitle')}</p>
         </div>
 
-        {/* View mode switches */}
-        <div className="flex bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-1 rounded-xl">
-          <Link
-            href="/ai-hub"
-            className="px-4 py-1.5 rounded-lg text-xs font-semibold text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all"
-          >
-            {t('aiHub.chatConsole')}
-          </Link>
-          <Link
-            href="/ai-hub/dashboard"
-            className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-accent)] text-white shadow-sm"
-          >
-            {t('aiHub.dashboardNav')}
-          </Link>
-        </div>
       </div>
 
       {/* 6 Metrics cards */}

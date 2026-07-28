@@ -72,7 +72,7 @@ export default function Opportunities() {
   // Map API response to local record format
   const oppsList: OpportunityRecord[] = rawOpps.map((opp: any) => ({
     id: opp.id,
-    code: opp.opportunityCode || `OPP-${opp.id.substring(0, 8).toUpperCase()}`,
+    code: opp.opportunityCode,
     name: opp.name,
     amount: Number(opp.amount) || 0,
     stage: opp.stage as any,
@@ -369,13 +369,13 @@ export default function Opportunities() {
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--color-fg)]">{t('opportunities.title')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)] mt-1">{t('opportunities.subtitle')}</p>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-fg)]">{t('opportunities.title')}</h1>
+          <p className="text-xs sm:text-sm text-[var(--color-muted-fg)] mt-0.5">{t('opportunities.subtitle')}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Search bar */}
-          <div className="flex items-center gap-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-xl px-3 py-2 w-full md:w-64">
-            <Search size={15} className="text-[var(--color-muted-fg)]" />
+          <div className="flex items-center gap-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-xl px-3 py-1.5 w-44 sm:w-64">
+            <Search size={14} className="text-[var(--color-muted-fg)] shrink-0" />
             <input
               type="text"
               placeholder={t('opportunities.searchPlaceholder')}
@@ -386,46 +386,49 @@ export default function Opportunities() {
           </div>
 
           {/* Toggle View Mode */}
-          <div className="bg-[var(--color-bg-tint)] p-1 rounded-xl border border-[var(--color-border)] flex h-10 items-center">
+          <div className="bg-[var(--color-bg-tint)] p-1 rounded-xl border border-[var(--color-border)] flex h-9 items-center shrink-0">
             <button
               onClick={() => setViewMode('kanban')}
+              title="Kanban View"
               className={`p-1.5 rounded-lg transition-all cursor-pointer ${
                 viewMode === 'kanban' ? 'bg-[var(--color-surface)] text-[var(--color-fg)] shadow-sm' : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
               }`}
             >
-              <Layers size={16} />
+              <Layers size={15} />
             </button>
             <button
               onClick={() => setViewMode('table')}
+              title="Table View"
               className={`p-1.5 rounded-lg transition-all cursor-pointer ${
                 viewMode === 'table' ? 'bg-[var(--color-surface)] text-[var(--color-fg)] shadow-sm' : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
               }`}
             >
-              <List size={16} />
+              <List size={15} />
             </button>
           </div>
 
+          {/* Filters Icon Button */}
           <button
             onClick={() => setFilterDrawerOpen(true)}
-            className="flex items-center gap-2 border border-[var(--color-border)] bg-[var(--color-bg-tint)] text-[var(--color-fg)] hover:bg-[var(--color-surface)] px-4 h-10 rounded-xl text-xs font-semibold cursor-pointer relative"
+            title="Filters"
+            className="w-9 h-9 flex items-center justify-center border border-[var(--color-border)] bg-[var(--color-bg-tint)] text-[var(--color-fg)] hover:bg-[var(--color-surface)] rounded-xl cursor-pointer relative shrink-0 transition-all"
           >
-            <SlidersHorizontal size={14} />
-            <span>Filters</span>
+            <SlidersHorizontal size={15} />
             {activeFiltersCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-[var(--color-accent)] text-white w-4 h-4 rounded-full text-[9px] flex items-center justify-center font-bold">
+              <span className="absolute -top-1 -right-1 bg-[var(--color-accent)] text-white w-4 h-4 rounded-full text-[9px] flex items-center justify-center font-bold animate-pulse">
                 {activeFiltersCount}
               </span>
             )}
           </button>
 
-          <Button
-            type="primary"
+          {/* New Opportunity Icon Button */}
+          <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-2 h-10 px-5 rounded-xl cursor-pointer"
+            title={t('opportunities.createOpportunity')}
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-cyan-500 hover:opacity-90 text-white shadow-md cursor-pointer transition-all shrink-0"
           >
             <Plus size={16} />
-            <span>{t('opportunities.create')}</span>
-          </Button>
+          </button>
         </div>
       </div>
 

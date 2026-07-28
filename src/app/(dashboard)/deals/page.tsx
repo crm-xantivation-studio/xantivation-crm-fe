@@ -46,7 +46,7 @@ export default function Deals() {
   // Map API response to local record format
   const dealsList: DealRecord[] = rawDeals.map((d: any) => ({
     id: d.id,
-    code: d.dealCode || `DEAL-${d.id.substring(0, 8).toUpperCase()}`,
+    code: d.dealCode,
     name: d.projectName,
     amount: Number(d.dealValue) || 0,
     stage: d.status as any,

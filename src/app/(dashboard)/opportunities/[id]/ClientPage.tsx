@@ -213,7 +213,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
 
       {/* Visual Stage Progress Stepper */}
       {opp.stage !== 'LOST' ? (
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-2xl">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-lg">
           <Steps
             current={currentStep}
             items={[

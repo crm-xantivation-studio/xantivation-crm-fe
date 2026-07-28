@@ -8,17 +8,21 @@ export enum LeadStatus {
 export enum LeadSource {
   WEBSITE = 'WEBSITE',
   FACEBOOK = 'FACEBOOK',
+  INSTAGRAM = 'INSTAGRAM',
   LINKEDIN = 'LINKEDIN',
+  X = 'X',
+  YOUTUBE = 'YOUTUBE',
+  TIKTOK = 'TIKTOK',
   ZALO = 'ZALO',
   GMAIL = 'GMAIL',
-  COLD_CALL = 'COLD_CALL',
   REFERRAL = 'REFERRAL',
   EVENT = 'EVENT',
   PORTFOLIO = 'PORTFOLIO',
-  WORD_OF_MOUTH = 'WORD_OF_MOUTH',
   MANUAL = 'MANUAL',
   CHATWOOT = 'CHATWOOT',
   TELEGRAM = 'TELEGRAM',
+  XANT = 'XANT',
+  XZ = 'XZ',
 }
 
 export enum ServiceInterest {

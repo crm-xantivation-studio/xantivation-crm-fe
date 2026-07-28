@@ -74,7 +74,7 @@ export default function ReportsOverview() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {isLoading ? (
           Array(4).fill(null).map((_, idx) => (
-            <div key={idx} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 h-28 flex flex-col justify-between">
+            <div key={idx} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 h-28 flex flex-col justify-between">
               <Skeleton.Input active size="small" style={{ width: 120 }} />
               <Skeleton.Input active size="default" style={{ width: 80 }} />
             </div>
@@ -82,7 +82,7 @@ export default function ReportsOverview() {
         ) : (
           <>
             {/* Total Pipeline */}
-            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 hover-action flex flex-col justify-between h-28">
               <div className="flex justify-between items-start">
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.totalPipeline')}</span>
                 <Target size={16} className="text-indigo-500" />
@@ -93,7 +93,7 @@ export default function ReportsOverview() {
             </div>
 
             {/* Won this month */}
-            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 hover-action flex flex-col justify-between h-28">
               <div className="flex justify-between items-start">
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.monthlySales')}</span>
                 <TrendingUp size={16} className="text-emerald-500" />
@@ -104,7 +104,7 @@ export default function ReportsOverview() {
             </div>
 
             {/* Overdue Payments */}
-            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 hover-action flex flex-col justify-between h-28">
               <div className="flex justify-between items-start">
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.overdueDebt')}</span>
                 <CreditCard size={16} className="text-rose-500" />
@@ -115,7 +115,7 @@ export default function ReportsOverview() {
             </div>
 
             {/* Forecast */}
-            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 hover-action flex flex-col justify-between h-28">
+            <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 hover-action flex flex-col justify-between h-28">
               <div className="flex justify-between items-start">
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.thirtyDayForecast')}</span>
                 <BarChart3 size={16} className="text-amber-500" />
@@ -141,7 +141,7 @@ export default function ReportsOverview() {
           return (
             <motion.div key={idx} variants={itemVariants}>
               <Link href={item.path}>
-                <Card className="h-full bg-[var(--color-bg-tint)] border border-[var(--color-border)] hover:border-[var(--color-accent)] rounded-2xl cursor-pointer hover-action group transition-all duration-300">
+                <Card className="h-full bg-[var(--color-bg-tint)] border border-[var(--color-border)] hover:border-[var(--color-accent)] rounded-lg cursor-pointer hover-action group transition-all duration-300">
                   <div className="flex flex-col h-full justify-between space-y-6">
                     <div className="space-y-4">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.color}`}>

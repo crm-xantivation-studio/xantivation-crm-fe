@@ -119,7 +119,7 @@ export default function ContractDetail({ params }: { params: Promise<{ id: strin
   // Convert payments from API format
   const paymentsList: PaymentScheduleRecord[] = (c.payments || []).map((p) => ({
     id: p.id,
-    invoiceNumber: p.invoiceCode || `INV-${p.id.substring(0, 8).toUpperCase()}`,
+    invoiceNumber: p.invoiceCode,
     amount: Number(p.amount) || 0,
     dueDate: p.dueDate ? p.dueDate.substring(0, 10) : '',
     paidAt: p.paidDate ? p.paidDate.substring(0, 16).replace('T', ' ') : undefined,
@@ -224,7 +224,7 @@ export default function ContractDetail({ params }: { params: Promise<{ id: strin
 
       {/* Visual Stepper */}
       {c.status !== 'VOIDED' && c.status !== 'DECLINED' && c.status !== 'EXPIRED' ? (
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-2xl">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-lg">
           <Steps
             current={getStepIndex(c.status)}
             items={[

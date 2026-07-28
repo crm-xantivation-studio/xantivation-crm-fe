@@ -190,7 +190,7 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
           <div className="text-xs text-[var(--color-muted-fg)] flex items-center gap-1.5 mb-2 font-mono">
             <Link href="/deals" className="hover:underline">{t('deals.breadcrumbDeals')}</Link>
             <span>&gt;</span>
-            <span className="text-[var(--color-fg)] font-semibold">{d.dealCode || `DEAL-${d.id.substring(0,8).toUpperCase()}`}</span>
+            <span className="text-[var(--color-fg)] font-semibold">{d.dealCode}</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
             {d.name}
