@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function ConversationsLegacyPage() {
+export default function MessagingPage() {
   redirect('/messaging/conversations');
 }

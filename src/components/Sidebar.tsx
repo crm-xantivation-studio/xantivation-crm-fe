@@ -40,6 +40,7 @@ export default function Sidebar() {
   const { t } = useTranslation();
 
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
+    '/messaging': true,
     '/customers': true,
     '/reports': false,
     '/ai-hub': false,
@@ -75,7 +76,21 @@ export default function Sidebar() {
 
   // Section 2: Tools, Intelligence & Settings
   const toolItems: SidebarItem[] = [
-    { name: t('sidebar.conversations'), path: '/conversations', icon: MessageSquare },
+    {
+      name: t('sidebar.messaging'),
+      path: '/messaging',
+      icon: MessageSquare,
+      children: [
+        { name: t('sidebar.messagingConversations'), path: '/messaging/conversations' },
+        { name: t('sidebar.messagingInboxes'), path: '/messaging/inboxes' },
+        { name: t('sidebar.messagingAgentBots'), path: '/messaging/agent-bots' },
+        { name: t('sidebar.messagingTeams'), path: '/messaging/teams' },
+        { name: t('sidebar.messagingLabels'), path: '/messaging/labels' },
+        { name: t('sidebar.messagingCannedResponses'), path: '/messaging/canned-responses' },
+        { name: t('sidebar.messagingAutomation'), path: '/messaging/automation' },
+        { name: t('sidebar.messagingWebhooks'), path: '/messaging/webhooks' },
+      ],
+    },
     {
       name: t('sidebar.aiHub'),
       path: '/ai-hub',
@@ -84,6 +99,7 @@ export default function Sidebar() {
         { name: 'AI Chat Console', path: '/ai-hub' },
         { name: 'Dashboard', path: '/ai-hub/dashboard' },
         { name: 'Workflow Monitor', path: '/ai-hub/workflow-monitor' },
+        { name: 'Configuration', path: '/ai-hub/configuration' },
       ],
     },
     { name: t('sidebar.reports'), path: '/reports', icon: BarChart3 },
