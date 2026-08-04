@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ConfigProvider, theme as antdTheme } from 'antd';
+import { App, ConfigProvider, theme as antdTheme } from 'antd';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import I18nProvider from './I18nProvider';
@@ -73,7 +73,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               },
             }}
           >
-            <I18nProvider>{children}</I18nProvider>
+            <App>
+              <I18nProvider>{children}</I18nProvider>
+            </App>
           </ConfigProvider>
         </AntdRegistry>
       </QueryClientProvider>
