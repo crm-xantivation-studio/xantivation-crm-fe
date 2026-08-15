@@ -1337,8 +1337,10 @@
     "payments": "付款",
     "customers": "客户",
     "conversations": "对话",
-    "reports": "报告",
-    "aiHub": "AI 中心",
+    "messagingWebhooks": "Webhooks",
+    "content": "内容与媒体",
+    "contentPosts": "自动发帖",
+    "aiHub": "AI Hub",
     "settings": "设置"
   },
   "header": {
@@ -1519,5 +1521,23 @@
     "aiChat": {
       "connectionError": "连接 AI 服务器失败。请重试。"
     }
+  },
+  "sidebar": {
+    "dashboard": "仪表板",
+    "leads": "线索",
+    "customers": "客户",
+    "opportunities": "商机",
+    "quotations": "报价单",
+    "deals": "交易",
+    "contracts": "合同",
+    "payments": "付款",
+    "messaging": "消息中心",
+    "messagingConversations": "对话",
+    "messagingConfiguration": "系统配置",
+    "content": "内容与媒体",
+    "contentPosts": "自动发帖",
+    "aiHub": "AI中心",
+    "reports": "报表分析",
+    "settings": "设置"
   }
 }

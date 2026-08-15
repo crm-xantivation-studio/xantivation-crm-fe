@@ -1344,6 +1344,8 @@
     "messagingCannedResponses": "Mẫu trả lời nhanh",
     "messagingAutomation": "Quy tắc tự động hóa",
     "messagingWebhooks": "Webhooks",
+    "content": "Nội Dung & Truyền Thông",
+    "contentPosts": "Tự Động Đăng Bài",
     "aiHub": "AI Hub",
     "reports": "Báo cáo",
     "settings": "Cài đặt"
@@ -1528,5 +1530,23 @@
     "aiChat": {
       "connectionError": "Đã xảy ra lỗi kết nối với máy chủ AI. Vui lòng thử lại."
     }
+  },
+  "sidebar": {
+    "dashboard": "Tổng quan",
+    "leads": "Khách hàng tiềm năng",
+    "customers": "Khách hàng",
+    "opportunities": "Cơ hội kinh doanh",
+    "quotations": "Báo giá",
+    "deals": "Thương vụ / Đơn hàng",
+    "contracts": "Hợp đồng",
+    "payments": "Thanh toán",
+    "messaging": "Kênh Tương Tác",
+    "messagingConversations": "Hội thoại",
+    "messagingConfiguration": "Cấu hình hệ thống",
+    "content": "Nội Dung & Truyền Thông",
+    "contentPosts": "Tự Động Đăng Bài",
+    "aiHub": "Trung tâm AI",
+    "reports": "Báo cáo & Phân tích",
+    "settings": "Cài đặt hệ thống"
   }
 }
