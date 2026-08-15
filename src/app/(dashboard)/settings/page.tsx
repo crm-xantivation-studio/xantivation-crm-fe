@@ -1053,21 +1053,21 @@ export default function Settings() {
               <div className="w-3/4 pl-2 space-y-6">
                 {/* Chatwoot Content */}
                 {activeIntegrationTab === 'chatwoot' && (
-                  <div className="space-y-4 max-w-xl">
-                    <div className="flex justify-between items-center bg-[var(--color-surface)]/50 p-4 border border-[var(--color-border)] rounded-2xl">
+                  <div className="space-y-4 max-w-xl bg-[var(--color-surface)]/50 p-6 border border-[var(--color-border)] rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <MessageSquare className="text-[var(--color-accent)]" size={24} />
                       <div>
-                        <h4 className="font-bold text-sm text-[var(--color-fg)]">Chatwoot Inbox</h4>
-                        <p className="text-[10px] text-[var(--color-muted-fg)]">Multi-channel conversation sync (Facebook, Zalo...)</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {chatwootStatus === 'success' && <Badge status="success" text="Connected" className="text-xs" />}
-                        {chatwootStatus === 'failed' && <Badge status="error" text="Connection Error" className="text-xs" />}
-                        <Button size="small" onClick={testChatwootConnection} className="text-xs rounded-lg cursor-pointer">Test Connection</Button>
+                        <h4 className="font-bold text-sm text-[var(--color-fg)]">Cấu Hình Chatwoot Omnichannel</h4>
+                        <p className="text-xs text-[var(--color-muted-fg)]">Toàn bộ cài đặt kết nối Chatwoot, công tắc Bật/Tắt AI và quản lý Kênh đã được di chuyển về trung tâm quản trị Messaging.</p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <FloatingInput label="Chatwoot Base URL" value={settings.chatwootUrl} onChange={(val) => settings.updateSettings({ chatwootUrl: val })} />
-                      <FloatingInput label="API Access Token" type="password" value={settings.chatwootToken} onChange={(val) => settings.updateSettings({ chatwootToken: val })} />
+                    <div className="pt-2">
+                      <a
+                        href="/messaging/configuration"
+                        className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-[var(--color-accent)] text-white hover:opacity-90 transition-all cursor-pointer"
+                      >
+                        <span>Đi tới Cấu hình Kênh Tương Tác (/messaging/configuration)</span>
+                      </a>
                     </div>
                   </div>
                 )}

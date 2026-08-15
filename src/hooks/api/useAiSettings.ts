@@ -192,6 +192,17 @@ export function useAgents() {
   });
 }
 
+export function useAgentBySlug(slug: string) {
+  return useQuery<BaseResponse<Agent>>({
+    queryKey: ['agent', slug],
+    queryFn: async () => {
+      const response = await api.get(`/ai-settings/agents/slug/${slug}`);
+      return response.data;
+    },
+    enabled: !!slug,
+  });
+}
+
 export function useCreateAgent() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -265,31 +276,6 @@ export function useUpdateAiConfiguration() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ai-configuration'] });
       message.success('AI Governance configuration saved & synced in real-time');
-    },
-  });
-}
-
-// === Auxiliary Models Hooks ===
-export function useAuxiliaryModels() {
-  return useQuery<BaseResponse<any[]>>({
-    queryKey: ['auxiliary-models'],
-    queryFn: async () => {
-      const response = await api.get('/ai-settings/auxiliary-models');
-      return response.data;
-    },
-  });
-}
-
-export function useUpsertAuxiliaryModel() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ taskType, data }: { taskType: string; data: any }) => {
-      const response = await api.patch(`/ai-settings/auxiliary-models/${taskType}`, data);
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['auxiliary-models'] });
-      message.success('Auxiliary model assignment updated');
     },
   });
 }

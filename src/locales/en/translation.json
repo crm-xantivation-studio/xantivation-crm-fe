@@ -1344,6 +1344,8 @@
     "messagingCannedResponses": "Canned Responses",
     "messagingAutomation": "Automation Rules",
     "messagingWebhooks": "Webhooks",
+    "content": "Content & Media",
+    "contentPosts": "Auto-Post & Reels",
     "aiHub": "AI Hub",
     "reports": "Reports",
     "settings": "Settings"
@@ -1528,5 +1530,23 @@
     "aiChat": {
       "connectionError": "Connection to AI server failed. Please try again."
     }
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "leads": "Leads",
+    "customers": "Customers",
+    "opportunities": "Opportunities",
+    "quotations": "Quotations",
+    "deals": "Deals",
+    "contracts": "Contracts",
+    "payments": "Payments",
+    "messaging": "Messaging",
+    "messagingConversations": "Conversations",
+    "messagingConfiguration": "Configuration",
+    "content": "Content & Media",
+    "contentPosts": "Auto-Post & Reels",
+    "aiHub": "AI Hub",
+    "reports": "Reports & Analytics",
+    "settings": "Settings"
   }
 }

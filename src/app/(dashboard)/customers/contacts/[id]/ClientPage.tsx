@@ -80,7 +80,7 @@ export default function ContactDetail({ params }: { params: Promise<{ id: string
   if (isLoading) {
     return (
       <div className="p-12 flex justify-center items-center h-96">
-        <Spin size="large" tip={t('customers.contactLoading')} />
+        <Spin size="large" description={t('customers.contactLoading')} />
       </div>
     );
   }

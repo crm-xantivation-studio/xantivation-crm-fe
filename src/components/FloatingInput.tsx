@@ -8,6 +8,7 @@ export function FloatingInput({
   onChange,
   required = false,
   disabled = false,
+  placeholder,
   onBlur,
 }: {
   label: string;
@@ -16,6 +17,7 @@ export function FloatingInput({
   onChange: (val: string) => void;
   required?: boolean;
   disabled?: boolean;
+  placeholder?: string;
   onBlur?: () => void;
 }) {
   const [focused, setFocused] = useState(false);

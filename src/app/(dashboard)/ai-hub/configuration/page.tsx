@@ -48,8 +48,6 @@ import {
   useExecutionLogs,
   useAiConfiguration,
   useUpdateAiConfiguration,
-  useAuxiliaryModels,
-  useUpsertAuxiliaryModel,
 } from '@/hooks/api/useAiSettings';
 
 const AVAILABLE_CRM_ACTIONS = [
@@ -87,9 +85,6 @@ export default function AiConfigurationPage() {
   const { data: apiKeysRes } = useApiKeys();
   const { data: modelsRes } = useModels();
   const { data: agentsRes } = useAgents();
-  const { data: auxModelsRes } = useAuxiliaryModels();
-
-  const upsertAuxMutation = useUpsertAuxiliaryModel();
 
   const createProviderMutation = useCreateProvider();
   const updateProviderMutation = useUpdateProvider();
@@ -109,7 +104,6 @@ export default function AiConfigurationPage() {
   const apiKeysList = Array.isArray(apiKeysRes) ? apiKeysRes : (apiKeysRes?.data || []);
   const modelsList = Array.isArray(modelsRes) ? modelsRes : (modelsRes?.data || []);
   const agentsList = Array.isArray(agentsRes) ? agentsRes : (agentsRes?.data || []);
-  const auxList = Array.isArray(auxModelsRes) ? auxModelsRes : (auxModelsRes?.data || []);
 
   // --- Modals State ---
   const [providerModalOpen, setProviderModalOpen] = useState(false);
@@ -544,119 +538,6 @@ export default function AiConfigurationPage() {
                   }
                 ]}
               />
-            </div>
-
-            {/* Auxiliary Task Model Assignments (Cost Optimization & Task Specialization) */}
-            <div className="space-y-4 border-t border-[var(--color-border)]/60 pt-6">
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg)] flex items-center gap-2">
-                  <Cpu size={14} className="text-[var(--color-accent)]" />
-                  <span>Auxiliary Task Model Assignments (Cost Optimization)</span>
-                </h4>
-                <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5">
-                  Assign specialized lightweight models (e.g. Gemini Flash, DeepSeek V3) to handle background subtasks (Vision OCR, Web Summaries, Compression) to cut LLM expenses by up to 90%.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[
-                  { type: 'vision', name: 'Vision & Image Analysis', icon: ImageIcon, desc: 'Used for PDF/Image OCR and document audit' },
-                  { type: 'web_extract', name: 'Web Scraping & Extract', icon: Globe, desc: 'Used for web crawling and lead enrichment' },
-                  { type: 'compression', name: 'Context Compressor Engine', icon: Zap, desc: 'Used for background history compaction' },
-                  { type: 'title_generation', name: 'Session Title Generator', icon: FileText, desc: 'Generates session titles after first turn' },
-                  { type: 'session_search', name: 'Session History Search', icon: Search, desc: 'Summarizes matching past user sessions' },
-                ].map((task) => {
-                  const Icon = task.icon;
-                  const existingAux = auxList.find((a: any) => a.taskType === task.type) || {};
-                  
-                  return (
-                    <div key={task.type} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 space-y-3 shadow-sm hover:border-[var(--color-accent)]/40 transition-all">
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-2">
-                          <div className="p-1.5 bg-indigo-500/10 text-indigo-400 rounded-lg">
-                            <Icon size={16} />
-                          </div>
-                          <div>
-                            <h5 className="font-bold text-xs text-[var(--color-fg)]">{task.name}</h5>
-                            <p className="text-[9px] text-[var(--color-muted-fg)]">{task.desc}</p>
-                          </div>
-                        </div>
-                        <Switch
-                          size="small"
-                          checked={existingAux.isEnabled ?? true}
-                          onChange={(val) => {
-                            upsertAuxMutation.mutate({
-                              taskType: task.type,
-                              data: { isEnabled: val }
-                            });
-                          }}
-                        />
-                      </div>
-
-                      <div className="space-y-2 pt-2 border-t border-[var(--color-border)]/40">
-                        <div className="flex flex-col gap-1">
-                          <label className="text-[8px] font-bold text-[var(--color-muted-fg)] uppercase">Assigned Model</label>
-                          <Select
-                            size="small"
-                            value={existingAux.modelId || ''}
-                            onChange={(val) => {
-                              upsertAuxMutation.mutate({
-                                taskType: task.type,
-                                data: { modelId: val || null }
-                              });
-                            }}
-                            options={[
-                              { value: '', label: '⚡ Auto (Provider Default / Gemini Flash)' },
-                              ...modelsList.map((m) => ({ value: m.id, label: `${m.provider?.name} — ${m.modelName}` }))
-                            ]}
-                            className="w-full text-xs"
-                          />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="flex flex-col gap-1">
-                            <label className="text-[8px] font-bold text-[var(--color-muted-fg)] uppercase">Timeout (sec)</label>
-                            <InputNumber
-                              size="small"
-                              value={existingAux.timeoutSeconds || 30}
-                              onChange={(val) => {
-                                upsertAuxMutation.mutate({
-                                  taskType: task.type,
-                                  data: { timeoutSeconds: val || 30 }
-                                });
-                              }}
-                              min={5}
-                              max={300}
-                              className="w-full text-xs"
-                            />
-                          </div>
-
-                          <div className="flex flex-col gap-1">
-                            <label className="text-[8px] font-bold text-[var(--color-muted-fg)] uppercase">Reasoning</label>
-                            <Select
-                              size="small"
-                              value={existingAux.reasoningEffort || 'none'}
-                              onChange={(val) => {
-                                upsertAuxMutation.mutate({
-                                  taskType: task.type,
-                                  data: { reasoningEffort: val }
-                                });
-                              }}
-                              options={[
-                                { value: 'none', label: 'None (Fast)' },
-                                { value: 'low', label: 'Low' },
-                                { value: 'medium', label: 'Medium' },
-                                { value: 'high', label: 'High' },
-                              ]}
-                              className="w-full text-xs"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
           </div>
         )}

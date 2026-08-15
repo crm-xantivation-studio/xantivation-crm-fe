@@ -8,7 +8,13 @@ export function useMessagingResource(resource: string) {
     queryKey: ['messaging', resource],
     queryFn: async () => {
       const res = await api.get(`/integrations/chatwoot/${resource}`);
-      return res.data?.data || [];
+      const raw = res.data?.data;
+      if (Array.isArray(raw)) return raw;
+      if (raw && typeof raw === 'object') {
+        const arrayField = Object.values(raw).find((v) => Array.isArray(v));
+        if (arrayField) return arrayField;
+      }
+      return [];
     },
   });
 
@@ -22,11 +28,289 @@ export function useMessagingResource(resource: string) {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, payload }: { id: string | number; payload: any }) => {
+      const res = await api.patch(`/integrations/chatwoot/${resource}/${id}`, payload);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messaging', resource] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string | number) => {
+      const res = await api.delete(`/integrations/chatwoot/${resource}/${id}`);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messaging', resource] });
+    },
+  });
+
   return {
     items: query.data || [],
     isLoading: query.isLoading,
     refetch: query.refetch,
     createItem: createMutation.mutateAsync,
+    updateItem: updateMutation.mutateAsync,
+    deleteItem: deleteMutation.mutateAsync,
     isCreating: createMutation.isPending,
+    isUpdating: updateMutation.isPending,
+    isDeleting: deleteMutation.isPending,
   };
+}
+
+export function useSystemSettings() {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ['system-settings'],
+    queryFn: async () => {
+      const res = await api.get('/integrations/chatwoot/system-settings');
+      return res.data?.data || {};
+    },
+  });
+
+  const saveMutation = useMutation({
+    mutationFn: async (settings: Array<{ key: string; value?: string; isEnabled?: boolean; description?: string }>) => {
+      const res = await api.post('/integrations/chatwoot/system-settings', { settings });
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['system-settings'] });
+    },
+  });
+
+  return {
+    settings: query.data || {},
+    isLoading: query.isLoading,
+    refetch: query.refetch,
+    saveSettings: saveMutation.mutateAsync,
+    isSaving: saveMutation.isPending,
+  };
+}
+
+export function useTestChatwootConnection() {
+  return useMutation({
+    mutationFn: async (payload: { baseUrl: string; accessToken: string; accountId?: number }) => {
+      const res = await api.post('/integrations/chatwoot/test-connection', payload);
+      return res.data?.data;
+    },
+  });
+}
+
+// === MESSAGING CHANNELS HOOKS (Phase 1 Backend API) ===
+
+export function useMessagingChannels(includeStatus = true) {
+  return useQuery({
+    queryKey: ['messaging-channels', includeStatus],
+    queryFn: async () => {
+      const res = await api.get(`/integrations/chatwoot/channels?includeStatus=${includeStatus}`);
+      return res.data?.data || [];
+    },
+  });
+}
+
+export function useSaveMessagingChannel() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, payload }: { id?: string; payload: { name?: string; platform?: string; botToken?: string; channelName?: string; inboxId?: number } }) => {
+      if (id) {
+        const res = await api.patch(`/integrations/chatwoot/channels/${id}`, payload);
+        return res.data?.data;
+      } else {
+        const res = await api.post('/integrations/chatwoot/channels', payload);
+        return res.data?.data;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messaging-channels'] });
+    },
+  });
+}
+
+export function useDeleteMessagingChannel() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await api.delete(`/integrations/chatwoot/channels/${id}`);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messaging-channels'] });
+    },
+  });
+}
+
+export function useRegisterWebhook() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await api.post(`/integrations/chatwoot/channels/${id}/register-webhook`);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messaging-channels'] });
+    },
+  });
+}
+
+export function useRegisterAllWebhooks() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const res = await api.post('/integrations/chatwoot/channels/register-all');
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messaging-channels'] });
+    },
+  });
+}
+
+export function useTunnelTest() {
+  return useMutation({
+    mutationFn: async (tunnelUrl?: string) => {
+      const res = await api.post('/integrations/chatwoot/tunnel/test', { tunnelUrl });
+      return res.data?.data;
+    },
+  });
+}
+
+export function useDiagnostics() {
+  return useQuery({
+    queryKey: ['messaging-diagnostics'],
+    queryFn: async () => {
+      const res = await api.get('/integrations/chatwoot/diagnostics');
+      return res.data?.data || null;
+    },
+    enabled: false, // Refetch manually on button click
+  });
+}
+
+export function useInboxMembers(inboxId?: number) {
+  return useQuery({
+    queryKey: ['inbox-members', inboxId],
+    queryFn: async () => {
+      if (!inboxId) return [];
+      const res = await api.get(`/integrations/chatwoot/inboxes/${inboxId}/members`);
+      return res.data?.data || [];
+    },
+    enabled: !!inboxId,
+  });
+}
+
+export function useSaveInboxMembers() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ inboxId, agentIds }: { inboxId: number; agentIds: number[] }) => {
+      const res = await api.post(`/integrations/chatwoot/inboxes/${inboxId}/members`, { agentIds });
+      return res.data?.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['inbox-members', variables.inboxId] });
+    },
+  });
+}
+
+// === SOCIAL POSTS & COMMENT SETTINGS HOOKS ===
+
+export function useSocialPosts(includeArchived = false) {
+  return useQuery({
+    queryKey: ['social-posts', includeArchived],
+    queryFn: async () => {
+      const res = await api.get(`/integrations/social-posts?includeArchived=${includeArchived}`);
+      return res.data?.data || [];
+    },
+  });
+}
+
+export function useCreateSocialPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: { title?: string; content: string; platform?: string; channelName?: string; status?: string; scheduledAt?: string }) => {
+      const res = await api.post('/integrations/social-posts', payload);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['social-posts'] });
+    },
+  });
+}
+
+export function usePublishSocialPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await api.post(`/integrations/social-posts/${id}/publish`);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['social-posts'] });
+    },
+  });
+}
+
+export function useGenerateSocialPostContent() {
+  return useMutation({
+    mutationFn: async (prompt: string) => {
+      const res = await api.post('/integrations/social-posts/generate', { prompt });
+      return res.data?.data;
+    },
+  });
+}
+
+export function useDeleteSocialPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await api.delete(`/integrations/social-posts/${id}`);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['social-posts'] });
+    },
+  });
+}
+
+export function useRestoreSocialPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await api.post(`/integrations/social-posts/${id}/restore`);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['social-posts'] });
+    },
+  });
+}
+
+export function useCommentSettings() {
+  return useQuery({
+    queryKey: ['comment-settings'],
+    queryFn: async () => {
+      const res = await api.get('/integrations/social-posts/comment-settings');
+      return res.data?.data || null;
+    },
+  });
+}
+
+export function useUpdateCommentSettings() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: { autoReplyEnabled: boolean; template: string; portfolioContactLink: string }) => {
+      const res = await api.post('/integrations/social-posts/comment-settings', payload);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comment-settings'] });
+    },
+  });
 }

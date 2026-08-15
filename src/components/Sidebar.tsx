@@ -21,6 +21,7 @@ import {
   BrainCircuit,
   BarChart3,
   Settings,
+  Share2,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
@@ -82,13 +83,15 @@ export default function Sidebar() {
       icon: MessageSquare,
       children: [
         { name: t('sidebar.messagingConversations'), path: '/messaging/conversations' },
-        { name: t('sidebar.messagingInboxes'), path: '/messaging/inboxes' },
-        { name: t('sidebar.messagingAgentBots'), path: '/messaging/agent-bots' },
-        { name: t('sidebar.messagingTeams'), path: '/messaging/teams' },
-        { name: t('sidebar.messagingLabels'), path: '/messaging/labels' },
-        { name: t('sidebar.messagingCannedResponses'), path: '/messaging/canned-responses' },
-        { name: t('sidebar.messagingAutomation'), path: '/messaging/automation' },
-        { name: t('sidebar.messagingWebhooks'), path: '/messaging/webhooks' },
+        { name: t('sidebar.messagingConfiguration'), path: '/messaging/configuration' },
+      ],
+    },
+    {
+      name: t('sidebar.content'),
+      path: '/content',
+      icon: Share2,
+      children: [
+        { name: t('sidebar.contentPosts'), path: '/content/posts' },
       ],
     },
     {

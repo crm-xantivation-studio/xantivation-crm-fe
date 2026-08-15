@@ -1519,5 +1519,23 @@
     "aiChat": {
       "connectionError": "Connection to AI server failed. Please try again."
     }
+  },
+  "sidebar": {
+    "dashboard": "ダッシュボード",
+    "leads": "リード",
+    "customers": "顧客",
+    "opportunities": "案件",
+    "quotations": "見積書",
+    "deals": "商談",
+    "contracts": "契約",
+    "payments": "支払い",
+    "messaging": "メッセージング",
+    "messagingConversations": "会話",
+    "messagingConfiguration": "システム設定",
+    "content": "コンテンツ & メディア",
+    "contentPosts": "自動投稿",
+    "aiHub": "AIハブ",
+    "reports": "レポート",
+    "settings": "設定"
   }
 }

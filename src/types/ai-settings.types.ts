@@ -1,9 +1,12 @@
 export interface LlmProvider {
   id: string;
   name: string;
+  slug?: string;
   type: 'CLOUD' | 'LOCAL' | 'CUSTOM';
   baseUrl: string;
-  isOpenAiCompatible: boolean;
+  apiFormat?: string;
+  isOpenAiCompatible?: boolean;
+  supportsFetchModels?: boolean;
   iconSlug?: string;
   isActive: boolean;
   createdAt: string;
@@ -19,6 +22,7 @@ export interface ApiKey {
   encryptedKey?: string;
   maskedKey: string;
   isActive: boolean;
+  failCount?: number;
   lastUsedAt?: string;
   createdAt: string;
   provider?: LlmProvider;
@@ -30,7 +34,9 @@ export interface LlmModel {
   modelName: string;
   displayName?: string;
   contextWindow?: number;
+  metadata?: Record<string, any>;
   isDefault: boolean;
+  isCustom?: boolean;
   createdAt: string;
   provider?: LlmProvider;
 }
@@ -42,17 +48,20 @@ export interface Agent {
   role: string;
   description?: string;
   systemPrompt: string;
+  providerId?: string;
   modelId: string;
   parentAgentId?: string;
   apiKeyId?: string;
-  autonomyLevel: 'FULL' | 'SEMI' | 'MANUAL';
+  autonomyLevel: 'FULL' | 'SEMI' | 'MANUAL' | string;
   maxTokensPerRequest?: number;
   temperature?: number;
-  reportingMode?: 'REALTIME' | 'BATCH' | 'SILENT';
+  reportingMode?: 'REALTIME' | 'BATCH' | 'SILENT' | string;
   reportingTarget?: string;
+  version?: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  provider?: LlmProvider;
   model?: LlmModel;
   parentAgent?: Agent;
   subAgents?: Agent[];
@@ -107,6 +116,7 @@ export interface CreateAgentDto {
   role: string;
   description?: string;
   systemPrompt: string;
+  providerId?: string;
   modelId: string;
   parentAgentId?: string;
   apiKeyId?: string;
