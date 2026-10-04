@@ -61,7 +61,7 @@ export default function AiHubDashboard() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-6 lg:p-8 overflow-y-auto h-full w-full bg-[var(--color-bg-tint)] relative">
       {/* Title */}
       <div className="flex justify-between items-center shrink-0">
         <div>

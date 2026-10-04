@@ -984,7 +984,6 @@ I have reviewed the agreement file and found:
           </div>
         </div>
 
-      </div>
     </div>
   );
 }

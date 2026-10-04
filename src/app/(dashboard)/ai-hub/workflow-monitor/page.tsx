@@ -212,7 +212,7 @@ export default function WorkflowMonitor() {
   }, []);
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col space-y-6">
+    <div className="h-full w-full p-6 lg:p-8 overflow-y-auto flex flex-col space-y-6 bg-[var(--color-bg-tint)] relative">
       {/* Title */}
       <div className="flex justify-between items-center shrink-0">
         <div>

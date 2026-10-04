@@ -370,7 +370,7 @@ export default function AiConfigurationPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-6 lg:p-8 overflow-y-auto h-full w-full bg-[var(--color-bg-tint)] relative">
       {/* Top Header */}
       <div className="flex justify-between items-start">
         <div>
