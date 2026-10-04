@@ -5,21 +5,19 @@ export enum OpportunityStage {
   QUALIFICATION = 'QUALIFICATION',
   PROPOSAL = 'PROPOSAL',
   NEGOTIATION = 'NEGOTIATION',
-  WON = 'WON',
-  LOST = 'LOST',
+  CLOSED_WON = 'CLOSED_WON',
+  CLOSED_LOST = 'CLOSED_LOST',
 }
 
 export interface Opportunity {
   id: string;
-  opportunityCode: string;
+  oppCode: string;
   name: string;
-  accountId: string;
-  account?: {
+  customer?: {
     id: string;
     customerCode: string;
     name: string;
   };
-  contactId: string;
   contact?: {
     id: string;
     firstName?: string;
@@ -30,13 +28,12 @@ export interface Opportunity {
   amount: number;
   stage: OpportunityStage;
   probability?: number;
-  expectedCloseDate: string;
+  closeDate: string;
   serviceInterest?: ServiceInterest;
   description?: string;
   lostReason?: string;
   leadId?: string;
-  ownerId?: string;
-  owner?: {
+  assignedTo?: {
     id: string;
     firstName: string;
     lastName: string;
@@ -47,16 +44,16 @@ export interface Opportunity {
 
 export interface CreateOpportunityDto {
   name: string;
-  accountId: string;
-  contactId: string;
+  customerId: string;
+  contactId?: string;
   amount: number;
   stage?: OpportunityStage;
   probability?: number;
-  expectedCloseDate: string;
+  closeDate: string;
   serviceInterest?: ServiceInterest;
   description?: string;
   leadId?: string;
-  ownerId?: string;
+  assignedToId?: string;
 }
 
 export interface UpdateOpportunityDto extends Partial<CreateOpportunityDto> {

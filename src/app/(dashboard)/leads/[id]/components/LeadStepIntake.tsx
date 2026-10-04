@@ -64,7 +64,7 @@ export function LeadStepIntake({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header Info */}
       <div className="border-b border-[var(--color-border)]/40 pb-3">
         <h3 className="text-sm font-bold text-[var(--color-fg)]">

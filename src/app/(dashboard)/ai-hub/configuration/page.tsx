@@ -150,10 +150,10 @@ export default function AiConfigurationPage() {
   // If non-admin user tries to access
   if (!isAdmin) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[500px] text-center p-8 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl">
+      <div className="flex flex-col items-center justify-center min-h-[500px] text-center p-8 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px]">
         <Lock size={48} className="text-red-500 mb-4" />
-        <h2 className="text-xl font-bold text-[var(--color-fg)]">Access Restricted</h2>
-        <p className="text-sm text-[var(--color-muted-fg)] mt-1 max-w-md">
+        <h2 className="text-base sm:text-lg font-semibold text-[var(--color-fg)]">Access Restricted</h2>
+        <p className="text-xs text-[var(--color-muted-fg)] mt-1 max-w-md">
           Only System Administrators are allowed to configure AI Hub settings and Hermes Agent governance rules.
         </p>
       </div>
@@ -370,11 +370,11 @@ export default function AiConfigurationPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Top Header */}
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-fg)] flex items-center gap-2.5">
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)] flex items-center gap-2.5">
             <Radio size={26} className="text-[var(--color-accent)]" />
             <span>AI Hub — Configuration</span>
           </h1>
@@ -415,11 +415,11 @@ export default function AiConfigurationPage() {
       </div>
 
       {/* Main Tab Content Body */}
-      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 min-h-[550px]">
+      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 min-h-[550px]">
         
         {/* TAB 1: PROVIDERS & KEYS */}
         {activeTab === 'providers' && (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* Providers List */}
             <div className="space-y-4">
               <div className="flex justify-between items-center">
@@ -439,7 +439,7 @@ export default function AiConfigurationPage() {
                 {providersList.map((p) => {
                   const status = providerStatuses[p.id];
                   return (
-                    <div key={p.id} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between space-y-4 hover:border-[var(--color-accent)]/50 transition-all shadow-sm">
+                    <div key={p.id} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-4 flex flex-col justify-between space-y-4 hover:border-[var(--color-accent)]/50 transition-all shadow-sm">
                       <div className="space-y-2">
                         <div className="flex justify-between items-start">
                           <div className="flex items-center gap-2">
@@ -586,7 +586,7 @@ export default function AiConfigurationPage() {
               </div>
 
               {/* ReactFlow Visual Container */}
-              <div className="h-[550px] border border-[var(--color-border)] rounded-2xl bg-[var(--color-surface)]/40 overflow-hidden relative shadow-inner">
+              <div className="h-[550px] border border-[var(--color-border)] rounded-[5px] bg-[var(--color-surface)]/40 overflow-hidden relative shadow-inner">
                 {agentsList.length === 0 ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
                     <Network size={36} className="text-[var(--color-muted-fg)] mb-2" />
@@ -774,7 +774,7 @@ export default function AiConfigurationPage() {
             </div>
 
             {/* Right Side: Detailed Sidebar Editor for Selected Agent Node */}
-            <div className="xl:col-span-3 bg-[var(--color-surface)]/60 border border-[var(--color-border)] rounded-2xl p-5 min-h-[550px] flex flex-col justify-between shadow-sm">
+            <div className="xl:col-span-3 bg-[var(--color-surface)]/60 border border-[var(--color-border)] rounded-[5px] p-5 min-h-[550px] flex flex-col justify-between shadow-sm">
               {selectedAgentNode ? (
                 <div className="space-y-4 overflow-y-auto max-h-[530px] pr-1">
                   <div>
@@ -993,7 +993,7 @@ export default function AiConfigurationPage() {
             </div>
 
             {/* 1. Approval Mode Card */}
-            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-3 shadow-sm">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-3 shadow-sm">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="text-xs font-bold text-[var(--color-fg)]">Agent Approval Mode</h4>
@@ -1019,7 +1019,7 @@ export default function AiConfigurationPage() {
             </div>
 
             {/* 2. Action Allowlist Tag Input Card */}
-            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-4 shadow-sm">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-4 shadow-sm">
               <div>
                 <h4 className="text-xs font-bold text-[var(--color-fg)]">Action Allowlist (Auto-Approve Tags)</h4>
                 <p className="text-[11px] text-[var(--color-muted-fg)]">Actions listed here will bypass human approval when Approval Mode is set to SMART.</p>
@@ -1065,7 +1065,7 @@ export default function AiConfigurationPage() {
 
             {/* 3. Safety Toggles Stack */}
             <div className="space-y-3">
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Redact Sensitive Data</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Mask PII (phone numbers, emails, personal IDs) before transmitting prompts to external LLM APIs.</p>
@@ -1076,7 +1076,7 @@ export default function AiConfigurationPage() {
                 />
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Data Checkpoints & Snapshot Rollback</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Automatically generate an atomic data checkpoint before Agent updates any CRM database record.</p>
@@ -1087,7 +1087,7 @@ export default function AiConfigurationPage() {
                 />
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Allow Direct Database Write</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">When disabled, Agent operates in read-only mode and can only propose draft changes.</p>
@@ -1101,7 +1101,7 @@ export default function AiConfigurationPage() {
 
             {/* 4. Limits & Threshold Inputs */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 space-y-2 shadow-sm">
+              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-4 space-y-2 shadow-sm">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-muted-fg)]">Max Steps Per Turn</label>
                 <InputNumber
                   value={aiConfig.maxStepsPerTurn}
@@ -1113,7 +1113,7 @@ export default function AiConfigurationPage() {
                 <p className="text-[9px] text-[var(--color-muted-fg)]">Limits loop steps per task.</p>
               </div>
 
-              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 space-y-2 shadow-sm">
+              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-4 space-y-2 shadow-sm">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-muted-fg)]">Subagent Concurrency</label>
                 <InputNumber
                   value={aiConfig.maxConcurrentSubagents}
@@ -1125,7 +1125,7 @@ export default function AiConfigurationPage() {
                 <p className="text-[9px] text-[var(--color-muted-fg)]">Max parallel sub-agents.</p>
               </div>
 
-              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 space-y-2 shadow-sm">
+              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-4 space-y-2 shadow-sm">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-muted-fg)]">Subagent Timeout (sec)</label>
                 <InputNumber
                   value={aiConfig.subagentTimeoutSec}
@@ -1155,7 +1155,7 @@ export default function AiConfigurationPage() {
 
             {/* Feature Toggles Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Lead BANT Syncing</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Auto score leads on budget and authority parameters.</p>
@@ -1163,7 +1163,7 @@ export default function AiConfigurationPage() {
                 <Switch checked={aiConfig.leadBantSync} onChange={(val) => saveGovernanceConfig({ leadBantSync: val })} />
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Opportunity Coach</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Suggests next actions on active pipeline steps.</p>
@@ -1171,7 +1171,7 @@ export default function AiConfigurationPage() {
                 <Switch checked={aiConfig.oppCoach} onChange={(val) => saveGovernanceConfig({ oppCoach: val })} />
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Quotation Follow-up</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Propose email drafts based on customer timeline rules.</p>
@@ -1179,7 +1179,7 @@ export default function AiConfigurationPage() {
                 <Switch checked={aiConfig.quoFollowUp} onChange={(val) => saveGovernanceConfig({ quoFollowUp: val })} />
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Contract Risk Audit</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Identify unfavorable clauses inside uploaded documents.</p>
@@ -1187,7 +1187,7 @@ export default function AiConfigurationPage() {
                 <Switch checked={aiConfig.contractRisk} onChange={(val) => saveGovernanceConfig({ contractRisk: val })} />
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Churn Risk Prediction</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Run daily cron job to detect high-churn risk accounts.</p>
@@ -1195,7 +1195,7 @@ export default function AiConfigurationPage() {
                 <Switch checked={aiConfig.churnPredictionEnabled} onChange={(val) => saveGovernanceConfig({ churnPredictionEnabled: val })} />
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] shadow-sm">
                 <div>
                   <p className="font-bold text-xs text-[var(--color-fg)]">Stalled Deal Alert</p>
                   <p className="text-[10px] text-[var(--color-muted-fg)]">Alert account managers when deals stagnate.</p>
@@ -1204,7 +1204,7 @@ export default function AiConfigurationPage() {
               </div>
             </div>
 
-            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-3 shadow-sm">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-3 shadow-sm">
               <label className="text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg)]">
                 Data Sensitivity Threshold
               </label>
@@ -1221,7 +1221,7 @@ export default function AiConfigurationPage() {
             </div>
 
             {/* Persistent Memory Engine */}
-            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-4 shadow-sm">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-4 shadow-sm">
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-fg)] flex items-center gap-2">
                   <Brain size={16} className="text-indigo-400" />
@@ -1290,7 +1290,7 @@ export default function AiConfigurationPage() {
             </div>
 
             {/* Auto-Context Compression Engine */}
-            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-4 shadow-sm">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-4 shadow-sm">
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-fg)] flex items-center gap-2">
                   <Zap size={16} className="text-amber-400" />
@@ -1432,7 +1432,7 @@ export default function AiConfigurationPage() {
         onCancel={() => setProviderModalOpen(false)}
         okText="Save Provider"
         cancelText="Cancel"
-        className="rounded-2xl"
+        className="rounded-[5px]"
       >
         <div className="space-y-4 pt-3">
           <FloatingInput label="Provider Name (e.g., Groq, Ollama, OpenAI)" value={providerNameInput} onChange={setProviderNameInput} />
@@ -1473,7 +1473,7 @@ export default function AiConfigurationPage() {
         onCancel={() => setKeyModalOpen(false)}
         okText="Save Encrypted Key"
         cancelText="Cancel"
-        className="rounded-2xl"
+        className="rounded-[5px]"
       >
         <div className="space-y-4 pt-3">
           <div className="flex flex-col gap-1">
@@ -1500,7 +1500,7 @@ export default function AiConfigurationPage() {
         onCancel={() => setAgentModalOpen(false)}
         okText="Save Agent"
         cancelText="Cancel"
-        className="rounded-2xl"
+        className="rounded-[5px]"
         width={600}
       >
         <div className="space-y-4 pt-3">

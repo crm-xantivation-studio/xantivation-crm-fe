@@ -63,11 +63,11 @@ export default function ReportsOverview() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Editorial Title */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">{t('reports.title')}</h1>
-        <p className="text-sm text-[var(--color-muted-fg)]">{t('reports.subtitle')}</p>
+        <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">{t('reports.title')}</h1>
+        <p className="text-xs text-[var(--color-muted-fg)]">{t('reports.subtitle')}</p>
       </div>
 
       {/* Bento Summary Cards */}
@@ -87,7 +87,7 @@ export default function ReportsOverview() {
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.totalPipeline')}</span>
                 <Target size={16} className="text-indigo-500" />
               </div>
-              <h2 className="text-2xl font-bold tracking-tight mt-2 text-[var(--color-fg)]">
+              <h2 className="text-base sm:text-lg font-semibold tracking-tight mt-2 text-[var(--color-fg)]">
                 {formatVND(summary?.totalPipelineValue)}
               </h2>
             </div>
@@ -98,7 +98,7 @@ export default function ReportsOverview() {
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.monthlySales')}</span>
                 <TrendingUp size={16} className="text-emerald-500" />
               </div>
-              <h2 className="text-2xl font-bold tracking-tight mt-2 text-[var(--color-fg)]">
+              <h2 className="text-base sm:text-lg font-semibold tracking-tight mt-2 text-[var(--color-fg)]">
                 {formatVND(summary?.wonThisMonth)}
               </h2>
             </div>
@@ -109,7 +109,7 @@ export default function ReportsOverview() {
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.overdueDebt')}</span>
                 <CreditCard size={16} className="text-rose-500" />
               </div>
-              <h2 className="text-2xl font-bold tracking-tight mt-2 text-[var(--color-fg)]">
+              <h2 className="text-base sm:text-lg font-semibold tracking-tight mt-2 text-[var(--color-fg)]">
                 {formatVND(summary?.overdueAmount)}
               </h2>
             </div>
@@ -120,7 +120,7 @@ export default function ReportsOverview() {
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{t('reports.thirtyDayForecast')}</span>
                 <BarChart3 size={16} className="text-amber-500" />
               </div>
-              <h2 className="text-2xl font-bold tracking-tight mt-2 text-[var(--color-fg)]">
+              <h2 className="text-base sm:text-lg font-semibold tracking-tight mt-2 text-[var(--color-fg)]">
                 {formatVND(summary?.forecast30Days)}
               </h2>
             </div>

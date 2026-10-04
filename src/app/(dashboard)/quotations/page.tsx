@@ -404,12 +404,12 @@ export default function Quotations() {
     (filterStatus !== 'ALL' ? 1 : 0) + (filterService !== 'ALL' ? 1 : 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--color-fg)]">{t('quotations.title')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)] mt-1">{t('quotations.subtitle')}</p>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">{t('quotations.title')}</h1>
+          <p className="text-xs text-[var(--color-muted-fg)] mt-1">{t('quotations.subtitle')}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {/* Search bar */}
@@ -426,25 +426,24 @@ export default function Quotations() {
 
           <button
             onClick={() => setFilterDrawerOpen(true)}
-            className="flex items-center gap-2 border border-[var(--color-border)] bg-[var(--color-bg-tint)] text-[var(--color-fg)] hover:bg-[var(--color-surface)] px-4 h-10 rounded-xl text-xs font-semibold cursor-pointer relative"
+            title={t('quotations.filters')}
+            className="w-9 h-9 flex items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-tint)] text-[var(--color-fg)] hover:bg-[var(--color-surface)] cursor-pointer relative shrink-0 transition-all"
           >
-            <SlidersHorizontal size={14} />
-            <span>{t('quotations.filters')}</span>
+            <SlidersHorizontal size={15} />
             {activeFiltersCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-[var(--color-accent)] text-white w-4 h-4 rounded-full text-[9px] flex items-center justify-center font-bold">
+              <span className="absolute -top-1 -right-1 bg-[var(--color-accent)] text-white w-4 h-4 rounded-full text-[9px] flex items-center justify-center font-bold animate-pulse">
                 {activeFiltersCount}
               </span>
             )}
           </button>
 
-          <Button
-            type="primary"
+          <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-2 h-10 px-5 rounded-xl cursor-pointer"
+            title={t('quotations.create')}
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white shadow-xs transition-all cursor-pointer shrink-0"
           >
             <Plus size={16} />
-            <span>{t('quotations.create')}</span>
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -481,7 +480,7 @@ export default function Quotations() {
           }
         }}
       >
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('quotations.statusLabel')}
@@ -520,7 +519,7 @@ export default function Quotations() {
           <span className="text-xs text-[var(--color-muted-fg)] font-mono">{t('quotations.loading')}</span>
         </div>
       ) : (
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-3xl overflow-hidden shadow-sm">
+        <div className="">
           <SharedTable
             columns={tableColumns}
             dataSource={filteredQuotations}
@@ -627,7 +626,7 @@ export default function Quotations() {
           </div>
 
           {/* Part 3: Pricing Summary */}
-          <div className="space-y-4 bg-[var(--color-surface)]/40 p-4 border border-[var(--color-border)] rounded-2xl">
+          <div className="space-y-4 bg-[var(--color-surface)]/40 p-4 border border-[var(--color-border)] rounded-[5px]">
             <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] border-b border-[var(--color-border)] pb-1.5 font-bold">3. Pricing Adjustment & VAT Summary</h4>
             <div className="grid grid-cols-3 gap-4 items-start">
               <div className="flex flex-col gap-2">

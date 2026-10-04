@@ -73,7 +73,7 @@ export function LeadStepBant({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header Info */}
       <div className="border-b border-[var(--color-border)]/40 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

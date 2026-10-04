@@ -105,7 +105,7 @@ export default function QuickQuoteModal({ visible, onClose, conversationId, matc
           Tạo Báo Giá
         </Button>,
       ]}
-      className="rounded-2xl"
+      className="rounded-[5px]"
       width={560}
     >
       <div className="space-y-4 my-3 text-xs">

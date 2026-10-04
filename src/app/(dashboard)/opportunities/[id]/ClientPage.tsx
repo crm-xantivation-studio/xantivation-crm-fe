@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useUsers } from '@/hooks/api/useUser';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { OpportunityStage } from '@/types/opportunity.types';
 
 export default function OpportunityDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -107,14 +108,14 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
   }
 
   const handleStageChange = async (newStage: any) => {
-    if (newStage === 'LOST') {
+    if (newStage === OpportunityStage.CLOSED_LOST) {
       setLostReason('');
       setLostModalOpen(true);
       return;
     }
 
     let prob = 10;
-    if (newStage === 'WON') prob = 100;
+    if (newStage === OpportunityStage.CLOSED_WON) prob = 100;
     else if (newStage === 'NEGOTIATION') prob = 80;
     else if (newStage === 'PROPOSAL') prob = 50;
     else if (newStage === 'QUALIFICATION') prob = 20;
@@ -167,11 +168,11 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
     });
   };
 
-  const handleOwnerChange = async (ownerId: string) => {
+  const handleOwnerChange = async (assignedToId: string) => {
     try {
       await updateMutation.mutateAsync({
         id: opp.id,
-        dto: { ownerId },
+        dto: { assignedToId },
       });
     } catch (err) {
       // Handled
@@ -180,30 +181,30 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
 
   // Convert stage list to index for visual Stepper
   const stagesOrder = ['QUALIFICATION', 'PROPOSAL', 'NEGOTIATION', 'WON'];
-  const currentStep = stagesOrder.indexOf(opp.stage === 'LOST' ? 'WON' : opp.stage);
+  const currentStep = stagesOrder.indexOf(opp.stage === OpportunityStage.CLOSED_LOST ? 'WON' : opp.stage);
 
-  const ownerName = opp.owner ? `${opp.owner.firstName || ''} ${opp.owner.lastName || ''}`.trim() : t('opportunities.systemAdmin');
+  const ownerName = opp.assignedTo ? `${opp.assignedTo.firstName || ''} ${opp.assignedTo.lastName || ''}`.trim() : t('opportunities.systemAdmin');
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Breadcrumbs & Title */}
       <div className="flex justify-between items-start shrink-0">
         <div>
           <div className="text-xs text-[var(--color-muted-fg)] flex items-center gap-1.5 mb-2 font-mono">
             <Link href="/opportunities" className="hover:underline">{t('opportunities.breadcrumbOpportunities')}</Link>
             <span>&gt;</span>
-            <span className="text-[var(--color-fg)] font-semibold">{opp.opportunityCode}</span>
+            <span className="text-[var(--color-fg)] font-semibold">{opp.oppCode}</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">
             {opp.name}
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('opportunities.dealCode')}: {opp.opportunityCode} • {opp.serviceInterest}</p>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('opportunities.dealCode')}: {opp.oppCode} • {opp.serviceInterest}</p>
         </div>
 
         <div className="flex items-center gap-3">
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            opp.stage === 'WON' ? 'bg-green-500/10 text-green-500' :
-            opp.stage === 'LOST' ? 'bg-red-500/10 text-red-500' :
+            opp.stage === OpportunityStage.CLOSED_WON ? 'bg-green-500/10 text-green-500' :
+            opp.stage === OpportunityStage.CLOSED_LOST ? 'bg-red-500/10 text-red-500' :
             'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
           }`}>
             {t('opportunities.stage')}: {opp.stage}
@@ -212,7 +213,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
       </div>
 
       {/* Visual Stage Progress Stepper */}
-      {opp.stage !== 'LOST' ? (
+      {opp.stage !== OpportunityStage.CLOSED_LOST ? (
         <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-lg">
           <Steps
             current={currentStep}
@@ -262,9 +263,9 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
           </div>
 
           {/* Sub Tab Bodies */}
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 min-h-[300px]">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 min-h-[300px]">
             {activeSubTab === 'overview' && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
@@ -281,7 +282,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
                       </div>
                       <div className="flex justify-between border-b border-[var(--color-border)] pb-2">
                         <span className="text-[var(--color-muted-fg)]">{t('opportunities.targetCloseDate')}</span>
-                        <span className="font-semibold font-mono">{opp.expectedCloseDate ? opp.expectedCloseDate.substring(0, 10) : ''}</span>
+                        <span className="font-semibold font-mono">{opp.closeDate ? opp.closeDate.substring(0, 10) : ''}</span>
                       </div>
                       <div className="flex justify-between border-b border-[var(--color-border)] pb-2">
                         <span className="text-[var(--color-muted-fg)]">{t('opportunities.serviceInterest')}</span>
@@ -297,16 +298,16 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between border-b border-[var(--color-border)] pb-2">
                         <span className="text-[var(--color-muted-fg)]">{t('opportunities.accountCustomer')}</span>
-                        {opp.accountId && (
-                          <Link href={`/customers/accounts/${opp.accountId}`} className="font-semibold text-[var(--color-accent)] hover:underline">
-                            {opp.account?.name || t('opportunities.viewAccount')}
+                        {opp.customer?.id && (
+                          <Link href={`/customers/accounts/${opp.customer?.id}`} className="font-semibold text-[var(--color-accent)] hover:underline">
+                            {opp.customer?.name || t('opportunities.viewAccount')}
                           </Link>
                         )}
                       </div>
                       <div className="flex justify-between border-b border-[var(--color-border)] pb-2">
                         <span className="text-[var(--color-muted-fg)]">{t('opportunities.primaryContact')}</span>
-                        {opp.contactId && (
-                          <Link href={`/customers/contacts/${opp.contactId}`} className="font-semibold text-[var(--color-accent)] hover:underline">
+                        {opp.contact?.id && (
+                          <Link href={`/customers/contacts/${opp.contact?.id}`} className="font-semibold text-[var(--color-accent)] hover:underline">
                             {opp.contact ? `${opp.contact.firstName || ''} ${opp.contact.lastName || ''}`.trim() : t('opportunities.viewContact')}
                           </Link>
                         )}
@@ -347,7 +348,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
             {activeSubTab === 'activity' && (
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-[var(--color-fg)]">{t('opportunities.timelineLogs')}</h3>
-                <div className="p-6 bg-[var(--color-surface)]/20 border border-[var(--color-border)]/50 rounded-2xl flex flex-col gap-3 justify-center min-h-[160px] text-center text-[var(--color-muted-fg)] text-xs font-mono">
+                <div className="p-6 bg-[var(--color-surface)]/20 border border-[var(--color-border)]/50 rounded-[5px] flex flex-col gap-3 justify-center min-h-[160px] text-center text-[var(--color-muted-fg)] text-xs font-mono">
                   <HelpCircle size={32} className="mx-auto text-[var(--color-accent)]/50" />
                   <span>{t('opportunities.noTimelineLogs')}</span>
                 </div>
@@ -355,7 +356,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
             )}
 
             {activeSubTab === 'ai-coach' && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="flex justify-between items-center border-b border-[var(--color-border)]/50 pb-4">
                   <div>
                     <h3 className="text-sm font-semibold text-[var(--color-fg)] flex items-center gap-2">
@@ -377,7 +378,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
 
                 {coachingNotes ? (
                   <div className="space-y-4 pt-2">
-                    <div className="p-5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl space-y-3 font-sans shadow-sm leading-relaxed text-xs">
+                    <div className="p-5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] space-y-3 font-sans shadow-sm leading-relaxed text-xs">
                       <p className="font-semibold text-xs text-[var(--color-fg)] flex items-center gap-1.5 border-b border-[var(--color-border)]/50 pb-2">
                         <Bot size={14} className="text-[var(--color-accent)]" />
                         <span>{t('opportunities.coachAdvice')}</span>
@@ -394,7 +395,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-16 space-y-3 bg-[var(--color-surface)]/10 border border-dashed border-[var(--color-border)] rounded-2xl">
+                  <div className="text-center py-16 space-y-3 bg-[var(--color-surface)]/10 border border-dashed border-[var(--color-border)] rounded-[5px]">
                     <Bot size={44} className="mx-auto text-[var(--color-muted-fg)]/40" />
                     <p className="text-xs text-[var(--color-muted-fg)] max-w-md mx-auto leading-relaxed">
                       {t('opportunities.coachEmpty')}
@@ -411,7 +412,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
 
         {/* Right Sidebar Actions (1 col) */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-6">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-6">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('opportunities.controlPanel')}
             </h3>
@@ -441,7 +442,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
                 {t('opportunities.assignedOwner')}
               </label>
               <Select
-                value={opp.ownerId || ''}
+                value={opp.assignedTo?.id || ''}
                 onChange={handleOwnerChange}
                 options={realUsers.map(u => ({ value: u.id, label: u.name }))}
                 className="w-full h-10"

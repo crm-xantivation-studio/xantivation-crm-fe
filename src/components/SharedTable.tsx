@@ -59,13 +59,13 @@ export default function SharedTable<T extends { id: string }>({
   };
 
   return (
-    <div className="az-card w-full overflow-hidden">
+    <div className="-mx-2 sm:-mx-6 overflow-hidden">
       <div className="w-full overflow-x-auto py-2 px-1">
         <table className="w-full text-left border-collapse table-auto group/table">
         <thead>
           <tr className="border-b border-[var(--color-border)]">
             {rowSelection && (
-              <th className="px-6 py-4 w-12">
+              <th className="px-3 py-2.5 w-12">
                 <input
                   type="checkbox"
                   checked={isAllSelected}
@@ -77,13 +77,13 @@ export default function SharedTable<T extends { id: string }>({
             {columns.map((col) => (
               <th
                 key={col.key}
-                className="px-6 py-4 text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium"
+                className="px-3 py-2.5 text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium"
               >
                 {col.title}
               </th>
             ))}
             {(onEdit || onDelete) && (
-              <th className="px-6 py-4 text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium text-right">
+              <th className="px-3 py-2.5 text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium text-right">
                 {effectiveActionsLabel}
               </th>
             )}
@@ -100,7 +100,7 @@ export default function SharedTable<T extends { id: string }>({
                 }`}
               >
                 {rowSelection && (
-                  <td className="px-6 py-4 w-12">
+                  <td className="px-3 py-2.5 w-12">
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -110,12 +110,12 @@ export default function SharedTable<T extends { id: string }>({
                   </td>
                 )}
                 {columns.map((col) => (
-                  <td key={col.key} className="px-6 py-4 text-xs font-medium text-[var(--color-fg)]">
+                  <td key={col.key} className="px-3 py-2.5 text-xs font-medium text-[var(--color-fg)]">
                     {col.render ? col.render(record[col.dataIndex], record) : (record[col.dataIndex] as any)}
                   </td>
                 ))}
                 {(onEdit || onDelete) && (
-                  <td className="px-6 py-4 text-right text-xs">
+                  <td className="px-3 py-2.5 text-right text-xs">
                     <div className="opacity-0 group-hover/row:opacity-100 transition-opacity duration-200 inline-flex items-center gap-1.5 justify-end">
                       {onEdit && (
                         <MagneticButton range={30}>
@@ -147,7 +147,7 @@ export default function SharedTable<T extends { id: string }>({
             <tr>
               <td
                 colSpan={columns.length + (rowSelection ? 1 : 0) + ((onEdit || onDelete) ? 1 : 0)}
-                className="px-6 py-12 text-center text-xs text-[var(--color-muted-fg)] font-mono"
+                className="px-3 py-8 text-center text-xs text-[var(--color-muted-fg)] font-mono"
               >
                 {t('common.noData')}
               </td>

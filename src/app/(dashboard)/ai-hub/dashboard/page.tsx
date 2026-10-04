@@ -61,12 +61,12 @@ export default function AiHubDashboard() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Title */}
       <div className="flex justify-between items-center shrink-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">{t('aiHub.dashboardTitle')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('aiHub.dashboardSubtitle')}</p>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">{t('aiHub.dashboardTitle')}</h1>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('aiHub.dashboardSubtitle')}</p>
         </div>
 
       </div>
@@ -81,9 +81,9 @@ export default function AiHubDashboard() {
           { label: t('aiHub.metricAvgLatency'), val: '280ms', change: t('aiHub.changeLatency') },
           { label: t('aiHub.metricQueueLoad'), val: '0 pending', change: t('aiHub.changeQueue') },
         ].map((item, idx) => (
-          <div key={idx} className="p-4 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl space-y-1">
+          <div key={idx} className="p-4 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] space-y-1">
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-muted-fg)]">{item.label}</span>
-            <h3 className="text-xl font-bold text-[var(--color-fg)]">{item.val}</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-[var(--color-fg)]">{item.val}</h3>
             <p className="text-[10px] text-[var(--color-muted-fg)]">{item.change}</p>
           </div>
         ))}
@@ -92,7 +92,7 @@ export default function AiHubDashboard() {
       {/* Visual Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Requests Chart */}
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-4 space-y-3">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-4 space-y-3">
           <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] block">{t('aiHub.dailyRequests')}</span>
           <div className="h-64 text-xs">
             <ResponsiveContainer width="100%" height="100%">
@@ -114,7 +114,7 @@ export default function AiHubDashboard() {
         </div>
 
         {/* Tokens Chart */}
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-4 space-y-3">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-4 space-y-3">
           <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] block">{t('aiHub.tokenAllocation')}</span>
           <div className="h-64 text-xs">
             <ResponsiveContainer width="100%" height="100%">
@@ -132,7 +132,7 @@ export default function AiHubDashboard() {
         </div>
 
         {/* Tool Distribution Chart */}
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-4 space-y-3">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-4 space-y-3">
           <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] block">{t('aiHub.toolTriggerFrequency')}</span>
           <div className="h-64 text-xs flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
@@ -162,7 +162,7 @@ export default function AiHubDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Left Side: BullMQ Jobs (2 cols) */}
-        <div className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-4">
+        <div className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-4">
           <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-3">
             <div>
               <h3 className="text-sm font-semibold text-[var(--color-fg)]">{t('aiHub.bullMqWorkers')}</h3>
@@ -190,7 +190,7 @@ export default function AiHubDashboard() {
         </div>
 
         {/* Right Side: Activity Timeline (1 col) */}
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-4">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-4">
           <h3 className="text-sm font-semibold text-[var(--color-fg)] border-b border-[var(--color-border)] pb-3">
             {t('aiHub.activityTimeline')}
           </h3>
@@ -218,7 +218,7 @@ export default function AiHubDashboard() {
       </div>
 
       {/* Admin Debug Panel Accordion */}
-      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-4">
+      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-4">
         <h3 className="text-sm font-semibold text-[var(--color-fg)] flex items-center gap-1.5">
           <Shield size={16} className="text-red-500" />
           <span>{t('aiHub.adminDebugSettings')}</span>
