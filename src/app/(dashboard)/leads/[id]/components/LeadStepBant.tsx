@@ -56,19 +56,17 @@ export function LeadStepBant({
         bantScore: Math.max(lead.bantScore || 50, 75),
         status: 'QUALIFIED',
       });
-      message.success('Đã xác nhận Lead Đạt chuẩn BANT');
       onAdvanceToNextStep();
     } catch (err: any) {
-      message.error(err.response?.data?.message || 'Cập nhật thất bại');
+      // Handled by hook
     }
   };
 
   const handleMarkUnqualified = async () => {
     try {
       await onUpdateLead({ status: 'UNQUALIFIED' });
-      message.success('Đã chuyển Lead sang Không đạt chuẩn');
     } catch (err: any) {
-      message.error(err.response?.data?.message || 'Cập nhật thất bại');
+      // Handled by hook
     }
   };
 

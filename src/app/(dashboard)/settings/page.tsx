@@ -882,49 +882,51 @@ export default function Settings() {
             )}
 
             {/* Modal Edit/Create User */}
-            {userModalOpen && (
-              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-[5px] p-5 w-full max-w-md space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
-                  <h4 className="font-semibold text-sm text-[var(--color-fg)] pb-2 border-b border-[var(--color-border)]">
-                    {editingUser ? 'Edit Account' : 'Create Employee Account'}
-                  </h4>
-
-                  <div className="space-y-3">
-                    <div>
-                      <FloatingInput label="Full Name" value={userNameInput} onChange={setUserNameInput} required />
-                      {userErrors.name && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.name}</p>}
-                    </div>
-                    <div>
-                      <FloatingInput label="Email Address" value={userEmailInput} onChange={setUserEmailInput} required />
-                      {userErrors.email && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.email}</p>}
-                    </div>
-                    <div>
-                      <FloatingInput label="Password" type="password" value={userPasswordInput} onChange={setUserPasswordInput} required={!editingUser} />
-                      {userErrors.password && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.password}</p>}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">System Role</label>
-                      <Select
-                        value={userRoleInput}
-                        onChange={setUserRoleInput}
-                        options={[
-                          { value: 'SALES_REP', label: 'Sales Representative' },
-                          { value: 'SALES_MANAGER', label: 'Sales Manager' },
-                          { value: 'ACCOUNTANT', label: 'Accountant' },
-                          { value: 'ADMIN', label: 'Administrator' },
-                        ]}
-                        className="w-full h-9 text-xs"
-                      />
-                    </div>
+            <Modal
+              title={editingUser ? 'Edit Account' : 'Create Employee Account'}
+              open={userModalOpen}
+              onCancel={() => setUserModalOpen(false)}
+              footer={null}
+              zIndex={1050}
+              centered
+              destroyOnClose
+            >
+              <div className="space-y-4 pt-3">
+                <div className="space-y-3">
+                  <div>
+                    <FloatingInput label="Full Name" value={userNameInput} onChange={setUserNameInput} required />
+                    {userErrors.name && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.name}</p>}
                   </div>
-
-                  <div className="flex justify-end gap-2.5 pt-3 border-t border-[var(--color-border)]">
-                    <button onClick={() => setUserModalOpen(false)} className="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer">Cancel</button>
-                    <button onClick={handleSaveUser} className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-gradient-to-r from-[var(--color-accent)] to-cyan-500 hover:opacity-90 text-white shadow-sm transition-all cursor-pointer">Save</button>
+                  <div>
+                    <FloatingInput label="Email Address" value={userEmailInput} onChange={setUserEmailInput} required />
+                    {userErrors.email && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.email}</p>}
+                  </div>
+                  <div>
+                    <FloatingInput label="Password" type="password" value={userPasswordInput} onChange={setUserPasswordInput} required={!editingUser} />
+                    {userErrors.password && <p className="text-red-500 text-[10px] mt-0.5">{userErrors.password}</p>}
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">System Role</label>
+                    <Select
+                      value={userRoleInput}
+                      onChange={setUserRoleInput}
+                      options={[
+                        { value: 'SALES_REP', label: 'Sales Representative' },
+                        { value: 'SALES_MANAGER', label: 'Sales Manager' },
+                        { value: 'ACCOUNTANT', label: 'Accountant' },
+                        { value: 'ADMIN', label: 'Administrator' },
+                      ]}
+                      className="w-full h-9 text-xs"
+                    />
                   </div>
                 </div>
+
+                <div className="flex justify-end gap-2.5 pt-3 border-t border-[var(--color-border)]">
+                  <button onClick={() => setUserModalOpen(false)} className="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer">Cancel</button>
+                  <button onClick={handleSaveUser} className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-gradient-to-r from-[var(--color-accent)] to-cyan-500 hover:opacity-90 text-white shadow-sm transition-all cursor-pointer">Save</button>
+                </div>
               </div>
-            )}
+            </Modal>
           </div>
         )}
 
@@ -950,68 +952,70 @@ export default function Settings() {
             )}
 
             {/* Modal Edit/Create Sales Team */}
-            {teamModalOpen && (
-              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-[5px] p-5 w-full max-w-md space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
-                  <h4 className="font-semibold text-sm text-[var(--color-fg)] pb-2 border-b border-[var(--color-border)]">
-                    {editingTeam ? 'Edit Team' : 'Create Sales Team'}
-                  </h4>
-
-                  <div className="space-y-3">
-                    <div>
-                      <FloatingInput label="Team Name" value={teamNameInput} onChange={setTeamNameInput} required />
-                      {teamErrors.name && <p className="text-red-500 text-[10px] mt-0.5">{teamErrors.name}</p>}
-                    </div>
-                    <div>
-                      <FloatingInput label="Team Description" value={teamDescInput} onChange={setTeamDescInput} />
-                    </div>
-                    
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">Team Leader</label>
-                      <Select
-                        value={teamLeaderInput}
-                        onChange={setTeamLeaderInput}
-                        placeholder="Select Team Leader"
-                        options={usersList.filter(u => u.role === 'SALES_MANAGER' || u.role === 'ADMIN').map(u => ({ value: u.id, label: `${u.name} (${u.role})` }))}
-                        className="w-full h-11"
-                        allowClear
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">Members</label>
-                      <Select
-                        mode="multiple"
-                        value={teamMembersInput}
-                        onChange={setTeamMembersInput}
-                        placeholder="Select Sales Members"
-                        options={usersList.map(u => ({ value: u.id, label: `${u.name} (${u.role})` }))}
-                        className="w-full min-h-11"
-                        allowClear
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">Auto Assignment Rule</label>
-                      <Select
-                        value={teamRuleInput}
-                        onChange={setTeamRuleInput}
-                        options={[
-                          { value: 'ROUND_ROBIN', label: 'Round Robin (Rotating assignment)' },
-                          { value: 'MANUAL', label: 'Manual (Assign manually)' },
-                        ]}
-                        className="w-full h-11"
-                      />
-                    </div>
+            <Modal
+              title={editingTeam ? 'Edit Team' : 'Create Sales Team'}
+              open={teamModalOpen}
+              onCancel={() => setTeamModalOpen(false)}
+              footer={null}
+              zIndex={1050}
+              centered
+              destroyOnClose
+            >
+              <div className="space-y-4 pt-3">
+                <div className="space-y-3">
+                  <div>
+                    <FloatingInput label="Team Name" value={teamNameInput} onChange={setTeamNameInput} required />
+                    {teamErrors.name && <p className="text-red-500 text-[10px] mt-0.5">{teamErrors.name}</p>}
+                  </div>
+                  <div>
+                    <FloatingInput label="Team Description" value={teamDescInput} onChange={setTeamDescInput} />
+                  </div>
+                  
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">Team Leader</label>
+                    <Select
+                      value={teamLeaderInput}
+                      onChange={setTeamLeaderInput}
+                      placeholder="Select Team Leader"
+                      options={usersList.filter(u => u.role === 'SALES_MANAGER' || u.role === 'ADMIN').map(u => ({ value: u.id, label: `${u.name} (${u.role})` }))}
+                      className="w-full h-11"
+                      allowClear
+                    />
                   </div>
 
-                  <div className="flex justify-end gap-3 pt-2">
-                    <Button onClick={() => setTeamModalOpen(false)} className="rounded-xl">Cancel</Button>
-                    <Button type="primary" onClick={handleSaveTeam} loading={createTeamMutation.isPending || updateTeamMutation.isPending} className="rounded-xl">Save</Button>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">Members</label>
+                    <Select
+                      mode="multiple"
+                      value={teamMembersInput}
+                      onChange={setTeamMembersInput}
+                      placeholder="Select Sales Members"
+                      options={usersList.map(u => ({ value: u.id, label: `${u.name} (${u.role})` }))}
+                      className="w-full min-h-11"
+                      allowClear
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">Auto Assignment Rule</label>
+                    <Select
+                      value={teamRuleInput}
+                      onChange={setTeamRuleInput}
+                      options={[
+                        { value: 'ROUND_ROBIN', label: 'Round Robin (Rotating assignment)' },
+                        { value: 'MANUAL', label: 'Manual (Assign manually)' },
+                      ]}
+                      className="w-full h-11"
+                    />
                   </div>
                 </div>
+
+                <div className="flex justify-end gap-3 pt-3 border-t border-[var(--color-border)]">
+                  <Button onClick={() => setTeamModalOpen(false)} className="rounded-xl">Cancel</Button>
+                  <Button type="primary" onClick={handleSaveTeam} loading={createTeamMutation.isPending || updateTeamMutation.isPending} className="rounded-xl">Save</Button>
+                </div>
               </div>
-            )}
+            </Modal>
           </div>
         )}
 

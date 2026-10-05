@@ -54,12 +54,11 @@ export function LeadStepIntake({
         ...(andNext ? { status: 'CONTACTED' } : {}),
       });
 
-      message.success(andNext ? 'Đã lưu & chuyển sang Bước 2 (CONTACTED)' : 'Đã lưu thông tin Lead');
       if (andNext) {
         onAdvanceToNextStep();
       }
     } catch (err: any) {
-      message.error(err.response?.data?.message || 'Lưu thông tin thất bại');
+      // Error message is handled by the hook
     }
   };
 

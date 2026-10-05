@@ -14,6 +14,7 @@ interface ContactRecord {
   id: string;
   firstName: string;
   lastName: string;
+  name?: string;
   email: string;
   phone: string;
   role: string;
@@ -140,18 +141,27 @@ export default function Customers() {
   }));
 
   const rawContacts = contactsResponse?.data || [];
-  const contacts = rawContacts.map((c: any) => ({
-    id: c.id,
-    firstName: c.firstName || '',
-    lastName: c.lastName || c.name || '',
-    email: c.email || '',
-    phone: c.phone || '',
-    role: c.role || '',
-    jobTitle: c.jobTitle || '',
-    isPrimary: c.isPrimary || false,
-    companyId: c.customer?.id || '',
-    companyName: c.customer?.name || '',
-  }));
+  const contacts: ContactRecord[] = rawContacts.map((c: any) => {
+    const firstName = c.firstName || '';
+    const lastName = c.lastName || '';
+    const fullName = c.name || c.fullName || `${firstName} ${lastName}`.trim() || c.email || '—';
+    const companyId = c.accountId || c.customerId || c.customer?.id || c.account?.id || c.account_id || c.customer_id || '';
+    const companyName = c.account?.name || c.customer?.name || c.companyName || (companyId ? `Account #${companyId.substring(0, 8)}` : '—');
+
+    return {
+      id: c.id,
+      firstName,
+      lastName: lastName || (firstName ? '' : fullName),
+      name: fullName,
+      email: c.email || '',
+      phone: c.phone || '',
+      role: c.role || '',
+      jobTitle: c.jobTitle || '',
+      isPrimary: c.isPrimary || false,
+      companyId,
+      companyName,
+    };
+  });
   
   // Modal states
   const [accountModalOpen, setAccountModalOpen] = useState(false);
@@ -247,11 +257,11 @@ export default function Customers() {
   const contactColumns: ColumnProps<ContactRecord>[] = [
     {
       title: t('customers.name'),
-      dataIndex: 'lastName',
+      dataIndex: 'name',
       key: 'name',
       render: (_, rec) => (
         <Link href={`/customers/contacts/${rec.id}`} className="font-semibold text-[var(--color-fg)] hover:underline">
-          {rec.firstName} {rec.lastName}
+          {rec.name || `${rec.firstName || ''} ${rec.lastName || ''}`.trim() || rec.email || '—'}
         </Link>
       ),
     },
@@ -263,9 +273,13 @@ export default function Customers() {
       dataIndex: 'companyName',
       key: 'companyName',
       render: (val, rec) => (
-        <Link href={`/customers/accounts/${rec.companyId}`} className="text-xs font-semibold text-[var(--color-accent)] hover:underline">
-          {val}
-        </Link>
+        rec.companyId ? (
+          <Link href={`/customers/accounts/${rec.companyId}`} className="text-xs font-semibold text-[var(--color-accent)] hover:underline">
+            {val || '—'}
+          </Link>
+        ) : (
+          <span className="text-xs text-[var(--color-muted-fg)]">{val || '—'}</span>
+        )
       ),
     },
     {
@@ -378,10 +392,13 @@ export default function Customers() {
     return matchesSearch && matchesStatus && matchesType;
   });
 
-  const filteredContacts = contacts.filter(c => {
-    const matchesSearch = c.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          c.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          c.email.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredContacts = contacts.filter((c: any) => {
+    const matchesSearch =
+      (c.name && c.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (c.firstName && c.firstName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (c.lastName && c.lastName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (c.email && c.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (c.companyName && c.companyName.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesPrimary = filterPrimary === 'ALL' || (filterPrimary === 'PRIMARY' && c.isPrimary) || (filterPrimary === 'REGULAR' && !c.isPrimary);
     return matchesSearch && matchesPrimary;
   });
@@ -508,28 +525,39 @@ export default function Customers() {
         </div>
       </div>
 
-      {/* Tabs Switcher */}
-      <div className="flex gap-6 border-b border-[var(--color-border)]">
-        <button
-          onClick={() => { setActiveTab('accounts'); setSearchQuery(''); }}
-          className={`pb-3 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-            activeTab === 'accounts'
-              ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-              : 'border-transparent text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
-          }`}
-        >
-          {t('customers.accounts')}
-        </button>
-        <button
-          onClick={() => { setActiveTab('contacts'); setSearchQuery(''); }}
-          className={`pb-3 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-            activeTab === 'contacts'
-              ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-              : 'border-transparent text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
-          }`}
-        >
-          {t('customers.contacts')}
-        </button>
+      {/* Tabs Switcher & Helper Tip */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--color-border)]">
+        <div className="flex gap-6">
+          <button
+            onClick={() => { setActiveTab('accounts'); setSearchQuery(''); }}
+            className={`pb-3 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
+              activeTab === 'accounts'
+                ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                : 'border-transparent text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
+            }`}
+          >
+            {t('customers.accounts')} ({accounts.length})
+          </button>
+          <button
+            onClick={() => { setActiveTab('contacts'); setSearchQuery(''); }}
+            className={`pb-3 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
+              activeTab === 'contacts'
+                ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                : 'border-transparent text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
+            }`}
+          >
+            {t('customers.contacts')} ({contacts.length})
+          </button>
+        </div>
+
+        <div className="pb-2 text-xs text-[var(--color-muted-fg)] flex items-center gap-1.5 font-mono">
+          <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] inline-block"></span>
+          <span>
+            {activeTab === 'accounts' 
+              ? '🏢 Accounts: Company & organization entities holding deals, contracts, and billing.'
+              : '👤 Contacts: Individual people & stakeholders associated with a Customer Account.'}
+          </span>
+        </div>
       </div>
 
       {/* Advanced Filter Drawer */}
@@ -726,6 +754,7 @@ export default function Customers() {
         onCancel={() => setAccountModalOpen(false)}
         footer={null}
         width={600}
+        zIndex={1050}
       >
         <div className="space-y-6 pt-4">
           <div className="grid grid-cols-2 gap-4">
@@ -802,6 +831,7 @@ export default function Customers() {
         onCancel={() => setContactModalOpen(false)}
         footer={null}
         width={600}
+        zIndex={1050}
       >
         <div className="space-y-6 pt-4">
           <div className="grid grid-cols-2 gap-4">

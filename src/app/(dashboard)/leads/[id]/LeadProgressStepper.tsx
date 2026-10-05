@@ -71,8 +71,9 @@ export function LeadProgressStepper({ status, bantScore = 0 }: LeadProgressStepp
 
           {/* 4 Step Nodes */}
           {STAGES.map((s) => {
-            const isDone = !isUnqualified && currentStep > s.step;
-            const isCurrent = !isUnqualified && currentStep === s.step;
+            const isConverted = currentStep >= 4;
+            const isDone = !isUnqualified && (currentStep > s.step || (isConverted && s.step === 4));
+            const isCurrent = !isUnqualified && !isConverted && currentStep === s.step;
 
             return (
               <div key={s.step} className="flex flex-col items-center relative z-10 select-none">
@@ -80,7 +81,7 @@ export function LeadProgressStepper({ status, bantScore = 0 }: LeadProgressStepp
                 <div
                   className={`w-8 h-8 rounded-full font-bold text-xs font-mono flex items-center justify-center transition-all shadow-sm ${
                     isDone
-                      ? 'bg-green-500 text-white shadow-green-500/20'
+                      ? 'bg-green-500 text-white shadow-green-500/20 ring-4 ring-green-500/10'
                       : isCurrent
                       ? 'bg-[var(--color-accent)] text-white ring-4 ring-[var(--color-accent)]/20 scale-105'
                       : 'bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-muted-fg)]'
@@ -91,7 +92,7 @@ export function LeadProgressStepper({ status, bantScore = 0 }: LeadProgressStepp
 
                 {/* Node Labels */}
                 <div className="text-center mt-2.5 max-w-[130px]">
-                  <p className={`text-xs font-semibold ${isCurrent ? 'text-[var(--color-accent)] font-bold' : isDone ? 'text-green-600' : 'text-[var(--color-muted-fg)]'}`}>
+                  <p className={`text-xs font-semibold ${isCurrent ? 'text-[var(--color-accent)] font-bold' : isDone ? 'text-green-600 font-bold' : 'text-[var(--color-muted-fg)]'}`}>
                     {s.title}
                   </p>
                   <p className="text-[10px] text-[var(--color-muted-fg)] mt-0.5 hidden sm:block">
