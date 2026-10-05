@@ -31,7 +31,7 @@ export function LeadProgressStepper({ status, bantScore = 0 }: LeadProgressStepp
   const isUnqualified = status === 'UNQUALIFIED';
 
   return (
-    <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-2xl p-5 shadow-sm space-y-5">
+    <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-[5px] p-5 shadow-sm space-y-5">
       {/* Header Title & Score */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">

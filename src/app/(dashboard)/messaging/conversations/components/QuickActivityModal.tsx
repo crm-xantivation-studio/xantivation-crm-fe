@@ -48,7 +48,7 @@ export default function QuickActivityModal({ visible, onClose, conversationId, m
       open={visible}
       onCancel={onClose}
       footer={null}
-      className="rounded-2xl"
+      className="rounded-[5px]"
       width={460}
     >
       <Form

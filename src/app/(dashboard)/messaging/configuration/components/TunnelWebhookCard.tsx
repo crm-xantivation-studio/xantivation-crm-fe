@@ -70,7 +70,7 @@ export default function TunnelWebhookCard({ onOpenDiagnostics }: TunnelWebhookCa
   };
 
   return (
-    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-4 shadow-sm">
+    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-4 shadow-sm">
       <div className="flex justify-between items-center pb-3 border-b border-[var(--color-border)]/50">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-500">
@@ -167,7 +167,7 @@ export default function TunnelWebhookCard({ onOpenDiagnostics }: TunnelWebhookCa
             Đóng
           </Button>,
         ]}
-        className="rounded-2xl"
+        className="rounded-[5px]"
       >
         <div className="space-y-3 mt-4">
           {registerResults?.map((r, idx) => (

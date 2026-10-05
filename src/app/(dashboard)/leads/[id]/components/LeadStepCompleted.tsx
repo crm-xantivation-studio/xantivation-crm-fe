@@ -18,7 +18,7 @@ export function LeadStepCompleted({ lead }: LeadStepCompletedProps) {
           <CheckCircle2 size={36} />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-[var(--color-fg)]">
+          <h3 className="text-base sm:text-lg font-semibold text-[var(--color-fg)]">
             Đã chuyển đổi Lead thành công!
           </h3>
           <p className="text-xs text-[var(--color-muted-fg)] mt-1">
@@ -28,7 +28,7 @@ export function LeadStepCompleted({ lead }: LeadStepCompletedProps) {
       </div>
 
       {/* Locked Notice (flow.md section 3.3) */}
-      <div className="max-w-md mx-auto p-4 bg-purple-500/5 border border-purple-500/20 rounded-2xl flex items-center gap-3 text-left">
+      <div className="max-w-md mx-auto p-4 bg-purple-500/5 border border-purple-500/20 rounded-[5px] flex items-center gap-3 text-left">
         <Lock size={20} className="text-purple-500 shrink-0" />
         <p className="text-xs text-purple-700 dark:text-purple-300">
           Theo quy tắc nghiệp vụ (Mục 3.3 flow.md), Lead ở trạng thái <strong>CONVERTED</strong> bị khóa dữ liệu toàn bộ ở chế độ Read-Only để đảm bảo tính toàn vẹn báo cáo KPI.

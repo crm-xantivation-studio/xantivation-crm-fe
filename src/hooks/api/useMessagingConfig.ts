@@ -106,7 +106,7 @@ export function useMessagingChannels(includeStatus = true) {
   return useQuery({
     queryKey: ['messaging-channels', includeStatus],
     queryFn: async () => {
-      const res = await api.get(`/integrations/chatwoot/channels?includeStatus=${includeStatus}`);
+      const res = await api.get(`/integrations/channels?includeStatus=${includeStatus}`);
       return res.data?.data || [];
     },
   });
@@ -118,10 +118,10 @@ export function useSaveMessagingChannel() {
   return useMutation({
     mutationFn: async ({ id, payload }: { id?: string; payload: { name?: string; platform?: string; botToken?: string; channelName?: string; inboxId?: number } }) => {
       if (id) {
-        const res = await api.patch(`/integrations/chatwoot/channels/${id}`, payload);
+        const res = await api.patch(`/integrations/channels/${id}`, payload);
         return res.data?.data;
       } else {
-        const res = await api.post('/integrations/chatwoot/channels', payload);
+        const res = await api.post('/integrations/channels', payload);
         return res.data?.data;
       }
     },
@@ -136,7 +136,7 @@ export function useDeleteMessagingChannel() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const res = await api.delete(`/integrations/chatwoot/channels/${id}`);
+      const res = await api.delete(`/integrations/channels/${id}`);
       return res.data?.data;
     },
     onSuccess: () => {
@@ -150,7 +150,7 @@ export function useRegisterWebhook() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const res = await api.post(`/integrations/chatwoot/channels/${id}/register-webhook`);
+      const res = await api.post(`/integrations/channels/${id}/register-webhook`);
       return res.data?.data;
     },
     onSuccess: () => {
@@ -164,7 +164,7 @@ export function useRegisterAllWebhooks() {
 
   return useMutation({
     mutationFn: async () => {
-      const res = await api.post('/integrations/chatwoot/channels/register-all');
+      const res = await api.post('/integrations/channels/register-all');
       return res.data?.data;
     },
     onSuccess: () => {
@@ -176,7 +176,7 @@ export function useRegisterAllWebhooks() {
 export function useTunnelTest() {
   return useMutation({
     mutationFn: async (tunnelUrl?: string) => {
-      const res = await api.post('/integrations/chatwoot/tunnel/test', { tunnelUrl });
+      const res = await api.post('/integrations/channels/test-tunnel', { tunnelUrl });
       return res.data?.data;
     },
   });
@@ -186,7 +186,7 @@ export function useDiagnostics() {
   return useQuery({
     queryKey: ['messaging-diagnostics'],
     queryFn: async () => {
-      const res = await api.get('/integrations/chatwoot/diagnostics');
+      const res = await api.get('/integrations/channels/diagnostics');
       return res.data?.data || null;
     },
     enabled: false, // Refetch manually on button click
@@ -234,7 +234,22 @@ export function useSocialPosts(includeArchived = false) {
 export function useCreateSocialPost() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: { title?: string; content: string; platform?: string; channelName?: string; status?: string; scheduledAt?: string }) => {
+    mutationFn: async (payload: {
+      title?: string;
+      content: string;
+      platform?: string;
+      channelName?: string;
+      status?: string;
+      scheduledAt?: string;
+      copywritingFramework?: string;
+      targetAudience?: string;
+      contentPillar?: string;
+      hashtags?: string[];
+      origin?: string;
+      topicCategory?: string;
+      imageUrl?: string;
+      mediaUrls?: string[];
+    }) => {
       const res = await api.post('/integrations/social-posts', payload);
       return res.data?.data;
     },
@@ -259,8 +274,9 @@ export function usePublishSocialPost() {
 
 export function useGenerateSocialPostContent() {
   return useMutation({
-    mutationFn: async (prompt: string) => {
-      const res = await api.post('/integrations/social-posts/generate', { prompt });
+    mutationFn: async (payload: string | { prompt: string; framework?: string; targetAudience?: string; contentPillar?: string; platform?: string; tone?: string; includeVisualPrompt?: boolean }) => {
+      const body = typeof payload === 'string' ? { prompt: payload } : payload;
+      const res = await api.post('/integrations/social-posts/generate', body);
       return res.data?.data;
     },
   });
@@ -314,3 +330,102 @@ export function useUpdateCommentSettings() {
     },
   });
 }
+
+// === HERMES AUTO POST & FILTERED POSTS HOOKS ===
+
+export interface SocialPostsFilterParams {
+  status?: string;
+  origin?: string;
+  includeArchived?: boolean;
+  page?: number;
+  limit?: number;
+}
+
+export function useSocialPostsFiltered(filters: SocialPostsFilterParams = {}) {
+  const params = new URLSearchParams();
+  if (filters.status && filters.status !== 'all') params.set('status', filters.status);
+  if (filters.origin && filters.origin !== 'all') params.set('origin', filters.origin);
+  if (filters.includeArchived) params.set('includeArchived', 'true');
+  if (filters.page) params.set('page', String(filters.page));
+  if (filters.limit) params.set('limit', String(filters.limit));
+
+  const queryString = params.toString();
+
+  return useQuery({
+    queryKey: ['social-posts', filters],
+    queryFn: async () => {
+      const res = await api.get(`/integrations/social-posts${queryString ? `?${queryString}` : ''}`);
+      const raw = res.data?.data;
+      if (Array.isArray(raw)) return raw;
+      if (raw && typeof raw === 'object' && Array.isArray(raw.data)) return raw.data;
+      return [];
+    },
+  });
+}
+
+export function useApproveSocialPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: {
+        action: 'approve' | 'approve_and_publish';
+        editedContent?: string;
+        editedTitle?: string;
+        scheduledAt?: string;
+      };
+    }) => {
+      const res = await api.post(`/integrations/social-posts/${id}/approve`, payload);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['social-posts'] });
+    },
+  });
+}
+
+export function useRegenerateSocialPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: { feedback?: string; keepTopicCategory?: boolean };
+    }) => {
+      const res = await api.post(`/integrations/social-posts/${id}/regenerate`, payload);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['social-posts'] });
+    },
+  });
+}
+
+export function useAutoPostConfig() {
+  return useQuery({
+    queryKey: ['auto-post-config'],
+    queryFn: async () => {
+      const res = await api.get('/integrations/social-posts/config');
+      return res.data?.data || {};
+    },
+  });
+}
+
+export function useUpdateAutoPostConfig() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: Record<string, any>) => {
+      const res = await api.post('/integrations/social-posts/config', payload);
+      return res.data?.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auto-post-config'] });
+    },
+  });
+}
+

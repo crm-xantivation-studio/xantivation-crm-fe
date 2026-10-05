@@ -22,10 +22,10 @@ export default function CannedResponsesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">Mẫu Trả Lời Nhanh (Canned Responses)</h1>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">Mẫu Trả Lời Nhanh (Canned Responses)</h1>
           <p className="text-xs text-[var(--color-muted-fg)]">Soạn sẵn các câu trả lời ngắn (gõ `/` trong chat để chọn nhanh)</p>
         </div>
         <div className="flex gap-2">

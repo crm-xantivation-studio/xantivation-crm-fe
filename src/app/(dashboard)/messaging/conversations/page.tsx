@@ -128,28 +128,23 @@ export default function ConversationsPage() {
     : `${chatwootBase}/app/accounts/1/inbox/1`;
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center shrink-0">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">{t('conversations.title')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('conversations.subtitle')}</p>
-        </div>
-        <button
-          onClick={handleRefresh}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer"
-        >
-          <RefreshCw size={12} className={listLoading ? 'animate-spin' : ''} />
-          <span>{t('conversations.syncInbox')}</span>
-        </button>
-      </div>
-
-      {/* 4-column Bento Grid Layout */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-0">
-        {/* Column 1: Conversations List Sidebar */}
-        <div className="lg:col-span-1 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl flex flex-col min-h-0 overflow-hidden">
+    <div className="h-full w-full flex overflow-hidden">
+      {/* Column 1: Conversations List Sidebar */}
+      <div className="w-80 flex flex-col bg-[var(--color-bg)] border-r border-[var(--color-border)] shrink-0">
+        {/* Sidebar Header (merged page header) */}
+        <div className="p-4 border-b border-[var(--color-border)] space-y-3 shrink-0">
+          <div className="flex justify-between items-center">
+            <h1 className="text-lg font-bold text-[var(--color-fg)]">Inbox</h1>
+            <button
+              onClick={handleRefresh}
+              className="flex items-center gap-1.5 p-1.5 rounded hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer"
+            >
+              <RefreshCw size={14} className={listLoading ? 'animate-spin' : ''} />
+            </button>
+          </div>
+          
           {/* Status Tabs header */}
-          <div className="flex border-b border-[var(--color-border)]/40 p-2 gap-1 bg-[var(--color-surface)]/20 shrink-0">
+          <div className="flex gap-1 bg-[var(--color-surface)]/50 p-1 rounded-lg">
             {(['open', 'pending', 'resolved'] as const).map((tab) => (
               <button
                 key={tab}
@@ -157,9 +152,9 @@ export default function ConversationsPage() {
                   setActiveTab(tab);
                   setSelectedConversation(null);
                 }}
-                className={`flex-1 py-1.5 text-[11px] font-mono uppercase tracking-wider font-bold rounded-lg transition-all cursor-pointer ${
+                className={`flex-1 py-1 text-[11px] font-bold rounded uppercase transition-all cursor-pointer ${
                   activeTab === tab
-                    ? 'bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-accent)] shadow-sm'
+                    ? 'bg-white border border-[var(--color-border)] text-indigo-600 shadow-sm'
                     : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
                 }`}
               >
@@ -167,95 +162,95 @@ export default function ConversationsPage() {
               </button>
             ))}
           </div>
+        </div>
 
-          {/* Platform Channel Filter Pills */}
-          <div className="flex border-b border-[var(--color-border)]/40 p-2 gap-1 overflow-x-auto shrink-0 bg-[var(--color-surface)]/10">
-            {[
-              { id: 'all', label: 'Tất cả' },
-              { id: 'telegram', label: '✈️ Telegram' },
-              { id: 'facebook', label: '💙 Facebook' },
-              { id: 'zalo', label: '💬 Zalo' },
-              { id: 'web', label: '🌐 Web' },
-            ].map((ch) => (
-              <button
-                key={ch.id}
-                onClick={() => setSelectedChannel(ch.id as any)}
-                className={`px-2.5 py-1 text-[10px] font-semibold rounded-full transition-all cursor-pointer shrink-0 ${
-                  selectedChannel === ch.id
-                    ? 'bg-[var(--color-accent)] text-white shadow-sm'
-                    : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface)]'
-                }`}
-              >
-                {ch.label}
-              </button>
-            ))}
-          </div>
+        {/* Platform Channel Filter Pills */}
+        <div className="flex border-b border-[var(--color-border)]/40 p-2 gap-1 overflow-x-auto shrink-0 bg-[var(--color-surface)]/10">
+          {[
+            { id: 'all', label: 'Tất cả' },
+            { id: 'telegram', label: '✈️ Telegram' },
+            { id: 'facebook', label: '💙 Facebook' },
+            { id: 'zalo', label: '💬 Zalo' },
+            { id: 'web', label: '🌐 Web' },
+          ].map((ch) => (
+            <button
+              key={ch.id}
+              onClick={() => setSelectedChannel(ch.id as any)}
+              className={`px-2.5 py-1 text-[10px] font-semibold rounded-full transition-all cursor-pointer shrink-0 ${
+                selectedChannel === ch.id
+                  ? 'bg-[var(--color-accent)] text-white shadow-sm'
+                  : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface)]'
+              }`}
+            >
+              {ch.label}
+            </button>
+          ))}
+        </div>
 
-          {/* Conversations listing */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {listLoading ? (
-              Array(4)
-                .fill(null)
-                .map((_, i) => (
-                  <div key={i} className="p-3 bg-[var(--color-surface)]/40 rounded-xl space-y-2 border border-[var(--color-border)]/50">
-                    <Skeleton.Input active size="small" style={{ width: '60%' }} />
-                    <Skeleton.Input active size="small" style={{ width: '85%' }} />
-                  </div>
-                ))
-            ) : filteredConversations.length === 0 ? (
-              <div className="text-center py-8 text-[var(--color-muted-fg)] flex flex-col items-center justify-center space-y-2">
-                <MessageSquare size={24} className="stroke-1 text-[var(--color-muted-fg)]/60" />
-                <span className="text-xs">{t('conversations.noConversations')}</span>
-              </div>
-            ) : (
-              filteredConversations.map((conv: any) => {
-                const isSelected = selectedConversation?.id === conv.id;
-                const lastMsg = conv.messages?.[conv.messages.length - 1];
-                return (
-                  <div
-                    key={conv.id}
-                    onClick={() => setSelectedConversation(conv)}
-                    className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between space-y-1.5 hover-action ${
-                      isSelected
-                        ? 'bg-[var(--color-surface)] border-[var(--color-accent)] shadow-sm'
-                        : 'bg-[var(--color-surface)]/50 border-[var(--color-border)] hover:border-[var(--color-border-hover)]'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-1.5 min-w-0 mr-2">
-                        <span className="text-xs font-bold text-[var(--color-fg)] truncate">
-                          {conv.contact?.name || conv.meta?.sender?.name || t('conversations.anonymous')}
-                        </span>
-                        {getChannelIcon(conv.channel_type || conv.meta?.channel)}
-                      </div>
-                      {conv.unreadCount > 0 && (
-                        <Badge count={conv.unreadCount} size="small" className="font-mono" />
-                      )}
+        {/* Conversations listing */}
+        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+          {listLoading ? (
+            Array(4)
+              .fill(null)
+              .map((_, i) => (
+                <div key={i} className="p-3 bg-[var(--color-surface)]/40 rounded-xl space-y-2 border border-transparent">
+                  <Skeleton.Input active size="small" style={{ width: '60%' }} />
+                  <Skeleton.Input active size="small" style={{ width: '85%' }} />
+                </div>
+              ))
+          ) : filteredConversations.length === 0 ? (
+            <div className="text-center py-8 text-[var(--color-muted-fg)] flex flex-col items-center justify-center space-y-2">
+              <MessageSquare size={24} className="stroke-1 text-[var(--color-muted-fg)]/60" />
+              <span className="text-xs">{t('conversations.noConversations')}</span>
+            </div>
+          ) : (
+            filteredConversations.map((conv: any) => {
+              const isSelected = selectedConversation?.id === conv.id;
+              const lastMsg = conv.messages?.[conv.messages.length - 1];
+              return (
+                <div
+                  key={conv.id}
+                  onClick={() => setSelectedConversation(conv)}
+                  className={`p-3 rounded-lg border transition-all cursor-pointer flex flex-col justify-between space-y-1.5 hover-action ${
+                    isSelected
+                      ? 'bg-[var(--color-surface)] border-[var(--color-border)] shadow-sm'
+                      : 'bg-transparent border-transparent hover:bg-[var(--color-surface)]/50'
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-1.5 min-w-0 mr-2">
+                      <span className="text-xs font-bold text-[var(--color-fg)] truncate">
+                        {conv.contact?.name || conv.meta?.sender?.name || t('conversations.anonymous')}
+                      </span>
+                      {getChannelIcon(conv.channel_type || conv.meta?.channel)}
                     </div>
-                    {(lastMsg || conv.last_non_activity_message) && (
-                      <p className="text-[10px] text-[var(--color-muted-fg)] truncate">
-                        {lastMsg?.content || conv.last_non_activity_message?.content}
-                      </p>
+                    {conv.unreadCount > 0 && (
+                      <Badge count={conv.unreadCount} size="small" className="font-mono" />
                     )}
                   </div>
-                );
-              })
-            )}
-          </div>
+                  {(lastMsg || conv.last_non_activity_message) && (
+                    <p className="text-[10px] text-[var(--color-muted-fg)] truncate">
+                      {lastMsg?.content || conv.last_non_activity_message?.content}
+                    </p>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
+      </div>
 
-        {/* Column 2 & 3: Native React Chat Window */}
-        <div className="lg:col-span-2 bg-[var(--color-surface)]/30 border border-[var(--color-border)]/40 rounded-2xl overflow-hidden flex flex-col relative shadow-sm">
-          <NativeChatWindow conversation={selectedConversation} onRefresh={refetch} />
-        </div>
+      {/* Column 2: Native React Chat Window */}
+      <div className="flex-1 flex flex-col relative bg-[var(--color-bg-tint)]">
+        <NativeChatWindow conversation={selectedConversation} onRefresh={refetch} />
+      </div>
 
-        {/* Column 4: Conversation Control Panel */}
-        <div className="lg:col-span-1 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-4 flex flex-col min-h-0 overflow-y-auto">
-          <ConversationControlPanel
-            conversation={selectedConversation}
-            onRefresh={handleRefresh}
-          />
-        </div>
+      {/* Column 3: Conversation Control Panel */}
+      <div className="w-80 flex flex-col bg-[var(--color-bg)] border-l border-[var(--color-border)] overflow-y-auto shrink-0 p-4">
+        <ConversationControlPanel
+          conversation={selectedConversation}
+          onRefresh={handleRefresh}
+        />
       </div>
     </div>
   );

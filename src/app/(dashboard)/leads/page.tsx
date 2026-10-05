@@ -295,12 +295,12 @@ export default function Leads() {
     (filterOwner !== 'ALL' ? 1 : 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-fg)]">{t('leads.title')}</h1>
-          <p className="text-xs sm:text-sm text-[var(--color-muted-fg)] mt-0.5">{t('leads.subtitle')}</p>
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">{t('leads.title')}</h1>
+          <p className="text-xs sm:text-xs text-[var(--color-muted-fg)] mt-0.5">{t('leads.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
           {/* Search bar */}
@@ -471,7 +471,7 @@ export default function Leads() {
       )}
 
       {/* Unified Table Container Canvas */}
-      <div className="az-card overflow-hidden shadow-xs relative">
+      <div className="relative">
         <Spin spinning={isLoading}>
           <SharedTable
             columns={columns}
@@ -693,7 +693,7 @@ export default function Leads() {
           </Button>,
         ]}
       >
-        <p className="text-sm text-[var(--color-fg)] py-2">{duplicateMessage}</p>
+        <p className="text-xs text-[var(--color-fg)] py-2">{duplicateMessage}</p>
       </Modal>
     </div>
   );

@@ -450,12 +450,12 @@ export default function Customers() {
       : (filterPrimary !== 'ALL' ? 1 : 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--color-fg)]">{t('customers.title')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)] mt-1">{t('customers.subtitle')}</p>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">{t('customers.title')}</h1>
+          <p className="text-xs text-[var(--color-muted-fg)] mt-1">{t('customers.subtitle')}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {/* Search bar */}
@@ -473,16 +473,16 @@ export default function Customers() {
           {/* Filters Button */}
           <button
             onClick={() => setFilterDrawerOpen(true)}
-            className={`flex items-center gap-2 h-10 px-3.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+            title="Filters"
+            className={`w-9 h-9 flex items-center justify-center rounded-xl border transition-all cursor-pointer relative shrink-0 ${
               activeFiltersCount > 0
-                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/5 text-[var(--color-accent)]'
-                : 'border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
+                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                : 'border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] bg-[var(--color-bg-tint)]'
             }`}
           >
-            <SlidersHorizontal size={14} />
-            <span>Filters</span>
+            <SlidersHorizontal size={15} />
             {activeFiltersCount > 0 && (
-              <span className="w-4.5 h-4.5 rounded-full bg-[var(--color-accent)] text-white text-[9px] flex items-center justify-center font-bold animate-pulse">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--color-accent)] text-white text-[9px] flex items-center justify-center font-bold animate-pulse">
                 {activeFiltersCount}
               </span>
             )}
@@ -491,21 +491,20 @@ export default function Customers() {
           {/* Export Excel Button */}
           <button
             onClick={() => message.success('Exporting accounts to Excel sheet...')}
-            className="flex items-center gap-2 h-10 px-3.5 text-xs font-semibold rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer"
+            title={t('customers.exportExcel')}
+            className="w-9 h-9 flex items-center justify-center rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface)] bg-[var(--color-bg-tint)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer shrink-0"
           >
-            <Download size={14} />
-            <span>{t('customers.exportExcel')}</span>
+            <Download size={15} />
           </button>
 
           {/* New Account / Contact Button */}
-          <Button
-            type="primary"
+          <button
             onClick={activeTab === 'accounts' ? handleOpenAccountCreate : handleOpenContactCreate}
-            className="flex items-center gap-2 h-10 px-4 rounded-xl cursor-pointer"
+            title={activeTab === 'accounts' ? t('customers.newAccount') : t('customers.newContact')}
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white shadow-xs transition-all cursor-pointer shrink-0"
           >
             <Plus size={16} />
-            <span>{activeTab === 'accounts' ? t('customers.newAccount') : t('customers.newContact')}</span>
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -570,7 +569,7 @@ export default function Customers() {
           }
         }}
       >
-        <div className="space-y-6">
+        <div className="space-y-4">
           {activeTab === 'accounts' ? (
             <>
               <div className="flex flex-col gap-2">
@@ -670,7 +669,7 @@ export default function Customers() {
       )}
 
       {/* Unified Table Container Canvas */}
-      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-3xl overflow-hidden shadow-sm relative">
+      <div className="relative">
         <Spin spinning={activeTab === 'accounts' ? isCustomersLoading : isContactsLoading}>
           {activeTab === 'accounts' ? (
             <SharedTable
