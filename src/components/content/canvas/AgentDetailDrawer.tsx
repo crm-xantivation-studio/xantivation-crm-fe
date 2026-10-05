@@ -8,6 +8,9 @@ import {
   Terminal,
   FileText,
   Activity,
+  Shield,
+  Link as LinkIcon,
+  Code
 } from 'lucide-react';
 import { AgentNodeData } from './AgentNode';
 import { CanvasExecutionEvent } from '@/hooks/useCanvasSSE';
