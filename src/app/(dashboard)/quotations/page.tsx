@@ -536,6 +536,7 @@ export default function Quotations() {
         onCancel={() => setModalOpen(false)}
         footer={null}
         width={750}
+        zIndex={1050}
       >
         <div className="space-y-6 pt-4 max-h-[70vh] overflow-y-auto pr-2">
           {/* Part 1: Header Parameters */}

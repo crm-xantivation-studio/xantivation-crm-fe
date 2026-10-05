@@ -56,7 +56,6 @@ export function LeadStepConvert({
       };
 
       await onConvertSubmit(payload);
-      message.success('Chuyển đổi Lead thành công! Hồ sơ Khách hàng & Cơ hội kinh doanh đã được tạo.');
       onAdvanceToNextStep();
     } catch (err: any) {
       const resData = err.response?.data;

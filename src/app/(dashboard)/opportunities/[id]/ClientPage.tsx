@@ -182,6 +182,23 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
   const stagesOrder = ['QUALIFICATION', 'PROPOSAL', 'NEGOTIATION', 'WON'];
   const currentStep = stagesOrder.indexOf(opp.stage === 'LOST' ? 'WON' : opp.stage);
 
+  const getStageLabel = (st: string) => {
+    switch (st) {
+      case 'QUALIFICATION':
+        return t('opportunities.stageQualification');
+      case 'PROPOSAL':
+        return t('opportunities.stageProposal');
+      case 'NEGOTIATION':
+        return t('opportunities.stageNegotiation');
+      case 'WON':
+        return t('opportunities.stageWon');
+      case 'LOST':
+        return t('opportunities.stageLost');
+      default:
+        return st;
+    }
+  };
+
   const ownerName = opp.owner ? `${opp.owner.firstName || ''} ${opp.owner.lastName || ''}`.trim() : t('opportunities.systemAdmin');
 
   return (
@@ -206,7 +223,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
             opp.stage === 'LOST' ? 'bg-red-500/10 text-red-500' :
             'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
           }`}>
-            {t('opportunities.stage')}: {opp.stage}
+            {t('opportunities.stage')}: {getStageLabel(opp.stage)}
           </span>
         </div>
       </div>
@@ -337,7 +354,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
                   </div>
                   <div className="relative">
                     <span className="absolute -left-[30px] top-0 bg-[var(--color-accent)] text-white w-4 h-4 rounded-full flex items-center justify-center font-bold font-mono text-[9px]">2</span>
-                    <p className="font-semibold text-[var(--color-fg)]">{opp.stage} {t('opportunities.stageReached')}</p>
+                    <p className="font-semibold text-[var(--color-fg)]">{getStageLabel(opp.stage)} {t('opportunities.stageReached')}</p>
                     <p className="text-[10px] text-[var(--color-muted-fg)]">{opp.updatedAt ? opp.updatedAt.substring(0, 10) : ''} • {t('opportunities.transitionedBy')} {ownerName}</p>
                   </div>
                 </div>

@@ -502,6 +502,7 @@ export default function Leads() {
         onCancel={() => setModalOpen(false)}
         footer={null}
         width={580}
+        zIndex={1050}
         styles={{
           body: {
             background: 'var(--color-bg)',
@@ -660,19 +661,20 @@ export default function Leads() {
           </div>
 
           {/* Submit Actions */}
-          <div className="flex justify-end gap-2.5 pt-3 border-t border-[var(--color-border)]">
-            <button
+          <div className="flex justify-end gap-3 pt-4">
+            <Button
               onClick={() => setModalOpen(false)}
-              className="px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] transition-all cursor-pointer"
+              className="rounded-xl"
             >
               {t('common.cancel')}
-            </button>
-            <button
+            </Button>
+            <Button
+              type="primary"
               onClick={handleSave}
-              className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white shadow-xs transition-all cursor-pointer"
+              className="rounded-xl"
             >
               {t('common.saveChanges')}
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

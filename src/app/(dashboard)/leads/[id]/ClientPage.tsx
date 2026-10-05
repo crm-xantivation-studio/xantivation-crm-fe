@@ -104,14 +104,9 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
   const handleAutoQualify = () => {
     const hide = message.loading('Đang phân tích BANT bằng AI...', 0);
     autoQualifyMutation.mutate(undefined, {
-      onSuccess: () => {
+      onSettled: () => {
         hide();
-        message.success('Đã tự động chấm điểm BANT thành công!');
       },
-      onError: () => {
-        hide();
-        message.error('Không thể tự động chấm điểm BANT');
-      }
     });
   };
 

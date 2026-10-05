@@ -69,6 +69,24 @@ export default function Opportunities() {
   const realContacts = contactsRes?.data || [];
   const realUsers = usersRes?.data || [];
 
+  // Helpers for mapping
+  const getStageLabel = (st: string) => {
+    switch (st) {
+      case 'QUALIFICATION':
+        return t('opportunities.stageQualification');
+      case 'PROPOSAL':
+        return t('opportunities.stageProposal');
+      case 'NEGOTIATION':
+        return t('opportunities.stageNegotiation');
+      case 'WON':
+        return t('opportunities.stageWon');
+      case 'LOST':
+        return t('opportunities.stageLost');
+      default:
+        return st;
+    }
+  };
+
   // Map API response to local record format
   const oppsList: OpportunityRecord[] = rawOpps.map((opp: any) => ({
     id: opp.id,
@@ -78,13 +96,13 @@ export default function Opportunities() {
     stage: opp.stage as any,
     probability: opp.probability || 0,
     closeDate: opp.expectedCloseDate ? opp.expectedCloseDate.substring(0, 10) : '',
-    companyId: opp.accountId || '',
-    companyName: opp.account?.name || '',
+    companyId: opp.accountId || opp.customerId || opp.account?.id || opp.customer?.id || '',
+    companyName: opp.account?.name || opp.customer?.name || '',
     contactId: opp.contactId || '',
-    contactName: opp.contact ? `${opp.contact.firstName || ''} ${opp.contact.lastName || ''}`.trim() : '',
+    contactName: opp.contact ? (opp.contact.name || opp.contact.fullName || `${opp.contact.firstName || ''} ${opp.contact.lastName || ''}`.trim() || '—') : '—',
     serviceInterest: opp.serviceInterest || 'WEBSITE',
     description: opp.description || '',
-    assignedTo: opp.owner ? `${opp.owner.firstName || ''} ${opp.owner.lastName || ''}`.trim() : 'System Admin',
+    assignedTo: opp.owner ? (opp.owner.name || `${opp.owner.firstName || ''} ${opp.owner.lastName || ''}`.trim()) : 'System Admin',
     lostReason: opp.lostReason || '',
   }));
 
@@ -127,8 +145,11 @@ export default function Opportunities() {
   // Handle company change auto-load associated contacts and auto-select primary contact
   const handleCompanyChange = (val: string) => {
     setCompanyId(val);
-    const relatedContacts = realContacts.filter(c => c.accountId === val);
-    const primary = relatedContacts.find(c => c.isPrimary) || relatedContacts[0];
+    const relatedContacts = realContacts.filter((c: any) => {
+      const accId = c.accountId || c.customerId || c.account?.id || c.customer?.id || c.account_id || c.customer_id;
+      return !val || accId === val;
+    });
+    const primary = relatedContacts.find((c: any) => c.isPrimary) || relatedContacts[0];
     if (primary) {
       setContactId(primary.id);
     } else {
@@ -339,7 +360,7 @@ export default function Opportunities() {
           st === 'LOST' ? 'bg-red-500/10 text-red-500' :
           st === 'NEGOTIATION' ? 'bg-amber-500/10 text-amber-600' :
           st === 'PROPOSAL' ? 'bg-blue-500/10 text-blue-500' : 'bg-purple-500/10 text-purple-500'
-        }`}>{st}</span>
+        }`}>{getStageLabel(st)}</span>
       ),
     },
     {
@@ -603,6 +624,7 @@ export default function Opportunities() {
         onCancel={() => setModalOpen(false)}
         footer={null}
         width={600}
+        zIndex={1050}
       >
         <div className="space-y-6 pt-4">
           <FloatingInput label={t('opportunities.name')} value={name} onChange={setName} required />
@@ -638,7 +660,16 @@ export default function Opportunities() {
               <Select
                 value={contactId}
                 onChange={setContactId}
-                options={realContacts.filter(c => c.accountId === companyId).map(c => ({ value: c.id, label: `${c.firstName || ''} ${c.lastName || ''}`.trim() }))}
+                options={realContacts
+                  .filter((c: any) => {
+                    if (!companyId) return true;
+                    const accId = c.accountId || c.customerId || c.account?.id || c.customer?.id || c.account_id || c.customer_id;
+                    return accId === companyId;
+                  })
+                  .map((c: any) => ({
+                    value: c.id,
+                    label: c.name || c.fullName || `${c.firstName || ''} ${c.lastName || ''}`.trim() || c.email || 'Unnamed Contact',
+                  }))}
                 className="w-full h-11"
               />
             </div>
@@ -713,6 +744,7 @@ export default function Opportunities() {
         confirmLoading={closeLostMutation.isPending}
         okText={t('opportunities.confirmCloseLost')}
         cancelText={t('opportunities.cancel')}
+        zIndex={1050}
       >
         <div className="space-y-4 pt-4">
           <p className="text-xs text-[var(--color-muted-fg)]">{t('opportunities.closeLostReason')}</p>
