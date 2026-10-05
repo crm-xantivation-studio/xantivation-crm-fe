@@ -18,7 +18,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import '@/components/content/canvas/canvas.css';
 
-import { Card, Button, Tag, Badge, Tooltip, message } from 'antd';
+import { Card, Button, Tag, Badge, Tooltip, message, Segmented, Input } from 'antd';
 import {
   Play,
   Pause,
@@ -67,6 +67,8 @@ function CanvasInner() {
   const [nodes, setNodes, onNodesChange] = useNodesState(INITIAL_NODES);
   const [edges, setEdges, onEdgesChange] = useEdgesState(INITIAL_EDGES);
   const [selectedAgent, setSelectedAgent] = useState<AgentNodeData | null>(null);
+  const [viewMode, setViewMode] = useState<'architecture' | 'runtime' | 'executions'>('runtime');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Modals and Panels State
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);

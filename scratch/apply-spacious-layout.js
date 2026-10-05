@@ -1,6 +1,11 @@
-import { Node, Edge, MarkerType } from '@xyflow/react';
+const fs = require('fs');
+const path = require('path');
 
-export const INITIAL_NODES: Node[] = [
+// 1. Update canvasData.ts layout (Spacious Hierarchical Layout as per User Image)
+const dataPath = path.join('src', 'components', 'content', 'canvas', 'canvasData.ts');
+let dataCode = fs.readFileSync(dataPath, 'utf8');
+
+const newNodesStr = `export const INITIAL_NODES: Node[] = [
   // Gateway CEO (Top Center)
   {
     id: 'hermes',
@@ -290,149 +295,25 @@ export const INITIAL_NODES: Node[] = [
       toolsets: ['file'],
     },
   },
-];
+];`;
 
-export const INITIAL_EDGES: Edge[] = [
-  // CEO Gateway -> Leads
-  {
-    id: 'e-hermes-marketing',
-    source: 'hermes',
-    target: 'hermes-marketing-lead',
-    type: 'animatedAgentEdge',
-    animated: true,
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#a855f7', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#a855f7' },
-  },
-  {
-    id: 'e-hermes-sales',
-    source: 'hermes',
-    target: 'hermes-sales-lead',
-    type: 'animatedAgentEdge',
-    data: { department: 'sales', status: 'idle' },
-    style: { stroke: '#64748b', strokeWidth: 1.5, strokeDasharray: '4 4' },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#64748b' },
-  },
-  {
-    id: 'e-hermes-tech',
-    source: 'hermes',
-    target: 'hermes-tech-lead',
-    type: 'animatedAgentEdge',
-    data: { department: 'tech', status: 'idle' },
-    style: { stroke: '#64748b', strokeWidth: 1.5, strokeDasharray: '4 4' },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#64748b' },
-  },
+dataCode = dataCode.replace(/export const INITIAL_NODES: Node\[\] = \[([\s\S]*?)\];/, newNodesStr);
+fs.writeFileSync(dataPath, dataCode);
 
-  // Marketing Pipeline: Lead -> Researcher -> Writers -> Auditor
-  {
-    id: 'e-mkt-lead-researcher',
-    source: 'hermes-marketing-lead',
-    target: 'mkt-researcher',
-    type: 'animatedAgentEdge',
-    animated: true,
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#a855f7', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#a855f7' },
-  },
-  // Researcher Sub-Tool connections (dashed curved lines)
-  {
-    id: 'e-researcher-tool-web',
-    source: 'mkt-researcher',
-    target: 'tool-mkt-web',
-    type: 'animatedAgentEdge',
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#10b981', strokeWidth: 1.2, strokeDasharray: '4 4' },
-  },
-  {
-    id: 'e-researcher-tool-file',
-    source: 'mkt-researcher',
-    target: 'tool-mkt-file',
-    type: 'animatedAgentEdge',
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#f59e0b', strokeWidth: 1.2, strokeDasharray: '4 4' },
-  },
-  {
-    id: 'e-mkt-researcher-writer1',
-    source: 'mkt-researcher',
-    target: 'mkt-writer-01',
-    type: 'animatedAgentEdge',
-    animated: true,
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#3b82f6', strokeWidth: 1.5 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#3b82f6' },
-  },
-  {
-    id: 'e-mkt-researcher-writer2',
-    source: 'mkt-researcher',
-    target: 'mkt-writer-02',
-    type: 'animatedAgentEdge',
-    animated: true,
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#3b82f6', strokeWidth: 1.5 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#3b82f6' },
-  },
-  {
-    id: 'e-mkt-writer1-auditor',
-    source: 'mkt-writer-01',
-    target: 'mkt-auditor',
-    type: 'animatedAgentEdge',
-    animated: true,
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#ec4899', strokeWidth: 1.5 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#ec4899' },
-  },
-  {
-    id: 'e-mkt-writer2-auditor',
-    source: 'mkt-writer-02',
-    target: 'mkt-auditor',
-    type: 'animatedAgentEdge',
-    animated: true,
-    data: { department: 'marketing', status: 'idle' },
-    style: { stroke: '#ec4899', strokeWidth: 1.5 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#ec4899' },
-  },
+// 2. Remove opacity-0 from Handles in AgentNode.tsx so they are always visible
+const agentNodePath = path.join('src', 'components', 'content', 'canvas', 'AgentNode.tsx');
+let agentNodeCode = fs.readFileSync(agentNodePath, 'utf8');
 
-  // Sales Sub-Agents
-  {
-    id: 'e-sales-lead-scorer',
-    source: 'hermes-sales-lead',
-    target: 'sales-lead-scorer',
-    type: 'animatedAgentEdge',
-    data: { department: 'sales', status: 'idle' },
-    style: { stroke: '#64748b', strokeDasharray: '4 4' },
-  },
-  {
-    id: 'e-sales-lead-advisor',
-    source: 'hermes-sales-lead',
-    target: 'sales-chat-advisor',
-    type: 'animatedAgentEdge',
-    data: { department: 'sales', status: 'idle' },
-    style: { stroke: '#64748b', strokeDasharray: '4 4' },
-  },
-  {
-    id: 'e-sales-lead-drafter',
-    source: 'hermes-sales-lead',
-    target: 'sales-quotation-drafter',
-    type: 'animatedAgentEdge',
-    data: { department: 'sales', status: 'idle' },
-    style: { stroke: '#64748b', strokeDasharray: '4 4' },
-  },
+agentNodeCode = agentNodeCode.replace(
+  /className="!h-3 !w-3 !border-2 !border-neutral-950 !bg-indigo-400 transition-transform hover:scale-125 !-top-1\.5 opacity-0 group-hover:opacity-100"/g,
+  'className="!h-3 !w-3 !border-2 !border-neutral-950 !bg-indigo-400 transition-transform hover:scale-125 !-top-1.5"'
+);
 
-  // Tech Sub-Agents
-  {
-    id: 'e-tech-lead-estimator',
-    source: 'hermes-tech-lead',
-    target: 'tech-estimator',
-    type: 'animatedAgentEdge',
-    data: { department: 'tech', status: 'idle' },
-    style: { stroke: '#64748b', strokeDasharray: '4 4' },
-  },
-  {
-    id: 'e-tech-lead-reviewer',
-    source: 'hermes-tech-lead',
-    target: 'tech-code-reviewer',
-    type: 'animatedAgentEdge',
-    data: { department: 'tech', status: 'idle' },
-    style: { stroke: '#64748b', strokeDasharray: '4 4' },
-  },
-];
+agentNodeCode = agentNodeCode.replace(
+  /className="!h-3 !w-3 !border-2 !border-neutral-950 !bg-emerald-400 transition-transform hover:scale-125 !-bottom-1\.5 opacity-0 group-hover:opacity-100"/g,
+  'className="!h-3 !w-3 !border-2 !border-neutral-950 !bg-emerald-400 transition-transform hover:scale-125 !-bottom-1.5"'
+);
+
+fs.writeFileSync(agentNodePath, agentNodeCode);
+
+console.log('Successfully applied spacious hierarchical layout and fixed handle visibility.');
