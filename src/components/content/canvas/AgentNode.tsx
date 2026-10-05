@@ -157,7 +157,7 @@ function AgentNodeComponent({ data, selected }: NodeProps) {
 
   return (
     <div
-      className={`agent-node-card group relative select-none rounded-xl border p-3 shadow-lg backdrop-blur-xl transition-all duration-200 ${
+      className={`agent-node-card group relative select-none rounded-2xl border p-3.5 transition-all duration-200 ${
         isGateway
           ? 'min-w-[250px] max-w-[270px]'
           : isLead
@@ -183,7 +183,7 @@ function AgentNodeComponent({ data, selected }: NodeProps) {
       <Handle
         type="target"
         position={Position.Top}
-        className="!h-2.5 !w-2.5 !border-2 !border-neutral-950 !bg-indigo-400 transition-transform hover:scale-125 !-top-1.5"
+        className="!h-3 !w-3 !border-2 !border-neutral-950 !bg-indigo-400 transition-transform hover:scale-125 !-top-1.5"
       />
 
       {/* Card Header: n8n Square Icon + Name & Status */}
