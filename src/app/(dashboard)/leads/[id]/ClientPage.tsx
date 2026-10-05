@@ -125,10 +125,10 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
             <span>/</span>
             <span className="text-[var(--color-fg)] font-semibold">{lead.leadCode}</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)] flex items-center gap-3">
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)] flex items-center gap-3">
             <span>{lead.firstName} {lead.lastName}</span>
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)] mt-1">
+          <p className="text-xs text-[var(--color-muted-fg)] mt-1">
             Ref Code {lead.leadCode} • Nguồn {lead.source} • Ngày tạo: {lead.createdAt}
           </p>
         </div>
@@ -157,7 +157,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
 
       {/* Unqualified Warning Alert */}
       {isUnqualified && (
-        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center justify-between gap-4">
+        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-[5px] flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-red-500">
             <XCircle size={20} />
             <span className="text-xs font-semibold">
@@ -180,7 +180,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
         {/* Main Step Workspace Container (3 Cols) */}
-        <div className="lg:col-span-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-2xl p-6 shadow-sm">
+        <div className="lg:col-span-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-[5px] p-6 shadow-sm">
           {activeStep === 1 && (
             <LeadStepIntake
               lead={lead}
@@ -219,7 +219,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
 
         {/* Streamlined Right Sidebar (1 Col) */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-2xl p-5 space-y-4 shadow-sm">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-[5px] p-5 space-y-4 shadow-sm">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)] border-b border-[var(--color-border)]/30 pb-2.5">
               Thông tin bổ sung
             </h3>

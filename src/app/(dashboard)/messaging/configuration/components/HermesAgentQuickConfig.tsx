@@ -135,7 +135,7 @@ export default function HermesAgentQuickConfig() {
 
   if (isAgentLoading) {
     return (
-      <Card className="rounded-2xl border-[var(--color-border)] p-6 text-center">
+      <Card className="rounded-[5px] border-[var(--color-border)] p-6 text-center">
         <Spin size="large" tip="Đang tải cấu hình Hermes AI Agent..." />
       </Card>
     );
@@ -145,7 +145,7 @@ export default function HermesAgentQuickConfig() {
   const selectedModelObj = models.find((m) => m.id === selectedModelId);
 
   return (
-    <Card className="rounded-2xl border-[var(--color-border)] shadow-sm bg-[var(--color-surface)]">
+    <Card className="rounded-[5px] border-[var(--color-border)] shadow-sm bg-[var(--color-surface)]">
       <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[var(--color-border)] pb-4 mb-6 gap-3">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md">

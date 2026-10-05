@@ -18,7 +18,7 @@ interface OpportunityRecord {
   code: string;
   name: string;
   amount: number;
-  stage: 'QUALIFICATION' | 'PROPOSAL' | 'NEGOTIATION' | 'WON' | 'LOST';
+  stage: 'QUALIFICATION' | 'PROPOSAL' | 'NEGOTIATION' | 'CLOSED_WON' | 'CLOSED_LOST';
   probability: number;
   closeDate: string;
   companyId: string;
@@ -41,12 +41,12 @@ const serviceOptions = [
   { value: 'CUSTOM', label: 'Custom Studio Services' },
 ];
 
-const stages: ('QUALIFICATION' | 'PROPOSAL' | 'NEGOTIATION' | 'WON' | 'LOST')[] = [
+const stages: ('QUALIFICATION' | 'PROPOSAL' | 'NEGOTIATION' | 'CLOSED_WON' | 'CLOSED_LOST')[] = [
   'QUALIFICATION',
   'PROPOSAL',
   'NEGOTIATION',
-  'WON',
-  'LOST',
+  'CLOSED_WON',
+  'CLOSED_LOST',
 ];
 
 export default function Opportunities() {
@@ -64,7 +64,7 @@ export default function Opportunities() {
   const updateMutation = useUpdateOpportunity();
   const closeLostMutation = useCloseLostOpportunity();
 
-  const rawOpps = oppsRes?.data?.items || [];
+  const rawOpps = Array.isArray(oppsRes?.data) ? oppsRes.data : ((oppsRes?.data as any)?.items || []);
   const realAccounts = accountsRes?.data || [];
   const realContacts = contactsRes?.data || [];
   const realUsers = usersRes?.data || [];
@@ -90,19 +90,19 @@ export default function Opportunities() {
   // Map API response to local record format
   const oppsList: OpportunityRecord[] = rawOpps.map((opp: any) => ({
     id: opp.id,
-    code: opp.opportunityCode,
+    code: opp.oppCode || '',
     name: opp.name,
     amount: Number(opp.amount) || 0,
     stage: opp.stage as any,
     probability: opp.probability || 0,
-    closeDate: opp.expectedCloseDate ? opp.expectedCloseDate.substring(0, 10) : '',
-    companyId: opp.accountId || opp.customerId || opp.account?.id || opp.customer?.id || '',
-    companyName: opp.account?.name || opp.customer?.name || '',
-    contactId: opp.contactId || '',
+    closeDate: opp.closeDate ? opp.closeDate.substring(0, 10) : '',
+    companyId: opp.customer?.id || opp.customerId || opp.account?.id || opp.customer?.id || '',
+    companyName: opp.customer?.name || opp.customer?.name || '',
+    contactId: opp.contact?.id || '',
     contactName: opp.contact ? (opp.contact.name || opp.contact.fullName || `${opp.contact.firstName || ''} ${opp.contact.lastName || ''}`.trim() || '—') : '—',
     serviceInterest: opp.serviceInterest || 'WEBSITE',
     description: opp.description || '',
-    assignedTo: opp.owner ? (opp.owner.name || `${opp.owner.firstName || ''} ${opp.owner.lastName || ''}`.trim()) : 'System Admin',
+    assignedTo: opp.assignedTo ? (opp.owner.name || `${opp.assignedTo.firstName || ''} ${opp.assignedTo.lastName || ''}`.trim()) : 'System Admin',
     lostReason: opp.lostReason || '',
   }));
 
@@ -211,15 +211,15 @@ export default function Opportunities() {
 
     const payload = {
       name,
-      accountId: companyId,
-      contactId,
+      customerId: companyId,
+      contactId: contactId || undefined,
       amount: Number(amount),
       stage: stage as any,
       probability,
-      expectedCloseDate: closeDate,
+      closeDate: closeDate,
       serviceInterest: serviceInterest as any,
       description,
-      ownerId: assignedTo || undefined,
+      assignedToId: assignedTo || undefined,
     };
 
     try {
@@ -252,7 +252,7 @@ export default function Opportunities() {
     const id = e.dataTransfer.getData('text/plain') || draggedOppId;
     if (!id) return;
 
-    if (targetStage === 'LOST') {
+    if (targetStage === 'CLOSED_LOST') {
       setDraggedOppId(id);
       setLostReason('');
       setLostModalOpen(true);
@@ -260,7 +260,7 @@ export default function Opportunities() {
     }
 
     let prob = 10;
-    if (targetStage === 'WON') prob = 100;
+    if (targetStage === 'CLOSED_WON') prob = 100;
     else if (targetStage === 'NEGOTIATION') prob = 80;
     else if (targetStage === 'PROPOSAL') prob = 50;
     else if (targetStage === 'QUALIFICATION') prob = 20;
@@ -356,8 +356,8 @@ export default function Opportunities() {
       key: 'stage',
       render: (st) => (
         <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider ${
-          st === 'WON' ? 'bg-green-500/10 text-green-500' :
-          st === 'LOST' ? 'bg-red-500/10 text-red-500' :
+          st === 'CLOSED_WON' ? 'bg-green-500/10 text-green-500' :
+          st === 'CLOSED_LOST' ? 'bg-red-500/10 text-red-500' :
           st === 'NEGOTIATION' ? 'bg-amber-500/10 text-amber-600' :
           st === 'PROPOSAL' ? 'bg-blue-500/10 text-blue-500' : 'bg-purple-500/10 text-purple-500'
         }`}>{getStageLabel(st)}</span>
@@ -386,12 +386,12 @@ export default function Opportunities() {
     (filterStage !== 'ALL' ? 1 : 0) + (filterInterest !== 'ALL' ? 1 : 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-fg)]">{t('opportunities.title')}</h1>
-          <p className="text-xs sm:text-sm text-[var(--color-muted-fg)] mt-0.5">{t('opportunities.subtitle')}</p>
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">{t('opportunities.title')}</h1>
+          <p className="text-xs sm:text-xs text-[var(--color-muted-fg)] mt-0.5">{t('opportunities.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
           {/* Search bar */}
@@ -486,7 +486,7 @@ export default function Opportunities() {
           }
         }}
       >
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('opportunities.salesStage')}
@@ -500,8 +500,8 @@ export default function Opportunities() {
                 { value: 'QUALIFICATION', label: 'Qualification' },
                 { value: 'PROPOSAL', label: 'Proposal' },
                 { value: 'NEGOTIATION', label: 'Negotiation' },
-                { value: 'WON', label: 'Won' },
-                { value: 'LOST', label: 'Lost' },
+                { value: 'CLOSED_WON', label: 'Won' },
+                { value: 'CLOSED_LOST', label: 'Lost' },
               ]}
             />
           </div>
@@ -541,16 +541,21 @@ export default function Opportunities() {
                   key={st}
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, st)}
-                  className="bg-[var(--color-bg-tint)] rounded-2xl p-3 flex flex-col min-h-[450px] border border-[var(--color-border)]"
+                  className="flex flex-col min-h-[450px]"
                 >
                   {/* Column Header */}
-                  <div className="mb-4 space-y-1">
+                  <div className={`mb-4 pb-2 space-y-1 border-t-2 ${
+                    st === 'QUALIFICATION' ? 'border-amber-400' :
+                    st === 'PROPOSAL' ? 'border-blue-400' :
+                    st === 'NEGOTIATION' ? 'border-purple-400' :
+                    st === 'CLOSED_WON' ? 'border-emerald-400' : 'border-rose-400'
+                  } pt-2`}>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-bold tracking-wider uppercase text-[var(--color-fg)]">
                         {st === 'QUALIFICATION' ? 'Qualification' :
                          st === 'PROPOSAL' ? 'Proposal' :
                          st === 'NEGOTIATION' ? 'Negotiation' :
-                         st === 'WON' ? 'Closed Won' : 'Closed Lost'}
+                         st === 'CLOSED_WON' ? 'Closed Won' : 'Closed Lost'}
                       </span>
                       <span className="text-[10px] bg-[var(--color-surface)] text-[var(--color-muted-fg)] font-semibold font-mono px-2 py-0.5 rounded-full border border-[var(--color-border)]">
                         {stageOpps.length}
@@ -607,8 +612,8 @@ export default function Opportunities() {
           </div>
         ) : (
           /* Table View */
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-3xl overflow-hidden shadow-sm">
-            <SharedTable
+          <div className="">
+          <SharedTable
               columns={tableColumns}
               dataSource={filteredOpps}
               onEdit={handleOpenEdit}
@@ -623,7 +628,7 @@ export default function Opportunities() {
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
         footer={null}
-        width={600}
+        width={600} centered
         zIndex={1050}
       >
         <div className="space-y-6 pt-4">

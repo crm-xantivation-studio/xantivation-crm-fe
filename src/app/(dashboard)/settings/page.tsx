@@ -803,15 +803,15 @@ export default function Settings() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col h-full w-full overflow-y-auto space-y-4">
       {/* Title */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">Settings</h1>
-        <p className="text-sm text-[var(--color-muted-fg)]">Configure system integrations, manage employee accounts, and AI settings.</p>
+      <div className="px-4 lg:px-6 pt-4 lg:pt-6">
+        <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">Settings</h1>
+        <p className="text-xs text-[var(--color-muted-fg)]">Configure system integrations, manage employee accounts, and AI settings.</p>
       </div>
 
       {/* Sub Tabs */}
-      <div className="flex border-b border-[var(--color-border)] gap-6 pb-px">
+      <div className="flex px-4 lg:px-6 border-b border-[var(--color-border)] gap-6 pb-px">
         {allTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeSubTab === tab.id;
@@ -833,7 +833,7 @@ export default function Settings() {
       </div>
 
       {/* Sub-tab Bodies */}
-      <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 min-h-[400px]">
+      <div className="px-4 lg:px-6 pb-4 lg:pb-6 min-h-[400px]">
         {activeSubTab === 'profile' && (
           <div className="max-w-xl space-y-6">
             <h3 className="text-sm font-semibold text-[var(--color-fg)]">Personal Information</h3>
@@ -861,7 +861,7 @@ export default function Settings() {
         )}
 
         {activeSubTab === 'users' && isAdmin && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-sm font-semibold text-[var(--color-fg)]">Account Management (Admin Only)</h3>
               <Button type="primary" onClick={handleOpenCreateUser} className="flex items-center gap-2 h-9 px-4 rounded-xl cursor-pointer">
@@ -931,7 +931,7 @@ export default function Settings() {
         )}
 
         {activeSubTab === 'sales-teams' && isAdmin && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-sm font-semibold text-[var(--color-fg)]">Sales Team Management (Admin Only)</h3>
               <Button type="primary" onClick={handleOpenCreateTeam} className="flex items-center gap-2 h-9 px-4 rounded-xl cursor-pointer">
@@ -1020,7 +1020,7 @@ export default function Settings() {
         )}
 
         {activeSubTab === 'integrations' && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div>
               <h3 className="text-sm font-semibold text-[var(--color-fg)]">Service Integration Configuration</h3>
               <p className="text-xs text-[var(--color-muted-fg)] mt-1">Connect and synchronize data with third-party platforms and services.</p>
@@ -1057,7 +1057,7 @@ export default function Settings() {
               <div className="w-3/4 pl-2 space-y-6">
                 {/* Chatwoot Content */}
                 {activeIntegrationTab === 'chatwoot' && (
-                  <div className="space-y-4 max-w-xl bg-[var(--color-surface)]/50 p-6 border border-[var(--color-border)] rounded-2xl">
+                  <div className="space-y-4 max-w-xl bg-[var(--color-surface)]/50 p-6 border border-[var(--color-border)] rounded-[5px]">
                     <div className="flex items-center gap-3">
                       <MessageSquare className="text-[var(--color-accent)]" size={24} />
                       <div>
@@ -1079,7 +1079,7 @@ export default function Settings() {
                 {/* DocuSign Content */}
                 {activeIntegrationTab === 'docusign' && (
                   <div className="space-y-4 max-w-xl">
-                    <div className="flex justify-between items-center bg-[var(--color-surface)]/50 p-4 border border-[var(--color-border)] rounded-2xl">
+                    <div className="flex justify-between items-center bg-[var(--color-surface)]/50 p-4 border border-[var(--color-border)] rounded-[5px]">
                       <div>
                         <h4 className="font-bold text-sm text-[var(--color-fg)]">DocuSign E-Signature Hub</h4>
                         <p className="text-[10px] text-[var(--color-muted-fg)]">E-signature automation on CRM Contracts</p>
@@ -1102,7 +1102,7 @@ export default function Settings() {
                 {/* Resend Content */}
                 {activeIntegrationTab === 'resend' && (
                   <div className="space-y-4 max-w-xl">
-                    <div className="flex justify-between items-center bg-[var(--color-surface)]/50 p-4 border border-[var(--color-border)] rounded-2xl">
+                    <div className="flex justify-between items-center bg-[var(--color-surface)]/50 p-4 border border-[var(--color-border)] rounded-[5px]">
                       <div>
                         <h4 className="font-bold text-sm text-[var(--color-fg)]">Resend SMTP Gateway</h4>
                         <p className="text-[10px] text-[var(--color-muted-fg)]">Automated quotation and contract email sending</p>
@@ -1122,8 +1122,8 @@ export default function Settings() {
 
                 {/* ERP Sync Content */}
                 {activeIntegrationTab === 'erp' && (
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center bg-[var(--color-surface)]/50 p-4 border border-[var(--color-border)] rounded-2xl">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center bg-[var(--color-surface)]/50 p-4 border border-[var(--color-border)] rounded-[5px]">
                       <div>
                         <h4 className="font-bold text-sm text-[var(--color-fg)]">ERP System Sync</h4>
                         <p className="text-[10px] text-[var(--color-muted-fg)]">Bi-directional sync of customers, opportunities, quotations, and payment invoices via XML-RPC</p>

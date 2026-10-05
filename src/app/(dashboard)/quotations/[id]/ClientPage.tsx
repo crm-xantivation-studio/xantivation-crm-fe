@@ -95,7 +95,7 @@ export default function QuotationDetail({ params }: { params: Promise<{ id: stri
   const ownerName = q.owner ? `${q.owner.firstName || ''} ${q.owner.lastName || ''}`.trim() : t('quotations.systemAdmin');
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Breadcrumbs & Title */}
       <div className="flex justify-between items-start shrink-0">
         <div>
@@ -104,10 +104,10 @@ export default function QuotationDetail({ params }: { params: Promise<{ id: stri
             <span>&gt;</span>
             <span className="text-[var(--color-fg)] font-semibold">{q.quotationCode}</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">
             {q.projectName}
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('quotations.quotation')} {q.quotationCode} (v{q.version}) • {serviceName}</p>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('quotations.quotation')} {q.quotationCode} (v{q.version}) • {serviceName}</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -151,12 +151,12 @@ export default function QuotationDetail({ params }: { params: Promise<{ id: stri
           {/* Sub Tab Bodies */}
           <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-lg p-6 min-h-[300px]">
             {activeSubTab === 'overview' && (
-              <div className="space-y-8">
+              <div className="space-y-4">
                 {/* Visual Pricing Banner */}
-                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">{t('quotations.grandTotalValue')}</p>
-                    <p className="text-2xl font-bold tracking-tight text-[var(--color-fg)] font-mono">{(q.grandTotal || 0).toLocaleString('vi-VN')} VND</p>
+                    <p className="text-base sm:text-lg font-semibold tracking-tight text-[var(--color-fg)] font-mono">{(q.grandTotal || 0).toLocaleString('vi-VN')} VND</p>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
                     <div className="border-l border-[var(--color-border)] pl-4">
@@ -206,7 +206,7 @@ export default function QuotationDetail({ params }: { params: Promise<{ id: stri
                 </div>
 
                 {/* PDF Live View Placeholder */}
-                <div className="border border-[var(--color-border)] rounded-2xl bg-[var(--color-surface)]/20 p-8 text-center space-y-4 min-h-[300px] flex flex-col justify-center items-center">
+                <div className="border border-[var(--color-border)] rounded-[5px] bg-[var(--color-surface)]/20 p-8 text-center space-y-4 min-h-[300px] flex flex-col justify-center items-center">
                   <FileText size={48} className="text-[var(--color-accent)]/40" />
                   <div className="max-w-md space-y-2">
                     <h4 className="font-bold text-sm text-[var(--color-fg)]">{t('quotations.quotationPdfDocument')}</h4>
@@ -257,7 +257,7 @@ export default function QuotationDetail({ params }: { params: Promise<{ id: stri
 
         {/* Right Sidebar Actions (1 col) */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-6">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-6">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('quotations.quotationControls')}
             </h3>

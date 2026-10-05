@@ -66,12 +66,12 @@ export default function SalesForecast() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Header and Filter */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">{t('reports.salesForecastTitle')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('reports.salesForecastDesc')}</p>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">{t('reports.salesForecastTitle')}</h1>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('reports.salesForecastDesc')}</p>
         </div>
         
         <div className="flex items-center gap-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)] px-4 py-2 rounded-xl">
@@ -95,7 +95,7 @@ export default function SalesForecast() {
       {/* Analytical Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Forecast trend line chart */}
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6">
           <h3 className="text-sm font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('reports.forecastVsActual')}</h3>
           {isLoading ? (
             <Skeleton active paragraph={{ rows: 5 }} />
@@ -134,7 +134,7 @@ export default function SalesForecast() {
         </div>
 
         {/* Stacked bar breakdown */}
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6">
           <h3 className="text-sm font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('reports.pipelineWeighted')}</h3>
           {isLoading ? (
             <Skeleton active paragraph={{ rows: 5 }} />
@@ -167,7 +167,7 @@ export default function SalesForecast() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
       >
-        <Card className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl">
+        <Card className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px]">
           <h3 className="text-sm font-mono uppercase tracking-wider text-[var(--color-muted-fg)] mb-6">{t('reports.topOpportunities')}</h3>
           <Table
             dataSource={report?.topOpportunities}

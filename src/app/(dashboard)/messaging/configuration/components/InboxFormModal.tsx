@@ -144,7 +144,7 @@ export default function InboxFormModal({ visible, channelToEdit, onClose, onSucc
       confirmLoading={saveChannelMutation.isPending || registerWebhookMutation.isPending}
       okText={channelToEdit ? 'Lưu Thay Đổi' : 'Tạo Kênh'}
       cancelText="Hủy"
-      className="rounded-2xl"
+      className="rounded-[5px]"
     >
       <Form form={form} layout="vertical" onFinish={handleFinish} className="mt-4 space-y-3">
         <Form.Item name="name" label="Tên Kênh Hiển Thị" rules={[{ required: true, message: 'Nhập tên kênh' }]}>

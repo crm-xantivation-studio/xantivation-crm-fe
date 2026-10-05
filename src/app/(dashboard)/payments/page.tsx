@@ -167,12 +167,12 @@ export default function Payments() {
   const activeFiltersCount = filterStatus !== 'ALL' ? 1 : 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--color-fg)]">{t('payments.title')}</h1>
-          <p className="text-sm text-[var(--color-muted-fg)] mt-1">
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">{t('payments.title')}</h1>
+          <p className="text-xs text-[var(--color-muted-fg)] mt-1">
             {t('payments.subtitle')}
           </p>
         </div>
@@ -192,16 +192,16 @@ export default function Payments() {
           {/* Filters Button */}
           <button
             onClick={() => setFilterDrawerOpen(true)}
-            className={`flex items-center gap-2 h-10 px-3.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
+            title={t('payments.filters')}
+            className={`w-9 h-9 flex items-center justify-center rounded-xl border transition-all cursor-pointer relative shrink-0 ${
               activeFiltersCount > 0
-                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/5 text-[var(--color-accent)]'
-                : 'border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
+                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                : 'border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] bg-[var(--color-bg-tint)]'
             }`}
           >
-            <SlidersHorizontal size={14} />
-            <span>{t('payments.filters')}</span>
+            <SlidersHorizontal size={15} />
             {activeFiltersCount > 0 && (
-              <span className="w-4.5 h-4.5 rounded-full bg-[var(--color-accent)] text-white text-[9px] flex items-center justify-center font-bold animate-pulse">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--color-accent)] text-white text-[9px] flex items-center justify-center font-bold animate-pulse">
                 {activeFiltersCount}
               </span>
             )}
@@ -243,7 +243,7 @@ export default function Payments() {
           }
         }}
       >
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('payments.paymentStatus')}
@@ -267,7 +267,7 @@ export default function Payments() {
           <span className="text-xs text-[var(--color-muted-fg)] font-mono">{t('payments.loading')}</span>
         </div>
       ) : (
-        <div className="az-card overflow-hidden shadow-xs">
+        <div className="">
           <SharedTable
             columns={columns}
             dataSource={filteredPayments}

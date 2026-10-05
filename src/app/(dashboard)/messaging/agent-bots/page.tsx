@@ -22,10 +22,10 @@ export default function AgentBotsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">Bot AI (Agent Bots)</h1>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">Bot AI (Agent Bots)</h1>
           <p className="text-xs text-[var(--color-muted-fg)]">Quản lý các Bot AI xử lý tin nhắn tự động (Hermes Agent, Dialogflow, Webhook Bot)</p>
         </div>
         <div className="flex gap-2">

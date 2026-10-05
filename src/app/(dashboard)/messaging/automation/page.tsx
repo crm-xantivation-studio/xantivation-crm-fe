@@ -22,10 +22,10 @@ export default function AutomationRulesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">Quy Tắc Tự Động Hóa (Automation Rules)</h1>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">Quy Tắc Tự Động Hóa (Automation Rules)</h1>
           <p className="text-xs text-[var(--color-muted-fg)]">Tự động gán team, gán nhãn, phản hồi khi có sự kiện hội thoại mới</p>
         </div>
         <div className="flex gap-2">

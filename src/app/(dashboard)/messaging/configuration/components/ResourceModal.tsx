@@ -62,7 +62,7 @@ export default function ResourceModal({
       confirmLoading={loading}
       okText="Xác Nhận Tạo"
       cancelText="Hủy"
-      className="rounded-2xl"
+      className="rounded-[5px]"
     >
       <Form form={form} layout="vertical" onFinish={handleFinish} className="mt-4 space-y-3">
         {/* AGENTS (Human CSKH) FORM */}

@@ -198,7 +198,7 @@ export default function NativeChatWindow({ conversation, onRefresh }: NativeChat
                   )}
 
                   <div
-                    className={`px-4 py-3 rounded-2xl text-xs leading-relaxed shadow-sm break-words ${
+                    className={`px-4 py-3 rounded-[5px] text-xs leading-relaxed shadow-sm break-words ${
                       isOutgoing
                         ? 'bg-gradient-to-r from-[var(--color-accent)] to-cyan-500 text-white rounded-br-none'
                         : 'bg-[var(--color-surface)] border border-[var(--color-border)]/40 text-[var(--color-fg)] rounded-bl-none'
@@ -237,7 +237,7 @@ export default function NativeChatWindow({ conversation, onRefresh }: NativeChat
           </Tooltip>
         </div>
 
-        <div className="flex items-end gap-3 bg-[var(--color-surface)]/60 border border-[var(--color-border)]/60 rounded-2xl p-2 focus-within:border-[var(--color-accent)] transition-all">
+        <div className="flex items-end gap-3 bg-[var(--color-surface)]/60 border border-[var(--color-border)]/60 rounded-[5px] p-2 focus-within:border-[var(--color-accent)] transition-all">
           <textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}

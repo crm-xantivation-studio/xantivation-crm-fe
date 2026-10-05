@@ -16,7 +16,7 @@ export default function DashboardPage() {
 
   if (!user) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div>
           <Skeleton.Input active size="large" style={{ width: 200 }} />
           <Skeleton.Input active size="small" style={{ width: 350, marginTop: 8 }} />
@@ -25,17 +25,17 @@ export default function DashboardPage() {
           {Array(3)
             .fill(null)
             .map((_, idx) => (
-              <div key={idx} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 h-28 flex flex-col justify-between">
+              <div key={idx} className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 h-28 flex flex-col justify-between">
                 <Skeleton.Input active size="small" style={{ width: 120 }} />
                 <Skeleton.Input active size="default" style={{ width: 80 }} />
               </div>
             ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 h-80">
+          <div className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 h-80">
             <Skeleton active paragraph={{ rows: 6 }} />
           </div>
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 h-80">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 h-80">
             <Skeleton active paragraph={{ rows: 6 }} />
           </div>
         </div>
@@ -84,13 +84,13 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Editorial Title */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
+        <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">
           {currentHeading.title}
         </h1>
-        <p className="text-sm text-[var(--color-muted-fg)]">
+        <p className="text-xs text-[var(--color-muted-fg)]">
           {t('dashboard.welcomeBack')}, {`${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email}. {currentHeading.subtitle}
         </p>
       </div>

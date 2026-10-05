@@ -44,7 +44,7 @@ export default function DiagnosticsPanel({ visible, onClose }: DiagnosticsPanelP
           Đóng
         </Button>,
       ]}
-      className="rounded-2xl"
+      className="rounded-[5px]"
     >
       {isLoading || isFetching ? (
         <div className="p-12 text-center">
@@ -56,7 +56,7 @@ export default function DiagnosticsPanel({ visible, onClose }: DiagnosticsPanelP
       ) : (
         <div className="space-y-4 my-3 text-xs">
           {/* Pipeline Visual Flow */}
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-4 flex items-center justify-between gap-2 overflow-x-auto font-mono text-[11px]">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-4 flex items-center justify-between gap-2 overflow-x-auto font-mono text-[11px]">
             {/* Step 1: Tunnel */}
             <div className="flex flex-col items-center text-center p-2">
               <Network size={20} className={report.tunnel?.reachable ? 'text-emerald-500' : 'text-rose-500'} />

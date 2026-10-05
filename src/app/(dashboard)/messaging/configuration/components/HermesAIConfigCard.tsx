@@ -119,7 +119,7 @@ export default function HermesAIConfigCard() {
   };
 
   return (
-    <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-6">
+    <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-6">
       <div className="flex justify-between items-center border-b border-[var(--color-border)]/50 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-500">

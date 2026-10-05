@@ -446,38 +446,33 @@ I have reviewed the agreement file and found:
   const selectedAgentData = agents.find(a => a.id === activeAgent) || agents[0];
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col space-y-6">
-      {/* Title Header */}
-      <div className="flex justify-between items-center shrink-0">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)] flex items-center gap-2">
+    <div className="h-full w-full flex overflow-hidden">
+      {/* Column 1: Conversations History Sidebar */}
+      <div className="w-80 flex flex-col bg-[var(--color-bg)] border-r border-[var(--color-border)] shrink-0">
+        
+        {/* Title Header (Merged into Sidebar) */}
+        <div className="p-4 border-b border-[var(--color-border)] shrink-0 bg-[var(--color-bg)]">
+          <h1 className="text-base font-bold text-[var(--color-fg)] flex items-center gap-2">
             <span>{t('aiHub.title')}</span>
-            <span className="text-xs bg-[var(--color-accent)]/10 text-[var(--color-accent)] px-2 py-0.5 rounded-full border border-[var(--color-accent)]/20 font-mono">
+            <span className="text-[10px] bg-[var(--color-accent)]/10 text-[var(--color-accent)] px-1.5 py-0.5 rounded-md border border-[var(--color-accent)]/20 font-mono">
               {t('aiHub.v3Pipeline')}
             </span>
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('aiHub.subtitle')}</p>
+          <p className="text-[11px] text-[var(--color-muted-fg)] mt-1">{t('aiHub.subtitle')}</p>
         </div>
 
-      </div>
-
-      {/* Main AI Chat Console Content Area */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-0">
-        
-        {/* Column 1: Conversations History Sidebar */}
-        <div className="lg:col-span-1 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl flex flex-col overflow-hidden">
-          {/* Header search & create */}
-          <div className="p-4 border-b border-[var(--color-border)] space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('aiHub.chatHistory')}
-              </span>
-              <button
-                onClick={handleCreateNewChat}
-                className="flex items-center gap-1 text-[11px] font-semibold text-[var(--color-accent)] hover:underline cursor-pointer"
-              >
-                <Plus size={12} />
-                <span>{t('aiHub.newChat')}</span>
+        {/* Header search & create */}
+        <div className="p-3 border-b border-[var(--color-border)] space-y-2 shrink-0 bg-[var(--color-surface)]/30">
+          <div className="flex justify-between items-center px-1">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] font-semibold">
+              {t('aiHub.chatHistory')}
+            </span>
+            <button
+              onClick={handleCreateNewChat}
+              className="flex items-center gap-1 text-[10px] font-semibold text-[var(--color-accent)] hover:underline cursor-pointer"
+            >
+              <Plus size={12} />
+              <span>{t('aiHub.newChat')}</span>
               </button>
             </div>
 
@@ -585,7 +580,7 @@ I have reviewed the agreement file and found:
         </div>
 
         {/* Column 2: Chat Panel (Center) */}
-        <div className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl flex flex-col overflow-hidden min-w-0">
+        <div className="flex-1 flex flex-col relative bg-[var(--color-bg-tint)]">
           {/* Top Selector Bar */}
           <div className="p-3 border-b border-[var(--color-border)] bg-[var(--color-surface)]/20 flex items-center justify-between gap-4 shrink-0">
             <div className="flex gap-2">
@@ -696,7 +691,7 @@ I have reviewed the agreement file and found:
                       </span>
                     </div>
 
-                    <div className={`p-4 rounded-2xl text-xs leading-relaxed ${
+                    <div className={`p-4 rounded-[5px] text-xs leading-relaxed ${
                       isUser
                         ? 'bg-[var(--color-accent)] text-white shadow-sm rounded-tr-none'
                         : `bg-[var(--color-surface)] text-[var(--color-fg)] border border-[var(--color-border)] rounded-tl-none border-l-4 ${agentData?.border || 'border-indigo-500/30'}`
@@ -746,7 +741,7 @@ I have reviewed the agreement file and found:
                     </span>
                     <span className="text-[8px] font-mono text-[var(--color-muted-fg)]">{t('aiHub.streaming')}</span>
                   </div>
-                  <div className={`p-4 rounded-2xl text-xs leading-relaxed bg-[var(--color-surface)] text-[var(--color-fg)] border border-[var(--color-border)] rounded-tl-none border-l-4 ${selectedAgentData.border}`}>
+                  <div className={`p-4 rounded-[5px] text-xs leading-relaxed bg-[var(--color-surface)] text-[var(--color-fg)] border border-[var(--color-border)] rounded-tl-none border-l-4 ${selectedAgentData.border}`}>
                     <p className="whitespace-pre-line">{streamingMessage}</p>
                     <span className="inline-block w-1.5 h-3.5 bg-[var(--color-accent)] animate-pulse ml-0.5" />
                   </div>
@@ -828,9 +823,9 @@ I have reviewed the agreement file and found:
         </div>
 
         {/* Column 3: Right Panel Context / Steppers */}
-        <div className="lg:col-span-1 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl flex flex-col overflow-hidden min-w-0">
+        <div className="w-80 bg-[var(--color-bg)] border-l border-[var(--color-border)] flex flex-col overflow-hidden shrink-0">
           {/* Tabs header */}
-          <div className="flex border-b border-[var(--color-border)] p-1.5 gap-0.5 bg-[var(--color-surface)]/20 overflow-x-auto shrink-0 scrollbar-none">
+          <div className="flex border-b border-[var(--color-border)] p-1.5 gap-0.5 bg-[var(--color-bg)] overflow-x-auto shrink-0 scrollbar-none">
             {[
               { id: 'context' },
               { id: 'execution' },
@@ -989,7 +984,6 @@ I have reviewed the agreement file and found:
           </div>
         </div>
 
-      </div>
     </div>
   );
 }

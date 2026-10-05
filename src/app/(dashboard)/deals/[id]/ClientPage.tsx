@@ -183,7 +183,7 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Breadcrumbs & Title */}
       <div className="flex justify-between items-start shrink-0">
         <div>
@@ -192,10 +192,10 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
             <span>&gt;</span>
             <span className="text-[var(--color-fg)] font-semibold">{d.dealCode}</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">
             {d.name}
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('deals.dealCode')}: {d.dealCode} • {t('deals.client')}: {d.opportunity?.account?.name}</p>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('deals.dealCode')}: {d.dealCode} • {t('deals.client')}: {d.opportunity?.account?.name}</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -211,7 +211,7 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
 
       {/* Visual Stepper */}
       {d.stage !== 'CLOSED_LOST' ? (
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-2xl">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-[5px]">
           <Steps
             current={currentStep}
             items={[
@@ -257,9 +257,9 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
             ))}
           </div>
 
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 min-h-[300px]">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 min-h-[300px]">
             {activeSubTab === 'overview' && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-6 text-sm">
                   <div className="space-y-3">
                     <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">{t('deals.commercialTerms')}</h3>
@@ -300,7 +300,7 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
             )}
 
             {activeSubTab === 'milestones' && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-[var(--color-fg)]">{t('deals.paymentMilestonesSchedule')}</h3>
                   {d.status === 'DRAFT' && (
@@ -402,7 +402,7 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
 
         {/* Right Sidebar Control */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-6">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-6">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('deals.dealControlPanel')}
             </h3>

@@ -22,10 +22,10 @@ export default function WebhooksPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-fg)]">Cấu Hình Webhooks</h1>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">Cấu Hình Webhooks</h1>
           <p className="text-xs text-[var(--color-muted-fg)]">Đẩy dữ liệu sự kiện hội thoại sang hệ thống bên ngoài (NestJS Backend, Zapier, Custom Server)</p>
         </div>
         <div className="flex gap-2">

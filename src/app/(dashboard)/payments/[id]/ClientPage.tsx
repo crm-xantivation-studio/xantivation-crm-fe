@@ -82,7 +82,7 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
   const createdAt = p.invoiceDate ? p.invoiceDate.substring(0, 10) : '';
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Breadcrumb Header */}
       <div className="flex justify-between items-start shrink-0">
         <div>
@@ -91,10 +91,10 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
             <span>&gt;</span>
             <span className="text-[var(--color-fg)] font-semibold">{invoiceNumber}</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">
             {t('payments.invoice')}: {invoiceNumber}
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('payments.milestoneBilling')}: {p.milestoneName} ({p.milestonePercentage}%) • {t('payments.client')}: {p.notes || t('payments.studioClient')}</p>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('payments.milestoneBilling')}: {p.milestoneName} ({p.milestonePercentage}%) • {t('payments.client')}: {p.notes || t('payments.studioClient')}</p>
         </div>
 
         <div>
@@ -144,9 +144,9 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
             ))}
           </div>
 
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 min-h-[350px]">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 min-h-[350px]">
             {activeTab === 'overview' && (
-              <div className="space-y-8">
+              <div className="space-y-4">
                 {/* Meta details */}
                 <div className="grid grid-cols-2 gap-6 text-xs border-b border-[var(--color-border)]/50 pb-6">
                   <div className="space-y-3">
@@ -181,7 +181,7 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
                 {/* Contract context */}
                 <div className="space-y-3 text-xs">
                   <h4 className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">{t('payments.relatedEContract')}</h4>
-                  <div className="p-4 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-2xl flex items-center justify-between">
+                  <div className="p-4 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-[5px] flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <FileText className="text-[var(--color-accent)]" size={24} />
                       <div>
@@ -204,7 +204,7 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
             )}
 
             {activeTab === 'preview' && (
-              <div className="space-y-6 text-xs text-[var(--color-fg)] font-mono max-w-xl mx-auto p-8 border border-[var(--color-border)] rounded-2xl bg-[var(--color-surface)]/20 shadow-sm relative">
+              <div className="space-y-6 text-xs text-[var(--color-fg)] font-mono max-w-xl mx-auto p-8 border border-[var(--color-border)] rounded-[5px] bg-[var(--color-surface)]/20 shadow-sm relative">
                 {/* Print button overlay */}
                 <button
                   onClick={handlePrint}
@@ -268,7 +268,7 @@ export default function PaymentDetail({ params }: { params: Promise<{ id: string
 
         {/* Right Sidebar Control */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-6">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-6">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('payments.financeControls')}
             </h3>

@@ -90,7 +90,7 @@ export default function ContactDetail({ params }: { params: Promise<{ id: string
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Breadcrumbs & Title */}
       <div className="flex justify-between items-start shrink-0">
         <div>
@@ -101,10 +101,10 @@ export default function ContactDetail({ params }: { params: Promise<{ id: string
             <span>&gt;</span>
             <span className="text-[var(--color-fg)] font-semibold">{contact.firstName} {contact.lastName}</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
+          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">
             {contact.firstName} {contact.lastName}
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">{t('customers.associatedAccount')}: <Link href={`/customers/accounts/${contact.companyId}`} className="text-[var(--color-accent)] hover:underline">{contact.companyName}</Link></p>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('customers.associatedAccount')}: <Link href={`/customers/accounts/${contact.companyId}`} className="text-[var(--color-accent)] hover:underline">{contact.companyName}</Link></p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -142,9 +142,9 @@ export default function ContactDetail({ params }: { params: Promise<{ id: string
           </div>
 
           {/* Sub Tab Bodies */}
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 min-h-[300px]">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 min-h-[300px]">
             {activeSubTab === 'overview' && (
-              <div className="space-y-8">
+              <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
@@ -203,7 +203,7 @@ export default function ContactDetail({ params }: { params: Promise<{ id: string
             {activeSubTab === 'opportunities' && (
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-[var(--color-fg)]">{t('customers.representedOpportunities')}</h3>
-                <div className="p-6 bg-[var(--color-surface)]/20 border border-[var(--color-border)]/50 rounded-2xl flex flex-col gap-3 justify-center min-h-[160px] text-center text-[var(--color-muted-fg)] text-xs font-mono">
+                <div className="p-6 bg-[var(--color-surface)]/20 border border-[var(--color-border)]/50 rounded-[5px] flex flex-col gap-3 justify-center min-h-[160px] text-center text-[var(--color-muted-fg)] text-xs font-mono">
                   <FileText size={32} className="mx-auto text-[var(--color-accent)]/50" />
                   <span>{t('customers.noContactOpportunities')}</span>
                 </div>
@@ -214,7 +214,7 @@ export default function ContactDetail({ params }: { params: Promise<{ id: string
 
         {/* Right Side: Sidebar Actions (1 col) */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl p-6 space-y-6">
+          <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] p-6 space-y-6">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('customers.contactControlPanel')}
             </h3>

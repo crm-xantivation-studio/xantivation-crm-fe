@@ -212,14 +212,14 @@ export default function WorkflowMonitor() {
   }, []);
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col space-y-6">
+    <div className="h-full w-full p-6 lg:p-8 overflow-y-auto flex flex-col space-y-6 bg-[var(--color-bg-tint)] relative">
       {/* Title */}
       <div className="flex justify-between items-center shrink-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-fg)]">
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">
             Workflow Monitor
           </h1>
-          <p className="text-sm text-[var(--color-muted-fg)]">
+          <p className="text-xs text-[var(--color-muted-fg)]">
             Real-time execution flow monitoring for AI agents and background jobs
           </p>
         </div>
@@ -237,7 +237,7 @@ export default function WorkflowMonitor() {
       {/* Main Content */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
         {/* Left: Execution Logs List */}
-        <div className="lg:col-span-1 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl flex flex-col overflow-hidden">
+        <div className="lg:col-span-1 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] flex flex-col overflow-hidden">
           <div className="p-4 border-b border-[var(--color-border)]">
             <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
               {t('aiHub.executionHistory')}
@@ -305,7 +305,7 @@ export default function WorkflowMonitor() {
         </div>
 
         {/* Right: Flow Graph Canvas (2 cols) */}
-        <div className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-2xl overflow-hidden flex flex-col">
+        <div className="lg:col-span-2 bg-[var(--color-bg-tint)] border border-[var(--color-border)] rounded-[5px] overflow-hidden flex flex-col">
           {selectedLog ? (
             <>
               {/* Selected execution header */}
@@ -371,7 +371,7 @@ export default function WorkflowMonitor() {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center space-y-3 max-w-sm">
                 <Activity size={40} className="mx-auto text-[var(--color-muted-fg)] opacity-40" />
-                <p className="text-sm text-[var(--color-muted-fg)]">
+                <p className="text-xs text-[var(--color-muted-fg)]">
                   Select an execution log from the left panel to visualize its flow
                 </p>
                 <p className="text-[10px] text-[var(--color-muted-fg)] font-mono">

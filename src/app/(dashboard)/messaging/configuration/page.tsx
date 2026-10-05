@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Button, Switch, message, Badge, Spin, Tag, Popconfirm, Select } from 'antd';
 import { FloatingInput } from '@/components/FloatingInput';
 import {
@@ -173,7 +174,7 @@ export default function MessagingConfigurationPage() {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="flex h-full w-full overflow-hidden">
       {/* Resource Modal for Operations */}
       <ResourceModal
         visible={modalResourceType !== null}
@@ -203,21 +204,28 @@ export default function MessagingConfigurationPage() {
         onClose={() => setIsDiagnosticsOpen(false)}
       />
 
-      {/* Top Page Header */}
-      <div>
-        <h1 className="text-xl font-bold text-[var(--color-fg)] flex items-center gap-2.5">
-          <Settings className="text-[var(--color-accent)]" size={24} />
-          <span>Trung Tâm Cấu Hình Kênh Tương Tác & Engine Chatwoot</span>
-        </h1>
-        <p className="text-xs text-[var(--color-muted-fg)] mt-1">
-          Quản lý tập trung Telegram Bots, Public Tunnel Gateway, Hermes AI Engine và quy tắc vận hành CSKH đa kênh.
-        </p>
-      </div>
+      
 
-      {/* Main Tab Wrapper */}
-      <div className="flex gap-6 min-h-[580px] bg-[var(--color-surface)]/30 border border-[var(--color-border)] rounded-2xl p-6 shadow-sm">
+      {/* Main Tab Wrapper - Removed heavy boxing/borders */}
+            {/* Left Sidebar Sub-Tabs (Secondary Sidebar) */}
         {/* Left Sidebar Sub-Tabs (5 Tabs) */}
-        <div className="w-64 flex flex-col gap-1.5 border-r border-[var(--color-border)] pr-5">
+        <motion.div
+        initial={{ x: -250, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+        className="w-72 shrink-0 flex flex-col border-r border-[var(--color-border)] bg-[var(--color-bg)] h-full overflow-y-auto"
+      >
+        {/* Header inside Secondary Sidebar */}
+        <div className="px-5 py-5 border-b border-[var(--color-border)] mb-4 shrink-0">
+          <h1 className="text-base font-bold text-[var(--color-fg)] flex items-center gap-2 mb-1">
+            <Settings size={18} className="text-[var(--color-accent)]" />
+            Configuration
+          </h1>
+          <p className="text-[11px] text-[var(--color-muted-fg)] leading-tight">
+            Quản lý tập trung Telegram Bots, Public Tunnel & Hermes AI Engine
+          </p>
+        </div>
+        <div className="px-3 flex flex-col gap-1.5 pb-6">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -225,10 +233,10 @@ export default function MessagingConfigurationPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-left transition-all cursor-pointer ${
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[var(--color-accent)]/15 text-[var(--color-accent)] font-semibold border-l-4 border-[var(--color-accent)] pl-2.5 shadow-sm'
-                    : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] hover:bg-[var(--color-muted-bg)]/30'
+                    ? 'bg-[var(--color-surface)] text-[var(--color-fg)] font-semibold shadow-sm'
+                    : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface)]/50'
                 }`}
               >
                 <Icon size={18} className={isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted-fg)]'} />
@@ -240,9 +248,10 @@ export default function MessagingConfigurationPage() {
             );
           })}
         </div>
+      </motion.div>
 
         {/* Right Content Panel */}
-        <div className="flex-1 pl-2">
+        <div className="flex-1 p-6 lg:p-8 overflow-y-auto bg-[var(--color-bg-tint)] relative">
           {isSettingsLoading ? (
             <div className="p-12 text-center">
               <Spin size="large" />
@@ -252,7 +261,7 @@ export default function MessagingConfigurationPage() {
             <>
               {/* TAB 1: KÊNH KẾT NỐI & TUNNEL GATEWAY (Default) */}
               {activeTab === 'channels' && (
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {/* Public Tunnel & Webhook Controller Card */}
                   <TunnelWebhookCard onOpenDiagnostics={() => setIsDiagnosticsOpen(true)} />
 
@@ -274,7 +283,7 @@ export default function MessagingConfigurationPage() {
               {activeTab === 'system' && (
                 <div className="space-y-6 max-w-2xl">
                   {/* Master Toggle Status */}
-                  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-4">
+                  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-4">
                     <div className="flex justify-between items-center pb-3 border-b border-[var(--color-border)]">
                       <div>
                         <h3 className="font-bold text-sm text-[var(--color-fg)] flex items-center gap-2">
@@ -318,7 +327,7 @@ export default function MessagingConfigurationPage() {
                   </div>
 
                   {/* AI Extraction & Lead Approval Settings Card */}
-                  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-4">
+                  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Bot className="text-amber-500" size={18} />
@@ -421,7 +430,7 @@ export default function MessagingConfigurationPage() {
                   </div>
 
                   {/* Server Connection Inputs */}
-                  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 space-y-4">
+                  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[5px] p-5 space-y-4">
                     <h3 className="font-bold text-sm text-[var(--color-fg)]">Thông Số Kết Nối Server Chatwoot</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <FloatingInput label="Chatwoot Base URL" value={baseUrl} onChange={setBaseUrl} placeholder="http://localhost:3003" />
@@ -468,7 +477,7 @@ export default function MessagingConfigurationPage() {
 
               {/* TAB 3: HERMES AI ENGINE */}
               {activeTab === 'hermes-ai' && (
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <HermesAgentQuickConfig />
 
                   <div className="space-y-4 pt-4 border-t border-[var(--color-border)]/40">
@@ -744,7 +753,7 @@ export default function MessagingConfigurationPage() {
 
               {/* TAB 5: TỰ ĐỘNG HÓA & WEBHOOKS (Automation & System Webhooks) */}
               {activeTab === 'automation-webhooks' && (
-                <div className="space-y-8">
+                <div className="space-y-4">
                   {/* Automation Rules Section */}
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
@@ -823,6 +832,6 @@ export default function MessagingConfigurationPage() {
           )}
         </div>
       </div>
-    </div>
+    
   );
 }
