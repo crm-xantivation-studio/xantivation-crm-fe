@@ -102,7 +102,7 @@ export default function Opportunities() {
     contactName: opp.contact ? (opp.contact.name || opp.contact.fullName || `${opp.contact.firstName || ''} ${opp.contact.lastName || ''}`.trim() || '—') : '—',
     serviceInterest: opp.serviceInterest || 'WEBSITE',
     description: opp.description || '',
-    assignedTo: opp.assignedTo ? (opp.owner.name || `${opp.assignedTo.firstName || ''} ${opp.assignedTo.lastName || ''}`.trim()) : 'System Admin',
+    assignedTo: opp.assignedTo ? (opp.owner?.name || opp.assignedTo?.name || `${opp.assignedTo?.firstName || ''} ${opp.assignedTo?.lastName || ''}`.trim() || 'System Admin') : (opp.owner?.name || 'System Admin'),
     lostReason: opp.lostReason || '',
   }));
 
