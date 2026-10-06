@@ -198,7 +198,7 @@ function SignInForm({ onLoginSuccess }: { onLoginSuccess?: (email: string, pass:
             id="email"
             name="email"
             type="email"
-            placeholder="admin@xantivation.com"
+            placeholder="admin@gmail.com"
             required
             autoComplete="email"
             value={email}
