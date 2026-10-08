@@ -51,6 +51,7 @@ export function FloatingInput({
         }`}
       >
         {label}
+        {required && <span className="text-red-500 ml-0.5 font-bold">*</span>}
       </label>
       {/* Bottom active line */}
       <div

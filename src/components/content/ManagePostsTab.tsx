@@ -117,12 +117,12 @@ export default function ManagePostsTab({
             <div className="flex flex-wrap items-center gap-1 pt-0.5">
               {record.topicCategory && (
                 <Tag color="default" className="text-[10px] rounded px-1.5 py-0">
-                  📌 {record.topicCategory}
+                  {record.topicCategory}
                 </Tag>
               )}
               {record.contentPillar && (
                 <Tag color="geekblue" className="text-[10px] rounded px-1.5 py-0">
-                  📊 {record.contentPillar}
+                  {record.contentPillar}
                 </Tag>
               )}
               {record.sources && record.sources.length > 0 && (
@@ -139,7 +139,7 @@ export default function ManagePostsTab({
                   }
                 >
                   <Tag color="cyan" className="text-[10px] rounded px-1.5 py-0 cursor-help">
-                    📎 {record.sources.length} nguồn
+                    {record.sources.length} nguồn
                   </Tag>
                 </Tooltip>
               )}
@@ -333,13 +333,13 @@ export default function ManagePostsTab({
         >
           <Radio.Button value="all">Tất Cả ({filterKey === 'all' ? postsList.length : '—'})</Radio.Button>
           <Radio.Button value="pending_approval">
-            🤖 Đề Xuất Agent ({filterKey === 'pending_approval' ? postsList.length : '—'})
+            Đề Xuất Agent ({filterKey === 'pending_approval' ? postsList.length : '—'})
           </Radio.Button>
           <Radio.Button value="published">
-            🟢 Đã Đăng ({filterKey === 'published' ? postsList.length : '—'})
+            Đã Đăng ({filterKey === 'published' ? postsList.length : '—'})
           </Radio.Button>
           <Radio.Button value="archived">
-            📦 Lưu Trữ ({filterKey === 'archived' ? postsList.length : '—'})
+            Lưu Trữ ({filterKey === 'archived' ? postsList.length : '—'})
           </Radio.Button>
         </Radio.Group>
 

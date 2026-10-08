@@ -23,19 +23,19 @@ import { api } from '@/services/api';
 const { TextArea } = Input;
 
 const FRAMEWORK_OPTIONS = [
-  { value: 'auto', label: '🤖 Tự động chọn (Auto Detect)' },
-  { value: 'PAS', label: '⚡ PAS (Problem - Agitate - Solve)' },
-  { value: 'AIDA', label: '🔥 AIDA (Attention - Interest - Desire - Action)' },
-  { value: 'BAB', label: '🌉 BAB (Before - After - Bridge)' },
-  { value: '4P', label: '🎯 4P (Promise - Picture - Proof - Push)' },
-  { value: 'StoryBrand', label: '📖 StoryBrand (Hero - Guide - Plan)' },
+  { value: 'auto', label: 'Tự động chọn (Auto Detect)' },
+  { value: 'PAS', label: 'PAS (Problem - Agitate - Solve)' },
+  { value: 'AIDA', label: 'AIDA (Attention - Interest - Desire - Action)' },
+  { value: 'BAB', label: 'BAB (Before - After - Bridge)' },
+  { value: '4P', label: '4P (Promise - Picture - Proof - Push)' },
+  { value: 'StoryBrand', label: 'StoryBrand (Hero - Guide - Plan)' },
 ];
 
 const AUDIENCE_OPTIONS = [
-  { value: 'Chủ doanh nghiệp SMEs, Ban Giám Đốc', label: '🏢 Chủ doanh nghiệp SMEs & Ban Giám Đốc' },
-  { value: 'Giám đốc Kinh doanh (CCO) & Sales Leader', label: '💼 Giám đốc Kinh doanh (CCO) & Sales Leader' },
-  { value: 'Trưởng phòng Marketing (CMO) & Growth Team', label: '🚀 Trưởng phòng Marketing (CMO) & Growth' },
-  { value: 'Doanh nghiệp B2B, Bán buôn & Dịch vụ chuyên nghiệp', label: '🌐 Doanh nghiệp B2B & Dịch vụ chuyên sâu' },
+  { value: 'Chủ doanh nghiệp SMEs, Ban Giám Đốc', label: 'Chủ doanh nghiệp SMEs & Ban Giám Đốc' },
+  { value: 'Giám đốc Kinh doanh (CCO) & Sales Leader', label: 'Giám đốc Kinh doanh (CCO) & Sales Leader' },
+  { value: 'Trưởng phòng Marketing (CMO) & Growth Team', label: 'Trưởng phòng Marketing (CMO) & Growth' },
+  { value: 'Doanh nghiệp B2B, Bán buôn & Dịch vụ chuyên nghiệp', label: 'Doanh nghiệp B2B & Dịch vụ chuyên sâu' },
 ];
 
 interface PromptTriggerModalProps {
@@ -137,7 +137,7 @@ export function PromptTriggerModal({
             loading={isLoading}
             className="bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 border-none rounded-lg text-xs font-bold shadow-md shadow-amber-500/20"
           >
-            ⚡ Auto Pilot 1-Click
+            Auto Pilot 1-Click
           </Button>
         </div>
       }
@@ -196,8 +196,9 @@ export function PromptTriggerModal({
                             </p>
                           </div>
                           <div className="flex flex-col items-end shrink-0 gap-1.5">
-                            <span className="font-mono font-bold text-amber-400 text-[11px] bg-amber-400/10 border border-amber-400/20 px-1.5 py-0.5 rounded-md">
-                              🔥 {trend.viralScore}/100
+                            <span className="font-mono font-bold text-amber-400 text-[11px] bg-amber-400/10 border border-amber-400/20 px-1.5 py-0.5 rounded-md flex items-center gap-1">
+                              <Flame size={12} className="text-amber-500" />
+                              {trend.viralScore}/100
                             </span>
                             <Button
                               type="primary"

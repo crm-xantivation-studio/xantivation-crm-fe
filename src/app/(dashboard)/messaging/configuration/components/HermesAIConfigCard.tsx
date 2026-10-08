@@ -159,10 +159,10 @@ export default function HermesAIConfigCard() {
             onChange={handleProviderChange}
             className="w-full h-10 rounded-xl"
             options={[
-              { value: 'ollama', label: '🦙 Ollama Local (http://127.0.0.1:11434)' },
-              { value: 'groq', label: '⚡ Groq Cloud API (Llama-3.3-70b - Siêu Tốc)' },
-              { value: 'openai', label: '🤖 OpenAI API (GPT-4o / GPT-4o-mini)' },
-              { value: 'hermes_gateway', label: '⚕️ Hermes Gateway Local API (Port 8642)' },
+              { value: 'ollama', label: 'Ollama Local (http://127.0.0.1:11434)' },
+              { value: 'groq', label: 'Groq Cloud API (Llama-3.3-70b - Siêu Tốc)' },
+              { value: 'openai', label: 'OpenAI API (GPT-4o / GPT-4o-mini)' },
+              { value: 'hermes_gateway', label: 'Hermes Gateway Local API (Port 8642)' },
             ]}
           />
         </div>
@@ -196,8 +196,8 @@ export default function HermesAIConfigCard() {
               loading={isFetchingModels}
               options={
                 ollamaModels.length > 0
-                  ? ollamaModels.map((m) => ({ value: m, label: `🦙 ${m}` }))
-                  : [{ value: 'qwen2.5:3b', label: '🦙 qwen2.5:3b (Mặc định)' }]
+                  ? ollamaModels.map((m) => ({ value: m, label: m }))
+                  : [{ value: 'qwen2.5:3b', label: 'qwen2.5:3b (Mặc định)' }]
               }
             />
           ) : (

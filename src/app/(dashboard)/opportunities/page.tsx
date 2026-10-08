@@ -204,6 +204,9 @@ export default function Opportunities() {
     if (!amount || Number(amount) < 0) newErrors.amount = 'Please enter a valid amount';
     if (!closeDate) newErrors.closeDate = 'Expected close date is required';
 
+    const duplicateOpp = oppsList.find(o => o.name.trim().toLowerCase() === name.trim().toLowerCase() && o.companyId === companyId && o.id !== editingOpp?.id);
+    if (duplicateOpp) newErrors.name = `Cơ hội với tên "${name}" đã tồn tại dưới khách hàng này`;
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -649,7 +652,7 @@ export default function Opportunities() {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.customerAccount')}
+                {t('opportunities.customerAccount')} <span className="text-red-500 font-bold">*</span>
               </label>
               <Select
                 value={companyId}
@@ -683,7 +686,7 @@ export default function Opportunities() {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.salesStage')}
+                {t('opportunities.salesStage')} <span className="text-red-500 font-bold">*</span>
               </label>
               <Select
                 value={stage}
@@ -711,7 +714,7 @@ export default function Opportunities() {
 
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-              {t('opportunities.owner')}
+              {t('opportunities.owner')} <span className="text-red-500 font-bold">*</span>
             </label>
             <Select
               value={assignedTo}

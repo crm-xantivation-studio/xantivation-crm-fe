@@ -214,9 +214,15 @@ export default function ConversationControlPanel({ conversation, onRefresh }: Co
               loading={statusMutation.isPending}
               className="w-32 text-xs"
             >
-              <Select.Option value="open">🟢 Open</Select.Option>
-              <Select.Option value="pending">🟡 Pending</Select.Option>
-              <Select.Option value="resolved">⚪ Closed</Select.Option>
+              <Select.Option value="open">
+                <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block shrink-0" /> Open</span>
+              </Select.Option>
+              <Select.Option value="pending">
+                <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500 inline-block shrink-0" /> Pending</span>
+              </Select.Option>
+              <Select.Option value="resolved">
+                <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-gray-400 inline-block shrink-0" /> Closed</span>
+              </Select.Option>
             </Select>
           </div>
 

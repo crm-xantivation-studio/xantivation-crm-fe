@@ -64,9 +64,24 @@ export default function QuickActivityModal({ visible, onClose, conversationId, m
           rules={[{ required: true }]}
         >
           <Select className="rounded-lg text-xs">
-            <Select.Option value="CALL">📞 Điện Thoại / Call</Select.Option>
-            <Select.Option value="MEETING">🤝 Cuộc Hẹn / Meeting</Select.Option>
-            <Select.Option value="TASK">📋 Task Nhắc Việc</Select.Option>
+            <Select.Option value="CALL">
+              <div className="flex items-center gap-2">
+                <PhoneCall size={14} className="text-blue-500" />
+                <span>Điện Thoại (Call)</span>
+              </div>
+            </Select.Option>
+            <Select.Option value="MEETING">
+              <div className="flex items-center gap-2">
+                <Users size={14} className="text-purple-500" />
+                <span>Cuộc Hẹn (Meeting)</span>
+              </div>
+            </Select.Option>
+            <Select.Option value="TASK">
+              <div className="flex items-center gap-2">
+                <CheckSquare size={14} className="text-amber-500" />
+                <span>Task Nhắc Việc</span>
+              </div>
+            </Select.Option>
           </Select>
         </Form.Item>
 

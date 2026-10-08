@@ -18,6 +18,7 @@ import {
   PenTool,
   ShieldCheck,
   Crown,
+  Target,
 } from 'lucide-react';
 import { CanvasExecutionEvent } from '@/hooks/useCanvasSSE';
 
@@ -147,8 +148,9 @@ export function ExecutionProgressPanel({
 
               {/* Goal or Tool Call Snippet */}
               {event.goal && (
-                <div className="text-neutral-400 line-clamp-2 text-[10px] pl-5">
-                  🎯 {event.goal}
+                <div className="flex items-center gap-1.5 text-neutral-400 line-clamp-2 text-[10px] pl-5">
+                  <Target size={11} className="shrink-0 text-indigo-400" />
+                  <span>{event.goal}</span>
                 </div>
               )}
 
@@ -161,13 +163,15 @@ export function ExecutionProgressPanel({
 
               {/* Metadata Highlights */}
               {event.metadata?.draftTitle && (
-                <div className="text-[10px] text-amber-300 bg-amber-950/20 px-2 py-0.5 rounded border border-amber-500/20 truncate">
-                  📄 Bản thảo: "{event.metadata.draftTitle}"
+                <div className="flex items-center gap-1.5 text-[10px] text-amber-300 bg-amber-950/20 px-2 py-0.5 rounded border border-amber-500/20 truncate">
+                  <FileText size={11} className="shrink-0 text-amber-400" />
+                  <span className="truncate">Bản thảo: "{event.metadata.draftTitle}"</span>
                 </div>
               )}
               {event.metadata?.auditPassed !== undefined && (
-                <div className="text-[10px] text-pink-300 bg-pink-950/20 px-2 py-0.5 rounded border border-pink-500/20">
-                  🛡️ Brand Voice Audit: {event.metadata.auditPassed ? 'ĐẠT CHUẨN' : 'CẦN CHỈNH SỬA'}
+                <div className="flex items-center gap-1.5 text-[10px] text-pink-300 bg-pink-950/20 px-2 py-0.5 rounded border border-pink-500/20">
+                  <ShieldCheck size={11} className="shrink-0 text-pink-400" />
+                  <span>Brand Voice Audit: {event.metadata.auditPassed ? 'ĐẠT CHUẨN' : 'CẦN CHỈNH SỬA'}</span>
                 </div>
               )}
             </div>

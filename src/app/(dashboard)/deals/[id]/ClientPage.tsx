@@ -149,9 +149,11 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
     }
   };
 
+  const dealStage = d.stage || d.status || 'DRAFT';
+
   // Convert stage list to index for visual Stepper
   const stagesOrder = ['DRAFT', 'INTERNAL_REVIEW', 'CUSTOMER_REVIEW', 'CLOSED_WON'];
-  const currentStep = stagesOrder.indexOf(d.status === 'CLOSED_LOST' ? 'CLOSED_WON' : d.status);
+  const currentStep = stagesOrder.indexOf(dealStage === 'CLOSED_LOST' ? 'CLOSED_WON' : dealStage);
 
   const assignedOwnerName = 'System Admin';
 
@@ -182,6 +184,8 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
     }
   ];
 
+  const clientDisplayName = d.opportunity?.customer?.name || d.opportunity?.account?.name || d.account?.name || d.customer?.name || '-';
+
   return (
     <div className="space-y-4">
       {/* Breadcrumbs & Title */}
@@ -193,24 +197,24 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
             <span className="text-[var(--color-fg)] font-semibold">{d.dealCode}</span>
           </div>
           <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)]">
-            {d.name}
+            {d.name || d.projectName}
           </h1>
-          <p className="text-xs text-[var(--color-muted-fg)]">{t('deals.dealCode')}: {d.dealCode} • {t('deals.client')}: {d.opportunity?.account?.name}</p>
+          <p className="text-xs text-[var(--color-muted-fg)]">{t('deals.dealCode')}: {d.dealCode} • {t('deals.client')}: {clientDisplayName}</p>
         </div>
 
         <div className="flex items-center gap-3">
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            d.stage === 'CLOSED_WON' ? 'bg-green-500/10 text-green-500' :
-            d.stage === 'CLOSED_LOST' ? 'bg-red-500/10 text-red-500' :
+            dealStage === 'CLOSED_WON' ? 'bg-green-500/10 text-green-500' :
+            dealStage === 'CLOSED_LOST' ? 'bg-red-500/10 text-red-500' :
             'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
           }`}>
-            {t('deals.status')}: {d.stage}
+            {t('deals.status')}: {dealStage}
           </span>
         </div>
       </div>
 
       {/* Visual Stepper */}
-      {d.stage !== 'CLOSED_LOST' ? (
+      {dealStage !== 'CLOSED_LOST' ? (
         <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-[5px]">
           <Steps
             current={currentStep}
@@ -281,11 +285,11 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
                     <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">{t('deals.clientRepresentative')}</h3>
                     <div className="flex justify-between border-b border-[var(--color-border)] pb-2">
                       <span className="text-[var(--color-muted-fg)]">{t('deals.companyAccount')}</span>
-                      <span className="font-semibold">{d.account?.name || '-'}</span>
+                      <span className="font-semibold">{d.account?.name || d.opportunity?.account?.name || d.opportunity?.customer?.name || d.customer?.name || '-'}</span>
                     </div>
                     <div className="flex justify-between border-b border-[var(--color-border)] pb-2">
                       <span className="text-[var(--color-muted-fg)]">{t('deals.representativeContact')}</span>
-                      <span className="font-semibold">{d.contact ? `${d.contact.firstName || ''} ${d.contact.lastName || ''}`.trim() : '-'}</span>
+                      <span className="font-semibold">{d.contact ? `${d.contact.firstName || ''} ${d.contact.lastName || ''}`.trim() : (d.opportunity?.contact ? `${d.opportunity.contact.firstName || ''} ${d.opportunity.contact.lastName || ''}`.trim() : '-')}</span>
                     </div>
                   </div>
                 </div>
@@ -303,7 +307,7 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-[var(--color-fg)]">{t('deals.paymentMilestonesSchedule')}</h3>
-                  {d.status === 'DRAFT' && (
+                  {dealStage === 'DRAFT' && (
                     <div className="flex items-center gap-2">
                       {isEditingMilestones ? (
                         <>
@@ -408,14 +412,14 @@ export default function DealDetail({ params }: { params: Promise<{ id: string }>
             </h3>
 
             <div className="space-y-3">
-              {d.status === 'DRAFT' && milestones.length > 0 && (
+              {dealStage === 'DRAFT' && milestones.length > 0 && (
                 <Button type="primary" onClick={() => { setReviewNotes(''); setReviewModalOpen(true); }} className="w-full flex items-center justify-center gap-1.5 h-10 rounded-xl cursor-pointer">
                   <ShieldCheck size={14} />
                   <span>{t('deals.submitForReview')}</span>
                 </Button>
               )}
 
-              {d.status === 'INTERNAL_REVIEW' && (
+              {dealStage === 'INTERNAL_REVIEW' && (
                 <Button type="primary" onClick={handleApproveDeal} loading={approveDealMutation.isPending} className="w-full bg-green-600 hover:bg-green-700 border-green-600 flex items-center justify-center gap-1.5 h-10 rounded-xl cursor-pointer">
                   <CheckCircle2 size={14} />
                   <span>{t('deals.approve')}</span>

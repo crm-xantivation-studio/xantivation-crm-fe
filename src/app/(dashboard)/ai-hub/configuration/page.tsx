@@ -1012,9 +1012,9 @@ export default function AiConfigurationPage() {
               </div>
 
               <div className="text-[11px] bg-[var(--color-bg)] p-3 rounded-xl border border-[var(--color-border)] font-mono text-[var(--color-muted-fg)]">
-                {aiConfig.approvalMode === 'MANUAL' && '🔴 MANUAL: Agent stops and requests explicit human confirmation before EVERY action.'}
-                {aiConfig.approvalMode === 'SMART' && '🟡 SMART: Agent auto-approves safe actions (reading/qualifying), but asks approval for high-risk actions.'}
-                {aiConfig.approvalMode === 'OFF' && '🟢 OFF: Full autonomy. Agent executes all tools automatically without human intervention.'}
+                {aiConfig.approvalMode === 'MANUAL' && '[MANUAL] Agent stops and requests explicit human confirmation before EVERY action.'}
+                {aiConfig.approvalMode === 'SMART' && '[SMART] Agent auto-approves safe actions (reading/qualifying), but asks approval for high-risk actions.'}
+                {aiConfig.approvalMode === 'OFF' && '[OFF] Full autonomy. Agent executes all tools automatically without human intervention.'}
               </div>
             </div>
 
@@ -1366,7 +1366,7 @@ export default function AiConfigurationPage() {
                 </div>
 
                 <div className="p-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl font-mono text-[10px] text-[var(--color-muted-fg)] space-y-1">
-                  <p className="font-bold text-indigo-400">💡 Active Compression Strategy Preview:</p>
+                  <p className="font-bold text-indigo-400">Active Compression Strategy Preview:</p>
                   <p>• Triggers when context reaches <span className="text-amber-400 font-bold">{Math.round((aiConfig.compressionThreshold || 0.50) * 100)}%</span> of total LLM context window.</p>
                   <p>• Summarizes middle messages while preserving the last <span className="text-emerald-400 font-bold">{aiConfig.compressionProtectLastN || 20}</span> recent messages.</p>
                   <p>• Yields a post-compression tail of <span className="text-indigo-400 font-bold">{Math.round((aiConfig.compressionTargetRatio || 0.20) * (aiConfig.compressionThreshold || 0.50) * 100)}%</span> of total context window.</p>

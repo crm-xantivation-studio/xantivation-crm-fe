@@ -77,8 +77,8 @@ export default function ResourceModal({
             <Form.Item name="role" label="Vai Trò / Phân Quyền" initialValue="agent">
               <Select
                 options={[
-                  { value: 'agent', label: '👤 Agent (Tư vấn viên)' },
-                  { value: 'administrator', label: '👑 Administrator (Quản trị viên)' },
+                  { value: 'agent', label: 'Agent (Tư vấn viên)' },
+                  { value: 'administrator', label: 'Administrator (Quản trị viên)' },
                 ]}
                 className="rounded-xl text-xs"
               />

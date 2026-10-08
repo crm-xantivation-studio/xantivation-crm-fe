@@ -142,16 +142,33 @@ export default function Customers() {
 
   const rawContacts = contactsResponse?.data || [];
   const contacts: ContactRecord[] = rawContacts.map((c: any) => {
-    const firstName = c.firstName || '';
-    const lastName = c.lastName || '';
-    const fullName = c.name || c.fullName || `${firstName} ${lastName}`.trim() || c.email || '—';
+    let firstName = c.firstName || '';
+    let lastName = c.lastName || '';
+    
+    // If individual name fields are missing but composite name exists, split appropriately (ignore if it's an email string)
+    const compositeCandidate = (c.name || c.fullName || '').trim();
+    if (!firstName && !lastName && compositeCandidate && !compositeCandidate.includes('@')) {
+      const parts = compositeCandidate.split(/\s+/);
+      if (parts.length > 1) {
+        firstName = parts.slice(0, -1).join(' ');
+        lastName = parts[parts.length - 1];
+      } else {
+        firstName = parts[0] || '';
+        lastName = '';
+      }
+    }
+
+    const fullName = (firstName || lastName)
+      ? `${firstName} ${lastName}`.trim()
+      : (compositeCandidate && !compositeCandidate.includes('@') ? compositeCandidate : '—');
+
     const companyId = c.accountId || c.customerId || c.customer?.id || c.account?.id || c.account_id || c.customer_id || '';
     const companyName = c.account?.name || c.customer?.name || c.companyName || (companyId ? `Account #${companyId.substring(0, 8)}` : '—');
 
     return {
       id: c.id,
       firstName,
-      lastName: lastName || (firstName ? '' : fullName),
+      lastName,
       name: fullName,
       email: c.email || '',
       phone: c.phone || '',
@@ -261,7 +278,7 @@ export default function Customers() {
       key: 'name',
       render: (_, rec) => (
         <Link href={`/customers/contacts/${rec.id}`} className="font-semibold text-[var(--color-fg)] hover:underline">
-          {rec.name || `${rec.firstName || ''} ${rec.lastName || ''}`.trim() || rec.email || '—'}
+          {(rec.name && rec.name !== '—' && !rec.name.includes('@')) ? rec.name : `${rec.firstName || ''} ${rec.lastName || ''}`.trim() || 'Người liên hệ'}
         </Link>
       ),
     },
@@ -306,6 +323,18 @@ export default function Customers() {
       newErrors.taxCode = 'Invalid tax code format (10 or 13 digits)';
     }
 
+    // Duplicate check for Account (SCRUM-70, SCRUM-80)
+    const duplicateEmail = accounts.find(a => a.email && a.email.toLowerCase() === accountEmail.trim().toLowerCase() && a.id !== editingAccount?.id);
+    if (duplicateEmail) newErrors.accountEmail = `Email đã tồn tại dưới doanh nghiệp "${duplicateEmail.name}" (${duplicateEmail.code})`;
+
+    const duplicatePhone = accounts.find(a => a.phone && a.phone.trim() === accountPhone.trim() && a.id !== editingAccount?.id);
+    if (duplicatePhone) newErrors.accountPhone = `Số điện thoại đã tồn tại dưới doanh nghiệp "${duplicatePhone.name}" (${duplicatePhone.code})`;
+
+    if (taxCodeVal) {
+      const duplicateTax = accounts.find(a => a.taxCode && a.taxCode.trim() === taxCodeVal.trim() && a.id !== editingAccount?.id);
+      if (duplicateTax) newErrors.taxCode = `Mã số thuế đã tồn tại dưới doanh nghiệp "${duplicateTax.name}" (${duplicateTax.code})`;
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -347,6 +376,13 @@ export default function Customers() {
     if (!contactLastName.trim()) newErrors.contactLastName = 'Last name is required';
     if (!contactEmail.trim() || !contactEmail.includes('@')) newErrors.contactEmail = 'Please enter a valid email address';
     if (!contactPhone.trim()) newErrors.contactPhone = 'Please enter a valid phone number';
+
+    // Duplicate check for Contact (SCRUM-70, SCRUM-80)
+    const duplicateContactEmail = contacts.find(c => c.email && c.email.toLowerCase() === contactEmail.trim().toLowerCase() && c.id !== editingContact?.id);
+    if (duplicateContactEmail) newErrors.contactEmail = `Email đã tồn tại dưới liên hệ "${duplicateContactEmail.name || duplicateContactEmail.firstName}" (${duplicateContactEmail.companyName})`;
+
+    const duplicateContactPhone = contacts.find(c => c.phone && c.phone.trim() === contactPhone.trim() && c.id !== editingContact?.id);
+    if (duplicateContactPhone) newErrors.contactPhone = `Số điện thoại đã tồn tại dưới liên hệ "${duplicateContactPhone.name || duplicateContactPhone.firstName}" (${duplicateContactPhone.companyName})`;
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -554,8 +590,8 @@ export default function Customers() {
           <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] inline-block"></span>
           <span>
             {activeTab === 'accounts' 
-              ? '🏢 Accounts: Company & organization entities holding deals, contracts, and billing.'
-              : '👤 Contacts: Individual people & stakeholders associated with a Customer Account.'}
+              ? 'Accounts: Company & organization entities holding deals, contracts, and billing.'
+              : 'Contacts: Individual people & stakeholders associated with a Customer Account.'}
           </span>
         </div>
       </div>

@@ -93,13 +93,21 @@ export default function Leads() {
   // Bulk action state
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
-  // Trigger duplicate check on blur
+  // Trigger duplicate check on blur (Strict block - SCRUM-56)
   const handleCheckDuplicate = (field: 'email' | 'phone', val: string) => {
     if (!val) return;
     const exists = leads.find((l) => (field === 'email' ? l.email === val : l.phone === val) && l.id !== editingLead?.id);
     if (exists) {
-      setDuplicateMessage(`Duplicate ${field} detected: Already exists under Lead ${exists.leadCode} (${exists.firstName} ${exists.lastName})`);
+      const errMsg = `Trùng lặp ${field === 'email' ? 'Email' : 'Số điện thoại'}: Đã tồn tại dưới Lead ${exists.leadCode} (${exists.firstName} ${exists.lastName})`;
+      setErrors((prev) => ({ ...prev, [field]: errMsg }));
+      setDuplicateMessage(errMsg);
       setDuplicateWarningOpen(true);
+    } else {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
     }
   };
 
@@ -206,8 +214,29 @@ export default function Leads() {
     if (!phone.trim()) newErrors.phone = 'Please enter a valid phone number';
     if (!source) newErrors.source = 'Please select a lead source';
 
+    // Strict duplicate check on submission (SCRUM-56)
+    const duplicateEmail = email.trim() ? leads.find((l) => l.email.toLowerCase() === email.trim().toLowerCase() && l.id !== editingLead?.id) : null;
+    const duplicatePhone = phone.trim() ? leads.find((l) => l.phone.trim() === phone.trim() && l.id !== editingLead?.id) : null;
+
+    if (duplicateEmail) {
+      newErrors.email = `Email đã tồn tại dưới Lead ${duplicateEmail.leadCode} (${duplicateEmail.firstName} ${duplicateEmail.lastName})`;
+    }
+    if (duplicatePhone) {
+      newErrors.phone = `Số điện thoại đã tồn tại dưới Lead ${duplicatePhone.leadCode} (${duplicatePhone.firstName} ${duplicatePhone.lastName})`;
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      if (duplicateEmail || duplicatePhone) {
+        setDuplicateMessage(
+          duplicateEmail && duplicatePhone
+            ? `Cả Email (${email}) và Số điện thoại (${phone}) đều đã tồn tại trong hệ thống. Hệ thống chặn hoàn toàn việc tạo trùng Lead.`
+            : duplicateEmail
+            ? `Email (${email}) đã tồn tại trong hệ thống dưới Lead ${duplicateEmail.leadCode} (${duplicateEmail.firstName} ${duplicateEmail.lastName}). Hệ thống chặn tạo trùng Lead.`
+            : `Số điện thoại (${phone}) đã tồn tại trong hệ thống dưới Lead ${duplicatePhone!.leadCode} (${duplicatePhone!.firstName} ${duplicatePhone!.lastName}). Hệ thống chặn tạo trùng Lead.`
+        );
+        setDuplicateWarningOpen(true);
+      }
       return;
     }
 
@@ -489,7 +518,7 @@ export default function Leads() {
       {/* Create / Edit Modal */}
       <Modal
         title={
-          <div className="flex items-center gap-2 pb-2 border-b border-[var(--color-border)]">
+          <div className="flex items-center gap-2 pb-2">
             <div className="w-6 h-6 rounded-md bg-[var(--color-accent)]/15 border border-[var(--color-accent)]/30 flex items-center justify-center text-[var(--color-accent)]">
               <Plus size={14} />
             </div>
@@ -679,23 +708,29 @@ export default function Leads() {
         </div>
       </Modal>
 
-      {/* Duplicate warning Modal */}
+      {/* Duplicate Strict Block Modal (SCRUM-56) */}
       <Modal
         title={
-          <span className="flex items-center gap-2 text-amber-500 font-bold">
+          <span className="flex items-center gap-2 text-red-500 font-bold">
             <AlertTriangle size={18} />
-            <span>{t('leads.duplicateDetected')}</span>
+            <span>Phát hiện trùng lặp — Chặn tạo mới Lead</span>
           </span>
         }
         open={duplicateWarningOpen}
         onCancel={() => setDuplicateWarningOpen(false)}
+        zIndex={1060}
         footer={[
-          <Button key="close" onClick={() => setDuplicateWarningOpen(false)} className="rounded-xl">
-            {t('leads.ignoreContinue')}
+          <Button key="close" type="primary" danger onClick={() => setDuplicateWarningOpen(false)} className="rounded-xl">
+            Đã hiểu & Đóng
           </Button>,
         ]}
       >
-        <p className="text-xs text-[var(--color-fg)] py-2">{duplicateMessage}</p>
+        <div className="space-y-2 py-2 text-xs">
+          <p className="text-red-500 font-semibold">{duplicateMessage}</p>
+          <p className="text-[var(--color-muted-fg)]">
+            Hệ thống áp dụng chính sách chặn trùng lặp nghiêm ngặt để đảm bảo chất lượng dữ liệu đầu mối. Vui lòng kiểm tra lại thông tin hoặc cập nhật Lead hiện có.
+          </p>
+        </div>
       </Modal>
     </div>
   );

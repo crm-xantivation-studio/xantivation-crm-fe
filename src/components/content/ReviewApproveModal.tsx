@@ -9,6 +9,7 @@ import {
   ExternalLink,
   Bot,
   Calendar,
+  Paperclip,
 } from 'lucide-react';
 import { useApproveSocialPost } from '@/hooks/api/useMessagingConfig';
 
@@ -94,22 +95,22 @@ export default function ReviewApproveModal({
           <div className="flex flex-wrap gap-2 text-xs">
             {post.topicCategory && (
               <Tag color="purple" className="text-xs rounded-md">
-                📌 Chủ đề: {post.topicCategory}
+                Chủ đề: {post.topicCategory}
               </Tag>
             )}
             {post.targetAudience && (
               <Tag color="cyan" className="text-xs rounded-md">
-                🎯 Đối tượng: {post.targetAudience}
+                Đối tượng: {post.targetAudience}
               </Tag>
             )}
             {post.contentPillar && (
               <Tag color="geekblue" className="text-xs rounded-md">
-                📊 Pillar: {post.contentPillar}
+                Pillar: {post.contentPillar}
               </Tag>
             )}
             {post.copywritingFramework && (
               <Tag color="magenta" className="text-xs rounded-md">
-                ✍️ Framework: {post.copywritingFramework}
+                Framework: {post.copywritingFramework}
               </Tag>
             )}
           </div>
@@ -164,8 +165,9 @@ export default function ReviewApproveModal({
         {/* Sources Reference */}
         {post.sources && post.sources.length > 0 && (
           <div className="border border-[var(--color-border)] rounded-xl p-3 space-y-1.5 bg-[var(--color-bg-subtle)]">
-            <label className="block text-xs font-semibold text-[var(--color-fg)]">
-              📎 Nguồn Tài Liệu Tham Khảo ({post.sources.length} nguồn):
+            <label className="flex items-center gap-1.5 text-xs font-semibold text-[var(--color-fg)]">
+              <Paperclip className="w-3.5 h-3.5 text-primary" />
+              Nguồn Tài Liệu Tham Khảo ({post.sources.length} nguồn):
             </label>
             <div className="space-y-1 text-xs">
               {post.sources.map((s: any, idx: number) => (

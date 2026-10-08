@@ -183,7 +183,7 @@ export default function TunnelWebhookCard({ onOpenDiagnostics }: TunnelWebhookCa
                 <p className="text-[11px] break-all">{r.webhookUrl || r.message}</p>
                 {!r.channelId && (
                   <p className="text-[11px] font-sans font-medium text-rose-600 dark:text-rose-400 mt-1">
-                    👉 Hãy bấm nút ✏️ (Sửa) ở bảng bên dưới để nhập Telegram Bot Token cho từng kênh trước khi đăng ký Webhook.
+                    Hãy bấm nút Sửa ở bảng bên dưới để nhập Telegram Bot Token cho từng kênh trước khi đăng ký Webhook.
                   </p>
                 )}
               </div>

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Checkbox, message, Alert } from 'antd';
 import { useSaveMessagingChannel, useRegisterWebhook, useSystemSettings, useMessagingResource, useInboxMembers, useSaveInboxMembers } from '@/hooks/api/useMessagingConfig';
+import { FacebookIcon, TelegramIcon, ZaloIcon, WhatsAppIcon, WebIcon } from '@/components/icons/SocialIcons';
 
 interface InboxFormModalProps {
   visible: boolean;
@@ -154,13 +155,13 @@ export default function InboxFormModal({ visible, channelToEdit, onClose, onSucc
         <Form.Item name="platform" label="Loại Nền Tảng" initialValue="telegram">
           <Select
             options={[
-              { value: 'telegram', label: '✈️ Telegram Bot' },
-              { value: 'facebook_messenger', label: '🔵 Facebook Messenger Bot' },
-              { value: 'facebook_post', label: '📰 Facebook Auto-Post Bot' },
-              { value: 'facebook_reels', label: '🎬 Facebook Reels Bot' },
-              { value: 'zalo', label: '💬 Zalo Official Account' },
-              { value: 'whatsapp', label: '💚 WhatsApp Business' },
-              { value: 'web_widget', label: '🌐 Website Live Chat Widget' },
+              { value: 'telegram', label: <div className="flex items-center gap-2"><TelegramIcon size={14} /><span>Telegram Bot</span></div> },
+              { value: 'facebook_messenger', label: <div className="flex items-center gap-2"><FacebookIcon size={14} /><span>Facebook Messenger Bot</span></div> },
+              { value: 'facebook_post', label: <div className="flex items-center gap-2"><FacebookIcon size={14} /><span>Facebook Auto-Post Bot</span></div> },
+              { value: 'facebook_reels', label: <div className="flex items-center gap-2"><FacebookIcon size={14} /><span>Facebook Reels Bot</span></div> },
+              { value: 'zalo', label: <div className="flex items-center gap-2"><ZaloIcon size={14} /><span>Zalo Official Account</span></div> },
+              { value: 'whatsapp', label: <div className="flex items-center gap-2"><WhatsAppIcon size={14} /><span>WhatsApp Business</span></div> },
+              { value: 'web_widget', label: <div className="flex items-center gap-2"><WebIcon size={14} /><span>Website Live Chat Widget</span></div> },
             ]}
             className="rounded-xl text-xs"
           />
@@ -209,7 +210,7 @@ export default function InboxFormModal({ visible, channelToEdit, onClose, onSucc
             loading={agentsResource.isLoading}
             options={agentsResource.items.map((agent: any) => ({
               value: agent.id,
-              label: `👤 ${agent.name || agent.email} (${agent.role || 'agent'})`,
+              label: `${agent.name || agent.email} (${agent.role || 'agent'})`,
             }))}
           />
         </Form.Item>

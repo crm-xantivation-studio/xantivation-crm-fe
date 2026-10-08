@@ -59,17 +59,34 @@ export default function ContactDetail({ params }: { params: Promise<{ id: string
   const updateContactMutation = useUpdateContact();
 
   const rawContact = contactResponse?.data;
+  let parsedFirstName = rawContact?.firstName || '';
+  let parsedLastName = rawContact?.lastName || '';
+  const fallbackName = (rawContact?.name || rawContact?.fullName || '').trim();
+  if (!parsedFirstName && !parsedLastName && fallbackName && !fallbackName.includes('@')) {
+    const parts = fallbackName.split(/\s+/);
+    if (parts.length > 1) {
+      parsedFirstName = parts.slice(0, -1).join(' ');
+      parsedLastName = parts[parts.length - 1];
+    } else {
+      parsedFirstName = parts[0] || '';
+      parsedLastName = '';
+    }
+  }
+
   const contact = rawContact ? {
     id: rawContact.id,
-    firstName: rawContact.firstName || '',
-    lastName: rawContact.lastName || '',
+    firstName: parsedFirstName,
+    lastName: parsedLastName,
+    displayName: (parsedFirstName || parsedLastName)
+      ? `${parsedFirstName} ${parsedLastName}`.trim()
+      : (fallbackName && !fallbackName.includes('@') ? fallbackName : 'Người liên hệ'),
     email: rawContact.email || '',
     phone: rawContact.phone || '',
     role: rawContact.role || '',
     jobTitle: rawContact.jobTitle || '',
     isPrimary: rawContact.isPrimary || false,
-    companyId: rawContact.customer?.id || '',
-    companyName: rawContact.customer?.name || '',
+    companyId: rawContact.customer?.id || rawContact.account?.id || '',
+    companyName: rawContact.customer?.name || rawContact.account?.name || '',
     status: rawContact.status || 'ACTIVE',
   } : undefined;
 
