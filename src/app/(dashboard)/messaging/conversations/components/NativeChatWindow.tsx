@@ -18,6 +18,8 @@ import {
 import { useConversationMessages } from '@/hooks/api/useConversationMessages';
 import { useAIStatus, useToggleAIMode } from '@/hooks/api/useConversation';
 
+import { FacebookIcon, TelegramIcon, ZaloIcon, WhatsAppIcon, InstagramIcon, EmailIcon, WebIcon } from '@/components/icons/SocialIcons';
+
 interface NativeChatWindowProps {
   conversation: any;
   onRefresh?: () => void;
@@ -73,13 +75,16 @@ export default function NativeChatWindow({ conversation, onRefresh }: NativeChat
     }
   };
 
-  // Determine channel icon badge
+  // Determine channel icon badge (SCRUM-61 & SCRUM-62)
   const getChannelBadge = (channelType?: string) => {
     const type = channelType?.toLowerCase() || '';
-    if (type.includes('telegram')) return <Tag color="blue" className="rounded-full px-2 py-0.5 text-[10px] flex items-center gap-1">✈️ Telegram</Tag>;
-    if (type.includes('facebook') || type.includes('messenger')) return <Tag color="geekblue" className="rounded-full px-2 py-0.5 text-[10px] flex items-center gap-1">💙 Facebook</Tag>;
-    if (type.includes('zalo')) return <Tag color="green" className="rounded-full px-2 py-0.5 text-[10px] flex items-center gap-1">💬 Zalo OA</Tag>;
-    return <Tag color="default" className="rounded-full px-2 py-0.5 text-[10px] flex items-center gap-1">🌐 Web Widget</Tag>;
+    if (type.includes('telegram')) return <Tag color="blue" className="rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1.5"><TelegramIcon size={12} /> Telegram</Tag>;
+    if (type.includes('facebook') || type.includes('messenger')) return <Tag color="geekblue" className="rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1.5"><FacebookIcon size={12} /> Facebook</Tag>;
+    if (type.includes('zalo')) return <Tag color="blue" className="rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1.5"><ZaloIcon size={12} /> Zalo OA</Tag>;
+    if (type.includes('whatsapp')) return <Tag color="green" className="rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1.5"><WhatsAppIcon size={12} /> WhatsApp</Tag>;
+    if (type.includes('instagram')) return <Tag color="magenta" className="rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1.5"><InstagramIcon size={12} /> Instagram</Tag>;
+    if (type.includes('email') || type.includes('mail')) return <Tag color="orange" className="rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1.5"><EmailIcon size={12} /> Email</Tag>;
+    return <Tag color="default" className="rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1.5"><WebIcon size={12} /> Web Widget</Tag>;
   };
 
   // Quick canned response options

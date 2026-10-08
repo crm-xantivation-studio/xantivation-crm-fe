@@ -7,6 +7,7 @@ import { Plus, Download, Search, FileText, Check, AlertCircle, SlidersHorizontal
 import SharedTable from '@/components/SharedTable';
 import type { ColumnProps } from '@/components/SharedTable';
 import { FloatingInput } from '@/components/FloatingInput';
+import { FormSelect } from '@/components/FormSelect';
 import Link from 'next/link';
 import { useQuotations, useCreateQuotation, useUpdateQuotation, useCloneQuotation } from '@/hooks/api/useQuotation';
 import { useOpportunities } from '@/hooks/api/useOpportunity';
@@ -90,8 +91,12 @@ export default function Quotations() {
   const updateMutation = useUpdateQuotation();
   const cloneMutation = useCloneQuotation();
 
-  const rawQuotations = quotationsRes?.data?.items || [];
-  const realOpps = (oppsRes?.data?.items || []) as any[];
+  const rawQuotations = Array.isArray(quotationsRes?.data) 
+    ? quotationsRes.data 
+    : ((quotationsRes?.data as any)?.items || []);
+  const realOpps = Array.isArray(oppsRes?.data) 
+    ? oppsRes.data 
+    : ((oppsRes?.data as any)?.items || (Array.isArray(oppsRes) ? oppsRes : []));
   const realUsers = usersRes?.data || [];
 
   // Map API response to local record format
@@ -113,7 +118,7 @@ export default function Quotations() {
     status: q.status as any,
     opportunityId: q.opportunityId || '',
     opportunityName: q.opportunity?.name || '',
-    companyName: q.opportunity?.account?.name || '',
+    companyName: q.opportunity?.customer?.name || q.opportunity?.account?.name || q.opportunity?.lead?.company || '',
     timeline: q.timeline || '',
     revisionLimit: q.revisionLimit || 3,
     paymentTerms: q.paymentTerms || '',
@@ -170,10 +175,19 @@ export default function Quotations() {
     }, 1000);
   };
 
+  const handleOpportunityChange = (oppId: string) => {
+    setOpportunityId(oppId);
+    const selected = realOpps.find((opp: any) => opp.id === oppId);
+    if (selected && !projectName) {
+      setProjectName(selected.name);
+    }
+  };
+
   const handleOpenCreate = () => {
     setEditingQuotation(null);
-    setOpportunityId(realOpps[0]?.id || '');
-    setProjectName('');
+    const firstOpp = realOpps[0];
+    setOpportunityId(firstOpp?.id || '');
+    setProjectName(firstOpp?.name || '');
     setServiceType('WEBSITE');
     setPackageType('STANDARD');
     setValidUntil('');
@@ -540,42 +554,45 @@ export default function Quotations() {
         <div className="space-y-6 pt-4 max-h-[70vh] overflow-y-auto pr-2">
           {/* Part 1: Header Parameters */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] border-b border-[var(--color-border)] pb-1.5 font-bold">1. Header & Association</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                  Linked CRM Opportunity
-                </label>
-                <Select
-                  value={opportunityId}
-                  onChange={setOpportunityId}
-                  options={realOpps.map((opp: any) => ({ value: opp.id, label: opp.name }))}
-                  className="w-full h-11"
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] font-bold">1. Header & Association</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+              <div>
+                <FormSelect
+                  label="Linked CRM Opportunity"
+                  value={opportunityId || undefined}
+                  onChange={handleOpportunityChange}
+                  placeholder="Chọn một cơ hội kinh doanh (Opportunity)..."
+                  options={realOpps.map((opp: any) => {
+                    const company = opp.customer?.name || opp.account?.name || opp.lead?.company || 'Chưa gán khách hàng';
+                    const amountStr = opp.amount ? ` - ${Number(opp.amount).toLocaleString('vi-VN')} VND` : '';
+                    return {
+                      value: opp.id,
+                      label: `${opp.name} (${company}${amountStr})`,
+                    };
+                  })}
+                  showSearch
+                  optionFilterProp="label"
                 />
               </div>
-              <FloatingInput label="Project Name" value={projectName} onChange={setProjectName} required />
+              <div>
+                <FloatingInput label="Project Name" value={projectName} onChange={setProjectName} required />
+              </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                  Service Type
-                </label>
-                <Select
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+              <div>
+                <FormSelect
+                  label="Service Type"
                   value={serviceType}
                   onChange={setServiceType}
                   options={serviceOptions}
-                  className="w-full h-11"
                 />
               </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                  Package Type
-                </label>
-                <Select
+              <div>
+                <FormSelect
+                  label="Package Type"
                   value={packageType}
                   onChange={setPackageType as any}
                   options={packageOptions}
-                  className="w-full h-11"
                 />
               </div>
               <div>
@@ -586,7 +603,7 @@ export default function Quotations() {
 
           {/* Part 2: Scope Items */}
           <div className="space-y-4">
-            <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-1.5">
+            <div className="flex justify-between items-center pb-1.5">
               <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] font-bold">2. Scope Items & Fixed Prices</h4>
               <Button size="small" onClick={handleAddItemRow} className="text-xs rounded-lg flex items-center gap-1">
                 <Plus size={10} />
@@ -628,9 +645,9 @@ export default function Quotations() {
 
           {/* Part 3: Pricing Summary */}
           <div className="space-y-4 bg-[var(--color-surface)]/40 p-4 border border-[var(--color-border)] rounded-[5px]">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] border-b border-[var(--color-border)] pb-1.5 font-bold">3. Pricing Adjustment & VAT Summary</h4>
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] font-bold">3. Pricing Adjustment & VAT Summary</h4>
             <div className="grid grid-cols-3 gap-4 items-start">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
                   Adjustment Type
                 </label>
@@ -643,16 +660,22 @@ export default function Quotations() {
                     { value: 'RUSH_FEE', label: 'Rush fee (+)' },
                     { value: 'OTHER', label: 'Other adjustments (+)' },
                   ]}
-                  className="w-full h-11"
+                  className="w-full h-12"
                 />
               </div>
               {adjustmentType && (
-                <div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] opacity-0 select-none">
+                    Adjustment Amount
+                  </label>
                   <FloatingInput label="Adjustment Amount (VND)" type="number" value={adjustmentAmount} onChange={setAdjustmentAmount} required />
                   {errors.adjustmentAmount && <p className="text-red-500 text-[10px] mt-1">{errors.adjustmentAmount}</p>}
                 </div>
               )}
-              <div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] opacity-0 select-none">
+                  VAT Rate
+                </label>
                 <FloatingInput label="VAT Rate (%)" type="number" value={vatRate} onChange={setVatRate} required />
               </div>
             </div>
@@ -687,10 +710,15 @@ export default function Quotations() {
 
           {/* Part 4: Terms & Signatures */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] border-b border-[var(--color-border)] pb-1.5 font-bold">4. Timeline & payment terms</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <FloatingInput label="Project delivery timeline" value={timeline} onChange={setTimeline} />
-              <div className="flex flex-col gap-2">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] font-bold">4. Timeline & payment terms</h4>
+            <div className="grid grid-cols-2 gap-4 items-start">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] opacity-0 select-none">
+                  Delivery Timeline
+                </label>
+                <FloatingInput label="Project delivery timeline" value={timeline} onChange={setTimeline} />
+              </div>
+              <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
                   Revision limits (times)
                 </label>
@@ -704,7 +732,7 @@ export default function Quotations() {
                     { value: 5, label: '5 revisions' },
                     { value: 10, label: '10 revisions' },
                   ]}
-                  className="w-full h-11"
+                  className="w-full h-12"
                 />
               </div>
             </div>
@@ -713,7 +741,7 @@ export default function Quotations() {
             <FloatingInput label="Internal notes" value={notes} onChange={setNotes} />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-[var(--color-border)]">
+          <div className="flex justify-end gap-3 pt-4">
             <Button onClick={() => setModalOpen(false)} className="rounded-xl">{t('quotations.cancel')}</Button>
             <Button type="primary" onClick={handleSave} loading={createMutation.isPending || updateMutation.isPending} className="rounded-xl">{t('quotations.saveChanges')}</Button>
           </div>
@@ -722,3 +750,4 @@ export default function Quotations() {
     </div>
   );
 }
+

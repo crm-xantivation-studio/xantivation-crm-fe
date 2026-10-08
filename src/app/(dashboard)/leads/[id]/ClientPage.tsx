@@ -66,8 +66,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
     if (lead) {
       if (lead.status === 'NEW') setActiveStep(1);
       else if (lead.status === 'CONTACTED') setActiveStep(2);
-      else if (lead.status === 'QUALIFIED') setActiveStep(3);
-      else if ((lead.status as string) === 'CONVERTED') setActiveStep(4);
+      else if (lead.status === 'QUALIFIED' || (lead.status as string) === 'CONVERTED') setActiveStep(4);
       else if (lead.status === 'UNQUALIFIED') setActiveStep(1);
     }
   }, [lead?.status]);
@@ -76,7 +75,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
     return (
       <div className="py-32 flex flex-col justify-center items-center gap-3">
         <Spin size="large" />
-        <span className="text-xs text-[var(--color-muted-fg)] font-mono">Đang tải dữ liệu Lead...</span>
+        <span className="text-xs text-[var(--color-muted-fg)] font-mono">{t('common.loading') || 'Đang tải dữ liệu...'}</span>
       </div>
     );
   }
@@ -102,7 +101,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
   };
 
   const handleAutoQualify = () => {
-    const hide = message.loading('Đang phân tích BANT bằng AI...', 0);
+    const hide = message.loading(t('leads.analyzingBant') || 'Đang phân tích BANT bằng AI...', 0);
     autoQualifyMutation.mutate(undefined, {
       onSettled: () => {
         hide();
@@ -125,21 +124,19 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
             <span>/</span>
             <span className="text-[var(--color-fg)] font-semibold">{lead.leadCode}</span>
           </div>
-          <h1 className="text-base font-semibold sm: tracking-tight text-[var(--color-fg)] flex items-center gap-3">
+          <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)] flex items-center gap-3">
             <span>{lead.firstName} {lead.lastName}</span>
           </h1>
           <p className="text-xs text-[var(--color-muted-fg)] mt-1">
-            Ref Code {lead.leadCode} • Nguồn {lead.source} • Ngày tạo: {lead.createdAt}
+            {t('leads.refCode') || 'Ref Code'} {lead.leadCode} • {t('leads.source') || 'Nguồn'} {lead.source} • {t('leads.createdAt') || 'Ngày tạo'}: {lead.createdAt}
           </p>
         </div>
 
         {/* Status Badge */}
         <div className="flex items-center gap-3">
           <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
-            lead.status === 'QUALIFIED'
+            lead.status === 'QUALIFIED' || (lead.status as string) === 'CONVERTED'
               ? 'bg-green-500/10 text-green-500 border border-green-500/30'
-              : (lead.status as string) === 'CONVERTED'
-              ? 'bg-purple-500/10 text-purple-500 border border-purple-500/30'
               : lead.status === 'UNQUALIFIED'
               ? 'bg-red-500/10 text-red-500 border border-red-500/30'
               : 'bg-blue-500/10 text-blue-500 border border-blue-500/30'
@@ -153,6 +150,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
       <LeadProgressStepper
         status={lead.status}
         bantScore={lead.bantScore}
+        activeStep={activeStep}
       />
 
       {/* Unqualified Warning Alert */}
@@ -161,7 +159,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center gap-3 text-red-500">
             <XCircle size={20} />
             <span className="text-xs font-semibold">
-              Lead này hiện ở trạng thái **Không đạt chuẩn (Unqualified)**. Bạn có thể mở lại Lead để tái tiếp cận.
+              {t('leads.unqualifiedNotice') || 'Lead này hiện ở trạng thái Không đạt chuẩn (Unqualified). Bạn có thể mở lại Lead để tái tiếp cận.'}
             </span>
           </div>
           <Button
@@ -171,7 +169,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
             className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs cursor-pointer bg-red-600 hover:bg-red-700 border-none"
           >
             <RefreshCw size={12} />
-            <span>Mở lại Lead (Reopen)</span>
+            <span>{t('leads.reopenLead') || 'Mở lại Lead (Reopen)'}</span>
           </Button>
         </div>
       )}
@@ -221,13 +219,13 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-[5px] p-5 space-y-4 shadow-sm">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)] border-b border-[var(--color-border)]/30 pb-2.5">
-              Thông tin bổ sung
+              {t('leads.additionalInfo') || 'Thông tin bổ sung'}
             </h3>
 
             {/* Change Owner (Reassign Owner) */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                Người phụ trách (Owner)
+                {t('leads.reassignOwner') || 'Người phụ trách (Owner)'}
               </label>
               <Select
                 value={lead.assignedToId || lead.owner}
@@ -251,15 +249,15 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
             {/* Metadata Summary (Clean Flat Rows) */}
             <div className="pt-2 space-y-2 text-xs font-mono border-t border-[var(--color-border)]/30">
               <div className="flex justify-between">
-                <span className="text-[var(--color-muted-fg)]">Mã Lead:</span>
+                <span className="text-[var(--color-muted-fg)]">{t('leads.leadCodeLabel') || 'Mã Lead:'}</span>
                 <span className="font-bold text-[var(--color-fg)]">{lead.leadCode}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--color-muted-fg)]">Nguồn:</span>
+                <span className="text-[var(--color-muted-fg)]">{t('leads.sourceLabel') || 'Nguồn:'}</span>
                 <span className="font-bold text-[var(--color-fg)]">{lead.source}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--color-muted-fg)]">Ngày tạo:</span>
+                <span className="text-[var(--color-muted-fg)]">{t('leads.createdAtLabel') || 'Ngày tạo:'}</span>
                 <span className="font-bold text-[var(--color-fg)]">{lead.createdAt}</span>
               </div>
             </div>
@@ -271,10 +269,10 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
                 disabled={(lead.status as string) === 'CONVERTED'}
                 onClick={() => {
                   Modal.confirm({
-                    title: 'Xóa đầu mối',
-                    content: `Bạn có chắc chắn muốn xóa đầu mối ${lead.firstName} ${lead.lastName}?`,
-                    okText: 'Xóa',
-                    cancelText: 'Hủy',
+                    title: t('leads.deleteConfirmTitle') || 'Xóa đầu mối',
+                    content: t('leads.deleteConfirmContent', { name: `${lead.firstName} ${lead.lastName}` }) || `Bạn có chắc chắn muốn xóa đầu mối ${lead.firstName} ${lead.lastName}?`,
+                    okText: t('common.delete') || 'Xóa',
+                    cancelText: t('common.cancel') || 'Hủy',
                     okButtonProps: { danger: true },
                     onOk: () => {
                       deleteLeadMutation.mutate(id, {
@@ -288,7 +286,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
                 className="w-full flex items-center justify-center gap-2 h-9 rounded-xl cursor-pointer text-xs"
               >
                 <Trash2 size={14} />
-                <span>Xóa Lead này</span>
+                <span>{t('leads.deleteThisLead') || 'Xóa Lead này'}</span>
               </Button>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { Button, Tag, Tooltip, Popconfirm, message, Badge } from 'antd';
 import { Eye, EyeOff, Edit, Trash2, RotateCw, CheckCircle2, AlertTriangle, XCircle, Plus, Info } from 'lucide-react';
 import SharedTable from '@/components/SharedTable';
 import { useMessagingChannels, useDeleteMessagingChannel, useRegisterWebhook } from '@/hooks/api/useMessagingConfig';
+import { FacebookIcon, TelegramIcon, ZaloIcon, WhatsAppIcon, WebIcon } from '@/components/icons/SocialIcons';
 
 interface InboxConfigTableProps {
   onOpenCreateModal: () => void;
@@ -114,25 +115,53 @@ export default function InboxConfigTable({ onOpenCreateModal, onOpenEditModal }:
       key: 'channelType',
       render: (val: string) => {
         if (val === 'telegram' || val === 'Channel::Telegram') {
-          return <Tag color="cyan">✈️ Telegram Bot</Tag>;
+          return (
+            <Tag color="cyan" className="inline-flex items-center gap-1.5">
+              <TelegramIcon size={12} /> Telegram Bot
+            </Tag>
+          );
         }
         if (val === 'facebook_messenger' || val === 'facebook' || val === 'Channel::FacebookPage') {
-          return <Tag color="blue">🔵 FB Messenger</Tag>;
+          return (
+            <Tag color="blue" className="inline-flex items-center gap-1.5">
+              <FacebookIcon size={12} /> FB Messenger
+            </Tag>
+          );
         }
         if (val === 'facebook_post') {
-          return <Tag color="orange">📰 FB Auto-Post</Tag>;
+          return (
+            <Tag color="orange" className="inline-flex items-center gap-1.5">
+              <FacebookIcon size={12} /> FB Auto-Post
+            </Tag>
+          );
         }
         if (val === 'facebook_reels') {
-          return <Tag color="purple">🎬 FB Reels</Tag>;
+          return (
+            <Tag color="purple" className="inline-flex items-center gap-1.5">
+              <FacebookIcon size={12} /> FB Reels
+            </Tag>
+          );
         }
         if (val === 'zalo') {
-          return <Tag color="geekblue">💬 Zalo OA</Tag>;
+          return (
+            <Tag color="geekblue" className="inline-flex items-center gap-1.5">
+              <ZaloIcon size={12} /> Zalo OA
+            </Tag>
+          );
         }
         if (val === 'whatsapp' || val === 'Channel::Whatsapp') {
-          return <Tag color="green">💚 WhatsApp</Tag>;
+          return (
+            <Tag color="green" className="inline-flex items-center gap-1.5">
+              <WhatsAppIcon size={12} /> WhatsApp
+            </Tag>
+          );
         }
         if (val === 'web_widget' || val === 'Channel::WebWidget') {
-          return <Tag color="blue">🌐 Website Chat</Tag>;
+          return (
+            <Tag color="blue" className="inline-flex items-center gap-1.5">
+              <WebIcon size={12} /> Website Chat
+            </Tag>
+          );
         }
         return <Tag color="default">{val}</Tag>;
       },

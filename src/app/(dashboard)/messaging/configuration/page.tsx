@@ -367,10 +367,10 @@ export default function MessagingConfigurationPage() {
                           onChange={setExtractLookbackWindow}
                           className="w-full text-xs rounded-lg"
                         >
-                          <Select.Option value="today">📅 Trong Hôm Nay</Select.Option>
-                          <Select.Option value="last_2_days">⏳ 2 Ngày Gần Nhất</Select.Option>
-                          <Select.Option value="last_7_days">📆 7 Ngày Gần Nhất</Select.Option>
-                          <Select.Option value="all">♾️ Toàn Bộ Lịch Sử</Select.Option>
+                          <Select.Option value="today">Trong Hôm Nay</Select.Option>
+                          <Select.Option value="last_2_days">2 Ngày Gần Nhất</Select.Option>
+                          <Select.Option value="last_7_days">7 Ngày Gần Nhất</Select.Option>
+                          <Select.Option value="all">Toàn Bộ Lịch Sử</Select.Option>
                         </Select>
                       </div>
 
@@ -421,9 +421,9 @@ export default function MessagingConfigurationPage() {
                           onChange={setSummaryLookbackWindow}
                           className="w-full text-xs rounded-lg"
                         >
-                          <Select.Option value="today">📅 Trong Hôm Nay</Select.Option>
-                          <Select.Option value="last_2_days">⏳ 2 Ngày Gần Nhất</Select.Option>
-                          <Select.Option value="all">♾️ Toàn Bộ Lịch Sử Chat</Select.Option>
+                          <Select.Option value="today">Trong Hôm Nay</Select.Option>
+                          <Select.Option value="last_2_days">2 Ngày Gần Nhất</Select.Option>
+                          <Select.Option value="all">Toàn Bộ Lịch Sử Chat</Select.Option>
                         </Select>
                       </div>
                     </div>
@@ -784,7 +784,7 @@ export default function MessagingConfigurationPage() {
                   <div className="space-y-4 pt-6 border-t border-[var(--color-border)]">
                     <div className="flex justify-between items-center">
                       <div>
-                        <h3 className="font-bold text-sm text-[var(--color-fg)]">Webhooks Hệ Thống (Chatwoot ➔ Backend CRM)</h3>
+                        <h3 className="font-bold text-sm text-[var(--color-fg)]">Webhooks Hệ Thống (Chatwoot &rarr; Backend CRM)</h3>
                         <p className="text-[11px] text-[var(--color-muted-fg)]">Đường dẫn nhận sự kiện tin nhắn từ Chatwoot đẩy về CRM Backend.</p>
                       </div>
                       <Button

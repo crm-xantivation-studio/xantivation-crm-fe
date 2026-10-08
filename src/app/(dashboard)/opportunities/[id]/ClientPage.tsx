@@ -229,10 +229,11 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
         </div>
       </div>
 
-      {/* Visual Stage Progress Stepper */}
+      {/* Visual Stage Progress Stepper (Compact Sleek Bar) */}
       {opp.stage !== OpportunityStage.CLOSED_LOST ? (
-        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)] p-6 rounded-lg">
+        <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 px-5 py-3 rounded-lg shadow-sm">
           <Steps
+            size="small"
             current={currentStep}
             items={[
               { title: t('opportunities.stepQualification'), description: t('opportunities.prob20') },
@@ -243,10 +244,10 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
           />
         </div>
       ) : (
-        <div className="bg-red-500/5 border border-red-500/20 p-4 rounded-xl flex items-center gap-3">
-          <AlertTriangle className="text-red-500 shrink-0" size={20} />
+        <div className="bg-red-500/5 border border-red-500/20 p-3 rounded-lg flex items-center gap-3">
+          <AlertTriangle className="text-red-500 shrink-0" size={18} />
           <div className="text-xs text-red-800 font-mono">
-            <span className="font-bold uppercase block">{t('opportunities.closedLostLabel')}</span>
+            <span className="font-bold uppercase inline-block mr-2">{t('opportunities.closedLostLabel')}:</span>
             <span>{t('opportunities.reason')}: {opp.lostReason}</span>
           </div>
         </div>

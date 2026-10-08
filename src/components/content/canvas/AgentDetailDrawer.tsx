@@ -10,7 +10,8 @@ import {
   Activity,
   Shield,
   Link as LinkIcon,
-  Code
+  Code,
+  Target
 } from 'lucide-react';
 import { AgentNodeData } from './AgentNode';
 import { CanvasExecutionEvent } from '@/hooks/useCanvasSSE';
@@ -77,14 +78,25 @@ export default function AgentDetailDrawer({
             <span className="text-[11px] text-[var(--color-muted-fg)] block mb-1">
               Trạng Thái Thực Thi
             </span>
-            <span className="font-bold capitalize text-[var(--color-fg)]">
+            <span className="font-bold capitalize text-[var(--color-fg)] flex items-center gap-1.5">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  agent.status === 'running'
+                    ? 'bg-blue-500 animate-pulse'
+                    : agent.status === 'completed'
+                    ? 'bg-emerald-500'
+                    : agent.status === 'failed'
+                    ? 'bg-rose-500'
+                    : 'bg-neutral-400'
+                }`}
+              />
               {agent.status === 'running'
-                ? '🔵 Đang chạy'
+                ? 'Đang chạy'
                 : agent.status === 'completed'
-                ? '🟢 Hoàn tất'
+                ? 'Hoàn tất'
                 : agent.status === 'failed'
-                ? '🔴 Thất bại'
-                : '⚪ Đang chờ'}
+                ? 'Thất bại'
+                : 'Đang chờ'}
             </span>
           </div>
           <div className="border border-[var(--color-border)] rounded-xl p-3">
@@ -139,8 +151,9 @@ export default function AgentDetailDrawer({
         {/* Goal Description */}
         {latestEvent?.goal && (
           <div>
-            <label className="font-semibold text-[var(--color-fg)] block mb-1">
-              🎯 Mục Tiêu Đang Thực Thi (Goal):
+            <label className="font-semibold text-[var(--color-fg)] mb-1 flex items-center gap-1.5">
+              <Target size={14} className="text-indigo-400" />
+              Mục Tiêu Đang Thực Thi (Goal):
             </label>
             <div className="bg-[var(--color-bg-subtle)] border border-[var(--color-border)] rounded-xl p-3 text-[11px] leading-relaxed text-[var(--color-fg)] font-sans">
               {latestEvent.goal}

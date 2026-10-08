@@ -24,10 +24,12 @@ import { formatVND } from '@/lib/utils';
 import NativeChatWindow from './components/NativeChatWindow';
 import ConversationControlPanel from './components/ConversationControlPanel';
 
+import { ChannelLogo, FacebookIcon, TelegramIcon, ZaloIcon, WhatsAppIcon, InstagramIcon, EmailIcon, WebIcon } from '@/components/icons/SocialIcons';
+
 export default function ConversationsPage() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'open' | 'pending' | 'resolved'>('open');
-  const [selectedChannel, setSelectedChannel] = useState<'all' | 'telegram' | 'facebook' | 'zalo' | 'web'>('all');
+  const [selectedChannel, setSelectedChannel] = useState<'all' | 'telegram' | 'facebook' | 'zalo' | 'whatsapp' | 'instagram' | 'email' | 'web'>('all');
   const [selectedConversation, setSelectedConversation] = useState<any>(null);
   const [quickCreateOpen, setQuickCreateOpen] = useState(false);
   const [form] = Form.useForm();
@@ -43,16 +45,15 @@ export default function ConversationsPage() {
     if (selectedChannel === 'telegram') return ch.includes('telegram');
     if (selectedChannel === 'facebook') return ch.includes('facebook') || ch.includes('messenger');
     if (selectedChannel === 'zalo') return ch.includes('zalo');
-    if (selectedChannel === 'web') return ch.includes('web') || ch.includes('widget');
+    if (selectedChannel === 'whatsapp') return ch.includes('whatsapp');
+    if (selectedChannel === 'instagram') return ch.includes('instagram');
+    if (selectedChannel === 'email') return ch.includes('email') || ch.includes('mail');
+    if (selectedChannel === 'web') return ch.includes('web') || ch.includes('widget') || ch.includes('api');
     return true;
   });
 
   const getChannelIcon = (channelType?: string) => {
-    const ch = (channelType || '').toLowerCase();
-    if (ch.includes('telegram')) return <span className="text-[11px]" title="Telegram">✈️</span>;
-    if (ch.includes('facebook') || ch.includes('messenger')) return <span className="text-[11px]" title="Facebook">💙</span>;
-    if (ch.includes('zalo')) return <span className="text-[11px]" title="Zalo">💬</span>;
-    return <span className="text-[11px]" title="Web">🌐</span>;
+    return <ChannelLogo channel={channelType} size={15} />;
   };
 
   // Active contact info
@@ -167,22 +168,26 @@ export default function ConversationsPage() {
         {/* Platform Channel Filter Pills */}
         <div className="flex border-b border-[var(--color-border)]/40 p-2 gap-1 overflow-x-auto shrink-0 bg-[var(--color-surface)]/10">
           {[
-            { id: 'all', label: 'Tất cả' },
-            { id: 'telegram', label: '✈️ Telegram' },
-            { id: 'facebook', label: '💙 Facebook' },
-            { id: 'zalo', label: '💬 Zalo' },
-            { id: 'web', label: '🌐 Web' },
+            { id: 'all', label: 'Tất cả', icon: null },
+            { id: 'telegram', label: 'Telegram', icon: <TelegramIcon size={12} /> },
+            { id: 'facebook', label: 'Facebook', icon: <FacebookIcon size={12} /> },
+            { id: 'zalo', label: 'Zalo', icon: <ZaloIcon size={12} /> },
+            { id: 'whatsapp', label: 'WhatsApp', icon: <WhatsAppIcon size={12} /> },
+            { id: 'instagram', label: 'Instagram', icon: <InstagramIcon size={12} /> },
+            { id: 'email', label: 'Email', icon: <EmailIcon size={12} /> },
+            { id: 'web', label: 'Web', icon: <WebIcon size={12} /> },
           ].map((ch) => (
             <button
               key={ch.id}
               onClick={() => setSelectedChannel(ch.id as any)}
-              className={`px-2.5 py-1 text-[10px] font-semibold rounded-full transition-all cursor-pointer shrink-0 ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-semibold rounded-full transition-all cursor-pointer shrink-0 ${
                 selectedChannel === ch.id
                   ? 'bg-[var(--color-accent)] text-white shadow-sm'
-                  : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface)]'
+                  : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface)] border border-[var(--color-border)]/40'
               }`}
             >
-              {ch.label}
+              {ch.icon}
+              <span>{ch.label}</span>
             </button>
           ))}
         </div>

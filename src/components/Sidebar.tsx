@@ -95,6 +95,10 @@ export default function Sidebar() {
       name: t('sidebar.messaging'), path: '/messaging', icon: MessageSquare,
       children: [
         { name: t('sidebar.messagingConversations'), path: '/messaging/conversations' },
+        { name: t('sidebar.messagingInboxes'), path: '/messaging/inboxes' },
+        { name: t('sidebar.messagingAgentBots'), path: '/messaging/agent-bots' },
+        { name: t('sidebar.messagingCannedResponses'), path: '/messaging/canned-responses' },
+        { name: t('sidebar.messagingTeams'), path: '/messaging/teams' },
         { name: t('sidebar.messagingConfiguration'), path: '/messaging/configuration' },
       ],
     },
@@ -114,7 +118,15 @@ export default function Sidebar() {
         { name: 'Configuration', path: '/ai-hub/configuration' },
       ],
     },
-    { name: t('sidebar.reports'), path: '/reports', icon: BarChart3 },
+    {
+      name: t('sidebar.reports'), path: '/reports', icon: BarChart3,
+      children: [
+        { name: t('sidebar.reportsOverview'), path: '/reports' },
+        { name: t('sidebar.reportsPipeline'), path: '/reports/pipeline' },
+        { name: t('sidebar.reportsPayment'), path: '/reports/payment' },
+        { name: t('sidebar.reportsForecast'), path: '/reports/sales-forecast' },
+      ],
+    },
     { name: t('sidebar.settings'), path: '/settings', icon: Settings },
   ];
 
@@ -314,8 +326,8 @@ export default function Sidebar() {
           {/* Footer Section: Utilities & Profile */}
           <div className="mt-auto px-3 pb-4 shrink-0 bg-transparent border-t border-[var(--color-border)]/50 pt-3 flex flex-col gap-3">
             {/* Utility Icons */}
-            <div className="flex items-center justify-between gap-1 py-1">
-              <Dropdown menu={{ items: langMenu }} trigger={['click']} placement="topRight">
+            <div className="flex items-center justify-start gap-1.5 py-1">
+              <Dropdown menu={{ items: langMenu }} trigger={['click']} placement="topLeft">
                 <button className="p-2 rounded-xl border border-transparent hover:border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-fg)] transition-all cursor-pointer flex items-center justify-center w-9 h-9">
                   {flagIcons[currentLang] || flagIcons.vi}
                 </button>

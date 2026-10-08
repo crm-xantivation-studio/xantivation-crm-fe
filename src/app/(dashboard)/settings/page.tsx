@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { Button, Select, Switch, message, Badge, Modal, Spin } from 'antd';
 import { FloatingInput } from '@/components/FloatingInput';
 import { Save, User, Shield, Radio, Key, Plus, Users, MessageSquare, PenTool, Mail, Bot, Settings as SettingsIcon, RefreshCw, Trash2, Cpu, Sliders, Database, Network, Server, Play } from 'lucide-react';
@@ -792,48 +793,61 @@ export default function Settings() {
   const isManagerOrAdmin = user?.role === UserRole.ADMIN || user?.role === UserRole.SALES_MANAGER;
 
   const allTabs = [
-    { id: 'profile', name: 'Profile', icon: User },
+    { id: 'profile', name: 'Profile', desc: 'Thông tin cá nhân & mật khẩu', icon: User },
     ...(isAdmin ? [
-      { id: 'users', name: 'Employee Management', icon: Shield },
-      { id: 'sales-teams', name: 'Sales Teams', icon: Users }
+      { id: 'users', name: 'Employee Management', desc: 'Quản lý tài khoản nhân viên', icon: Shield },
+      { id: 'sales-teams', name: 'Sales Teams', desc: 'Cấu hình nhóm kinh doanh', icon: Users }
     ] : []),
     ...(isManagerOrAdmin ? [
-      { id: 'integrations', name: 'Third-Party Integrations', icon: Key }
+      { id: 'integrations', name: 'Third-Party Integrations', desc: 'Kết nối ERP, Mail & AI', icon: Key }
     ] : []),
   ];
 
   return (
-    <div className="flex flex-col h-full w-full overflow-y-auto space-y-4">
-      {/* Title */}
-      <div className="px-4 lg:px-6 pt-4 lg:pt-6">
-        <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)]">Settings</h1>
-        <p className="text-xs text-[var(--color-muted-fg)]">Configure system integrations, manage employee accounts, and AI settings.</p>
-      </div>
+    <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden bg-[var(--color-bg)]">
+      {/* Secondary Left Sidebar (SCRUM-67) */}
+      <motion.div
+        initial={{ x: -250, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+        className="w-72 shrink-0 flex flex-col border-r border-[var(--color-border)] bg-[var(--color-bg)] h-full overflow-y-auto"
+      >
+        <div className="px-5 py-5 border-b border-[var(--color-border)] mb-2 shrink-0">
+          <h1 className="text-base font-bold text-[var(--color-fg)] flex items-center gap-2 mb-1">
+            <SettingsIcon size={18} className="text-[var(--color-accent)]" />
+            <span>Settings</span>
+          </h1>
+          <p className="text-[11px] text-[var(--color-muted-fg)] leading-tight">
+            Configure system integrations, manage employee accounts, and AI settings.
+          </p>
+        </div>
+        <div className="px-3 flex flex-col gap-1.5 pb-6">
+          {allTabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeSubTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveSubTab(tab.id)}
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-[var(--color-surface)] text-[var(--color-fg)] font-semibold shadow-sm border border-[var(--color-border)]/50'
+                    : 'text-[var(--color-muted-fg)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface)]/50 border border-transparent'
+                }`}
+              >
+                <Icon size={18} className={isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted-fg)]'} />
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold">{tab.name}</span>
+                  <span className="text-[10px] text-[var(--color-muted-fg)]">{tab.desc}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
 
-      {/* Sub Tabs */}
-      <div className="flex px-4 lg:px-6 border-b border-[var(--color-border)] gap-6 pb-px">
-        {allTabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeSubTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveSubTab(tab.id)}
-              className={`flex items-center gap-2 pb-4 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                isActive
-                  ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-                  : 'border-transparent text-[var(--color-muted-fg)] hover:text-[var(--color-fg)]'
-              }`}
-            >
-              <Icon size={16} />
-              <span>{tab.name}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Sub-tab Bodies */}
-      <div className="px-4 lg:px-6 pb-4 lg:pb-6 min-h-[400px]">
+      {/* Right Content Panel */}
+      <div className="flex-1 p-6 lg:p-8 overflow-y-auto bg-[var(--color-bg-tint)] relative">
         {activeSubTab === 'profile' && (
           <div className="max-w-xl space-y-6">
             <h3 className="text-sm font-semibold text-[var(--color-fg)]">Personal Information</h3>

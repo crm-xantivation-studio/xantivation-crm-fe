@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button, Select, Modal, message } from 'antd';
 import { Building2, User, DollarSign, Calendar, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { FloatingInput } from '@/components/FloatingInput';
 
 interface LeadStepConvertProps {
@@ -18,6 +19,7 @@ export function LeadStepConvert({
   onAdvanceToNextStep,
   isConverting,
 }: LeadStepConvertProps) {
+  const { t } = useTranslation();
   // Branching: BUSINESS vs INDIVIDUAL
   const [clientType, setClientType] = useState<'BUSINESS' | 'INDIVIDUAL'>(
     lead.company ? 'BUSINESS' : 'INDIVIDUAL'
@@ -39,7 +41,7 @@ export function LeadStepConvert({
 
   const handleTriggerConvert = async (forceCreateContact = false, linkExistingContactId?: string) => {
     if (clientType === 'BUSINESS' && !companyName.trim()) {
-      message.error('Tên công ty / Account là bắt buộc đối với Khách hàng Doanh nghiệp.');
+      message.error(t('leads.companyAccountNameReq') || 'Tên công ty / Account là bắt buộc đối với Khách hàng Doanh nghiệp.');
       return;
     }
 
@@ -51,6 +53,7 @@ export function LeadStepConvert({
         opportunityAmount: Number(oppAmount) || 0,
         expectedCloseDate,
         serviceType,
+        serviceInterest: serviceType,
         forceCreateContact,
         linkExistingContactId,
       };
@@ -63,7 +66,7 @@ export function LeadStepConvert({
       // Deduplication Tax Code Error (Section 3.2 Blocked)
       if (resData?.code === 'TAX_CODE_EXISTS') {
         Modal.error({
-          title: 'Mã số thuế trùng lặp (Tài khoản Doanh nghiệp đã tồn tại)',
+          title: t('leads.taxCodeExistsTitle') || 'Mã số thuế trùng lặp (Tài khoản Doanh nghiệp đã tồn tại)',
           content: (
             <div className="space-y-2 pt-2 text-xs">
               <p className="text-red-500 font-semibold">
@@ -84,7 +87,7 @@ export function LeadStepConvert({
         return;
       }
 
-      message.error(resData?.message || 'Chuyển đổi Lead thất bại.');
+      message.error(resData?.message || t('leads.conversionFailed') || 'Chuyển đổi Lead thất bại.');
     }
   };
 
@@ -93,10 +96,10 @@ export function LeadStepConvert({
       {/* Header Info */}
       <div className="border-b border-[var(--color-border)]/40 pb-3">
         <h3 className="text-sm font-bold text-[var(--color-fg)]">
-          Bước 3: Thiết lập Chuyển đổi Lead (Conversion Wizard)
+          {t('leads.step3Title') || 'Bước 3: Thiết lập Chuyển đổi Lead (Conversion Wizard)'}
         </h3>
         <p className="text-xs text-[var(--color-muted-fg)] mt-0.5">
-          Xác định loại Khách hàng (Business / Individual) và thông số Cơ hội kinh doanh để thực hiện Convert.
+          {t('leads.step3Desc') || 'Xác định loại Khách hàng (Business / Individual) và thông số Cơ hội kinh doanh để thực hiện Convert.'}
         </p>
       </div>
 
@@ -107,20 +110,20 @@ export function LeadStepConvert({
         <div className="space-y-4">
           <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)] flex items-center gap-1.5 border-b border-[var(--color-border)]/30 pb-2">
             <Building2 size={14} className="text-[var(--color-accent)]" />
-            <span>Phân loại Hồ sơ Khách hàng (Customer Profile)</span>
+            <span>{t('leads.customerProfileType') || 'Phân loại Hồ sơ Khách hàng (Customer Profile)'}</span>
           </h4>
 
           <div className="space-y-3">
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                Loại Khách hàng
+                {t('leads.clientType') || 'Loại Khách hàng'}
               </label>
               <Select
                 value={clientType}
                 onChange={(val) => setClientType(val as any)}
                 options={[
-                  { value: 'BUSINESS', label: 'Khách hàng Doanh nghiệp (B2B - Đơn vị / Công ty)' },
-                  { value: 'INDIVIDUAL', label: 'Khách hàng Cá nhân (B2C - Người mua lẻ / Tự do)' },
+                  { value: 'BUSINESS', label: t('leads.clientTypeBusiness') || 'Khách hàng Doanh nghiệp (B2B - Đơn vị / Công ty)' },
+                  { value: 'INDIVIDUAL', label: t('leads.clientTypeIndividual') || 'Khách hàng Cá nhân (B2C - Người mua lẻ / Tự do)' },
                 ]}
                 className="w-full h-11"
               />
@@ -128,20 +131,20 @@ export function LeadStepConvert({
 
             {clientType === 'BUSINESS' ? (
               <>
-                <FloatingInput label="Tên Công ty / Account *" value={companyName} onChange={setCompanyName} required />
-                <FloatingInput label="Mã số thuế (Tax Code)" value={taxCode} onChange={setTaxCode} />
+                <FloatingInput label={t('leads.companyAccountNameReq') || 'Tên Công ty / Account *'} value={companyName} onChange={setCompanyName} required />
+                <FloatingInput label={t('leads.taxCodeOptional') || 'Mã số thuế (Tax Code)'} value={taxCode} onChange={setTaxCode} />
                 <p className="text-[10px] text-[var(--color-muted-fg)] italic">
-                  * Hệ thống sẽ tự động kiểm tra trùng lặp Mã số thuế trong dữ liệu Doanh nghiệp.
+                  {t('leads.taxCodeDeduplicationNotice') || '* Hệ thống sẽ tự động kiểm tra trùng lặp Mã số thuế trong dữ liệu Doanh nghiệp.'}
                 </p>
               </>
             ) : (
               <div className="p-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-xl space-y-1">
                 <span className="text-xs font-semibold text-[var(--color-accent)] flex items-center gap-1">
                   <User size={14} />
-                  Nhánh Cá nhân (Individual)
+                  {t('customers.individual') || 'Nhánh Cá nhân (Individual)'}
                 </span>
                 <p className="text-[11px] text-[var(--color-muted-fg)]">
-                  Bỏ qua bước tạo Account Doanh nghiệp. Hệ thống sẽ tạo thẳng Contact với tên {lead.firstName} {lead.lastName}.
+                  {t('leads.individualBranchDesc', { name: `${lead.firstName} ${lead.lastName}` }) || `Bỏ qua bước tạo Account Doanh nghiệp. Hệ thống sẽ tạo thẳng Contact với tên ${lead.firstName} ${lead.lastName}.`}
                 </p>
               </div>
             )}
@@ -152,26 +155,26 @@ export function LeadStepConvert({
         <div className="space-y-4">
           <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)] flex items-center gap-1.5 border-b border-[var(--color-border)]/30 pb-2">
             <DollarSign size={14} className="text-[var(--color-accent)]" />
-            <span>Phạm vi Cơ hội Kinh doanh (Opportunity Scope)</span>
+            <span>{t('leads.oppScopeSetup') || 'Phạm vi Cơ hội Kinh doanh (Opportunity Scope)'}</span>
           </h4>
 
           <div className="space-y-3">
-            <FloatingInput label="Giá trị Cơ hội ước tính (VND) *" type="number" value={oppAmount} onChange={setOppAmount} required />
-            <FloatingInput label="Ngày dự kiến chốt (Expected Close Date) *" type="date" value={expectedCloseDate} onChange={setExpectedCloseDate} required />
+            <FloatingInput label={t('leads.oppAmountReq') || 'Giá trị Cơ hội ước tính (VND) *'} type="number" value={oppAmount} onChange={setOppAmount} required />
+            <FloatingInput label={t('leads.expectedCloseDateReq') || 'Ngày dự kiến chốt (Expected Close Date) *'} type="date" value={expectedCloseDate} onChange={setExpectedCloseDate} required />
 
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                Loại dịch vụ
+                {t('leads.serviceType') || 'Loại dịch vụ'}
               </label>
               <Select
                 value={serviceType}
                 onChange={setServiceType}
                 options={[
-                  { value: 'WEBSITE', label: 'Thiết kế Website' },
-                  { value: 'APP_MVP', label: 'Xây dựng Mobile App / MVP' },
-                  { value: 'BRANDING', label: 'Bộ nhận diện Thương hiệu' },
-                  { value: 'UI_UX', label: 'Thiết kế UI/UX' },
-                  { value: 'CUSTOM', label: 'Dịch vụ Tùy chỉnh' },
+                  { value: 'WEBSITE', label: t('leads.optionWebsite') || 'Thiết kế Website' },
+                  { value: 'APP_MVP', label: t('leads.optionAppMvp') || 'Xây dựng Mobile App / MVP' },
+                  { value: 'BRANDING', label: t('leads.optionBranding') || 'Bộ nhận diện Thương hiệu' },
+                  { value: 'UI_UX', label: t('leads.optionUiUx') || 'Thiết kế UI/UX' },
+                  { value: 'CUSTOM', label: t('leads.optionCustom') || 'Dịch vụ Tùy chỉnh' },
                 ]}
                 className="w-full h-11"
               />
@@ -190,7 +193,7 @@ export function LeadStepConvert({
           className="flex items-center gap-2 h-11 px-8 rounded-xl cursor-pointer bg-purple-600 hover:bg-purple-700 border-none font-semibold text-sm shadow-md"
         >
           <Sparkles size={18} />
-          <span>Thực hiện Chuyển đổi Lead</span>
+          <span>{t('leads.performLeadConversion') || 'Thực hiện Chuyển đổi Lead'}</span>
           <ArrowRight size={18} />
         </Button>
       </div>
@@ -200,14 +203,14 @@ export function LeadStepConvert({
         title={
           <div className="flex items-center gap-2 text-amber-500">
             <ShieldAlert size={20} />
-            <span>Cảnh báo: Liên hệ (Contact) đã tồn tại trong hệ thống</span>
+            <span>{t('leads.contactExistsTitle') || 'Cảnh báo: Liên hệ (Contact) đã tồn tại trong hệ thống'}</span>
           </div>
         }
         open={dupModalOpen}
         onCancel={() => setDupModalOpen(false)}
         footer={[
           <Button key="cancel" onClick={() => setDupModalOpen(false)}>
-            Hủy bỏ
+            {t('common.cancel') || 'Hủy bỏ'}
           </Button>,
           <Button
             key="link"
@@ -217,29 +220,19 @@ export function LeadStepConvert({
               handleTriggerConvert(false, dupInfo?.id);
             }}
           >
-            Liên kết với Contact cũ ({dupInfo?.name})
-          </Button>,
-          <Button
-            key="force"
-            danger
-            onClick={() => {
-              setDupModalOpen(false);
-              handleTriggerConvert(true);
-            }}
-          >
-            Vẫn tạo mới Contact
+            {t('leads.linkOldContact', { name: dupInfo?.name }) || `Liên kết với Contact cũ (${dupInfo?.name})`}
           </Button>,
         ]}
       >
         {dupInfo && (
           <div className="space-y-3 pt-3 text-xs">
             <p className="text-[var(--color-fg)]">
-              Hệ thống phát hiện Email <strong>{dupInfo.email}</strong> hoặc SĐT <strong>{dupInfo.phone}</strong> đã khớp với Contact:
+              {t('leads.contactExistsDesc', { email: dupInfo.email, phone: dupInfo.phone }) || `Hệ thống phát hiện Email ${dupInfo.email} hoặc SĐT ${dupInfo.phone} đã khớp với Contact:`}
             </p>
             <div className="p-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-xl space-y-1 font-mono">
-              <p><strong>Họ tên:</strong> {dupInfo.name}</p>
-              <p><strong>Email:</strong> {dupInfo.email}</p>
-              <p><strong>Số điện thoại:</strong> {dupInfo.phone}</p>
+              <p><strong>{t('leads.name') || 'Họ tên'}:</strong> {dupInfo.name}</p>
+              <p><strong>{t('leads.email') || 'Email'}:</strong> {dupInfo.email}</p>
+              <p><strong>{t('leads.phone') || 'Số điện thoại'}:</strong> {dupInfo.phone}</p>
             </div>
             <p className="text-[var(--color-muted-fg)] italic">
               * Theo quy tắc deduplication, bạn có thể chọn liên kết dữ liệu với Contact cũ hoặc ép buộc tạo Contact mới.

@@ -213,3 +213,32 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.4) !important;
 }
+
+/* Modal Polish — Remove Header/Footer borders (SCRUM-76, SCRUM-77, SCRUM-82) */
+.ant-modal .ant-modal-content {
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+}
+
+.ant-modal .ant-modal-header,
+.ant-modal-header {
+  border-bottom: none !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.ant-modal .ant-modal-footer,
+.ant-modal-footer {
+  border-top: none !important;
+  border-bottom: none !important;
+  margin-top: 16px !important;
+  padding-top: 0 !important;
+}
+
+.ant-modal .ant-modal-title,
+.ant-modal-title {
+  border-bottom: none !important;
+}
+
+

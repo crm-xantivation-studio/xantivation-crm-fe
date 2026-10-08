@@ -84,15 +84,15 @@ export default function InboxesPage() {
           <Form.Item name="channel_type" label="Loại Kênh" initialValue="telegram">
             <Select
               options={[
-                { value: 'telegram', label: '✈️ Telegram Bot' },
-                { value: 'facebook_messenger', label: '🔵 Facebook Messenger Bot' },
-                { value: 'facebook_post', label: '📰 Facebook Auto-Post Bot' },
-                { value: 'facebook_reels', label: '🎬 Facebook Reels Bot' },
-                { value: 'zalo', label: '💬 Zalo Official Account' },
-                { value: 'whatsapp', label: '💚 WhatsApp Business' },
-                { value: 'web_widget', label: '🌐 Website Live Chat Widget' },
-                { value: 'email', label: '📧 Email Support (IMAP/SMTP)' },
-                { value: 'api', label: '🔌 Custom REST API Channel' },
+                { value: 'telegram', label: 'Telegram Bot' },
+                { value: 'facebook_messenger', label: 'Facebook Messenger Bot' },
+                { value: 'facebook_post', label: 'Facebook Auto-Post Bot' },
+                { value: 'facebook_reels', label: 'Facebook Reels Bot' },
+                { value: 'zalo', label: 'Zalo Official Account' },
+                { value: 'whatsapp', label: 'WhatsApp Business' },
+                { value: 'web_widget', label: 'Website Live Chat Widget' },
+                { value: 'email', label: 'Email Support (IMAP/SMTP)' },
+                { value: 'api', label: 'Custom REST API Channel' },
               ]}
             />
           </Form.Item>

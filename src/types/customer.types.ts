@@ -34,6 +34,8 @@ export interface Customer {
 
 export interface Contact {
   id: string;
+  name?: string;
+  fullName?: string;
   firstName?: string;
   lastName: string;
   email: string;

@@ -12,6 +12,7 @@ import {
   Hash,
   Share2,
   Copy,
+  Clock,
 } from 'lucide-react';
 
 const { TextArea } = Input;
@@ -131,11 +132,15 @@ export function ExecutionResultDrawer({
               {postData.platform || 'Facebook Post'}
             </Tag>
           </div>
-          <div className="flex items-center gap-2 font-mono text-[11px]">
-            <span className="text-neutral-400">📝 {wordCount} từ</span>
+          <div className="flex items-center gap-3 font-mono text-[11px]">
+            <span className="text-neutral-400 flex items-center gap-1">
+              <FileText size={12} />
+              <span>{wordCount} từ</span>
+            </span>
             {postData.durationMs && (
-              <span className="text-emerald-400">
-                ⏱️ {(postData.durationMs / 1000).toFixed(1)}s
+              <span className="text-emerald-400 flex items-center gap-1">
+                <Clock size={12} />
+                <span>{(postData.durationMs / 1000).toFixed(1)}s</span>
               </span>
             )}
           </div>

@@ -340,7 +340,7 @@ export default function AIHub() {
     let responseText = `I have received your request "${prompt}". As a ${activeAgent === 'assistant' ? t('aiHub.agentAssistant') : activeAgent === 'deerflow' ? t('aiHub.agentDeerflow') : t('aiHub.agentHermes')}, I am analyzing the relevant resources...`;
     
     if (prompt.startsWith('/forecast')) {
-      responseText = `### 📊 30-Day Revenue Forecast Report (Weighted Forecast)
+      responseText = `### 30-Day Revenue Forecast Report (Weighted Forecast)
 Based on Xantivation Studio's pipeline and opportunity probabilities:
 
 | Stage | Count | Total Value (VND) | Weight (%) | Forecast Value |
@@ -352,7 +352,7 @@ Based on Xantivation Studio's pipeline and opportunity probabilities:
 
 Actual cash flow forecast peaks on 05/08/2026 when the acceptance milestone for the **CRM Setup** opportunity is completed.`;
     } else if (prompt.startsWith('/risk-analysis')) {
-      responseText = `### ⚠️ Contract Legal Risk Review Results
+      responseText = `### Contract Legal Risk Review Results
 I have reviewed the agreement file and found:
 - **Payment Terms**: Missing late payment penalty clause (Overdue interest rate). *Risk Level: Medium*.
 - **Liability Limitations**: Studio's compensation liability is not limited to 100% of the actual contract value. *Risk Level: High*.
