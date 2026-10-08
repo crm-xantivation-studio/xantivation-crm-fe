@@ -666,6 +666,11 @@
     "voidContract": "契約を無効化"
   },
   "leads": {
+    "step1": "1. リード受付",
+    "step2": "2. インタラクション & BANT",
+    "step3": "3. コンバージョン設定",
+    "step4": "4. コンバージョン済み",
+    "unqualifiedStatus": "資格なし (Unqualified)",
     "loading": "Loading lead details...",
     "notFound": "Lead not found",
     "notEvaluated": "This lead has not been auto-evaluated by AI yet.",

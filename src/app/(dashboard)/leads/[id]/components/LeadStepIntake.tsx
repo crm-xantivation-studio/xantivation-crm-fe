@@ -33,14 +33,14 @@ export function LeadStepIntake({
     setLastName(lead.lastName || '');
     setEmail(lead.email || '');
     setPhone(lead.phone || '');
-    setCompanyName(lead.company || '');
+    setCompanyName(lead.companyName || '');
     setServiceInterest(lead.serviceInterest || 'WEBSITE');
     setSource(lead.source || 'MANUAL');
   }, [lead]);
 
   const handleSave = async (andNext: boolean = false) => {
-    if (!lastName.trim() || !email.trim() || !phone.trim()) {
-      message.error('Vui lòng điền đầy đủ Tên, Email và Số điện thoại');
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim()) {
+      message.error(t('leads.fillRequired') || 'Vui lòng điền đầy đủ Họ, Tên, Email và Số điện thoại');
       return;
     }
 
@@ -85,7 +85,7 @@ export function LeadStepIntake({
           </h4>
 
           <div className="grid grid-cols-2 gap-3">
-            <FloatingInput label={t('leads.firstName') || 'Họ'} value={firstName} onChange={setFirstName} />
+            <FloatingInput label={t('leads.firstName') || 'Họ'} value={firstName} onChange={setFirstName} required />
             <FloatingInput label={t('leads.lastName') || 'Tên'} value={lastName} onChange={setLastName} required />
           </div>
 

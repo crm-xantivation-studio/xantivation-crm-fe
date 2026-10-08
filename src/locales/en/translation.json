@@ -31,6 +31,7 @@
     "back": "Back",
     "next": "Next",
     "prev": "Prev",
+    "continue": "Continue",
     "saveChanges": "Save Changes",
     "confirmDelete": "Confirm Delete",
     "confirmDeleteMsg": "Are you sure you want to delete this item? This action cannot be undone.",
@@ -660,6 +661,11 @@
     "voidContract": "Void Contract"
   },
   "leads": {
+    "step1": "1. Lead Intake",
+    "step2": "2. Interaction & BANT",
+    "step3": "3. Lead Conversion",
+    "step4": "Converted",
+    "unqualifiedStatus": "Unqualified",
     "title": "Lead Management",
     "subtitle": "Track sales prospects, evaluate BANT qualification scores, and manage automated assignments.",
     "searchPlaceholder": "Search by name, email, company, code...",
@@ -821,6 +827,8 @@
     "step3Title": "Step 3: Lead Conversion Wizard",
     "step3Desc": "Configure Customer Profile (Business / Individual) and Opportunity scope to execute conversion.",
     "step4Title": "Lead Converted Successfully!",
+    "saveBant": "Save BANT",
+    "convertLeadAction": "Convert",
     "step4Desc": "This lead has completed the qualification funnel and created a Customer Profile.",
     "step4LockedNotice": "According to business rules (flow.md section 3.3), Leads in CONVERTED status are locked in Read-Only mode to preserve KPI report integrity.",
     "aiAutoQualify": "AI Auto-Qualify",

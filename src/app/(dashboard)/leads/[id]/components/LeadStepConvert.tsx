@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Select, Modal, message } from 'antd';
+import { Button, Select, Modal, message, Checkbox } from 'antd';
 import { Building2, User, DollarSign, Calendar, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FloatingInput } from '@/components/FloatingInput';
@@ -28,6 +28,7 @@ export function LeadStepConvert({
   const [taxCode, setTaxCode] = useState('');
   
   // Opportunity scope
+  const [createOpportunity, setCreateOpportunity] = useState(true);
   const [oppAmount, setOppAmount] = useState(String(lead.budget || 10000000));
   const [expectedCloseDate, setExpectedCloseDate] = useState(
     new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10)
@@ -50,27 +51,39 @@ export function LeadStepConvert({
         clientType,
         companyName: clientType === 'BUSINESS' ? companyName : undefined,
         taxCode: clientType === 'BUSINESS' ? taxCode : undefined,
-        opportunityAmount: Number(oppAmount) || 0,
-        expectedCloseDate,
-        serviceType,
-        serviceInterest: serviceType,
-        forceCreateContact,
-        linkExistingContactId,
+        opportunityAmount: createOpportunity ? Number(oppAmount) || 0 : 0,
+        expectedCloseDate: createOpportunity ? expectedCloseDate : undefined,
+        serviceType: createOpportunity ? serviceType : undefined,
+        serviceInterest: createOpportunity ? serviceType : undefined,
+        createOpportunity,
+        forceCreate: forceCreateContact,
+        linkContactId: linkExistingContactId,
       };
 
-      await onConvertSubmit(payload);
+      const res = await onConvertSubmit(payload);
+      
+      if (res?.data?.isDuplicate) {
+        if (res.data.duplicateType === 'CONTACT') {
+          setDupType('CONTACT');
+          setDupInfo(res.data.duplicateRecord);
+          setDupModalOpen(true);
+          return;
+        }
+      }
+
       onAdvanceToNextStep();
     } catch (err: any) {
-      const resData = err.response?.data;
+      const resData = err?.response?.data;
+      const errMsg = Array.isArray(resData?.message) ? resData.message[0] : resData?.message;
 
       // Deduplication Tax Code Error (Section 3.2 Blocked)
-      if (resData?.code === 'TAX_CODE_EXISTS') {
+      if (resData?.code === 'TAX_CODE_EXISTS' || (errMsg && errMsg.includes('Mã số thuế'))) {
         Modal.error({
           title: t('leads.taxCodeExistsTitle') || 'Mã số thuế trùng lặp (Tài khoản Doanh nghiệp đã tồn tại)',
           content: (
             <div className="space-y-2 pt-2 text-xs">
               <p className="text-red-500 font-semibold">
-                Mã số thuế {taxCode} đã thuộc về Doanh nghiệp: <strong>{resData.existingAccountName}</strong>.
+                Mã số thuế {taxCode} đã tồn tại trong hệ thống.
               </p>
               <p>Theo quy tắc flow.md, bạn không thể tạo trùng Account. Vui lòng chuyển về Account cũ hoặc sửa lại MST.</p>
             </div>
@@ -87,16 +100,16 @@ export function LeadStepConvert({
         return;
       }
 
-      message.error(resData?.message || t('leads.conversionFailed') || 'Chuyển đổi Lead thất bại.');
+      message.error(errMsg || t('leads.conversionFailed') || 'Chuyển đổi Lead thất bại.');
     }
   };
 
   return (
     <div className="space-y-4">
       {/* Header Info */}
-      <div className="border-b border-[var(--color-border)]/40 pb-3">
+      <div className="pb-3">
         <h3 className="text-sm font-bold text-[var(--color-fg)]">
-          {t('leads.step3Title') || 'Bước 3: Thiết lập Chuyển đổi Lead (Conversion Wizard)'}
+          {t('leads.step3Title') || 'Thiết lập Chuyển đổi Lead (Conversion Wizard)'}
         </h3>
         <p className="text-xs text-[var(--color-muted-fg)] mt-0.5">
           {t('leads.step3Desc') || 'Xác định loại Khách hàng (Business / Individual) và thông số Cơ hội kinh doanh để thực hiện Convert.'}
@@ -152,34 +165,54 @@ export function LeadStepConvert({
         </div>
 
         {/* Opportunity Scope Setup */}
-        <div className="space-y-4">
-          <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)] flex items-center gap-1.5 border-b border-[var(--color-border)]/30 pb-2">
-            <DollarSign size={14} className="text-[var(--color-accent)]" />
-            <span>{t('leads.oppScopeSetup') || 'Phạm vi Cơ hội Kinh doanh (Opportunity Scope)'}</span>
-          </h4>
-
-          <div className="space-y-3">
-            <FloatingInput label={t('leads.oppAmountReq') || 'Giá trị Cơ hội ước tính (VND) *'} type="number" value={oppAmount} onChange={setOppAmount} required />
-            <FloatingInput label={t('leads.expectedCloseDateReq') || 'Ngày dự kiến chốt (Expected Close Date) *'} type="date" value={expectedCloseDate} onChange={setExpectedCloseDate} required />
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('leads.serviceType') || 'Loại dịch vụ'}
-              </label>
-              <Select
-                value={serviceType}
-                onChange={setServiceType}
-                options={[
-                  { value: 'WEBSITE', label: t('leads.optionWebsite') || 'Thiết kế Website' },
-                  { value: 'APP_MVP', label: t('leads.optionAppMvp') || 'Xây dựng Mobile App / MVP' },
-                  { value: 'BRANDING', label: t('leads.optionBranding') || 'Bộ nhận diện Thương hiệu' },
-                  { value: 'UI_UX', label: t('leads.optionUiUx') || 'Thiết kế UI/UX' },
-                  { value: 'CUSTOM', label: t('leads.optionCustom') || 'Dịch vụ Tùy chỉnh' },
-                ]}
-                className="w-full h-11"
-              />
-            </div>
+        <div className={`space-y-4 transition-opacity duration-300 ${!createOpportunity ? 'opacity-50' : ''}`}>
+          <div className="flex items-center justify-between border-b border-[var(--color-border)]/30 pb-2">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-muted-fg)] flex items-center gap-1.5">
+              <DollarSign size={14} className="text-[var(--color-accent)]" />
+              <span>{t('leads.oppScopeSetup') || 'Cơ hội Kinh doanh (Opportunity)'}</span>
+            </h4>
+            <Checkbox 
+              checked={createOpportunity} 
+              onChange={(e) => setCreateOpportunity(e.target.checked)}
+              className="text-xs font-mono text-[var(--color-muted-fg)]"
+            >
+              {t('leads.createOpportunityCheckbox') || 'Tạo Opportunity'}
+            </Checkbox>
           </div>
+
+          {createOpportunity ? (
+            <div className="space-y-3">
+              <FloatingInput label={t('leads.oppAmountReq') || 'Giá trị Cơ hội ước tính (VND) *'} type="number" value={oppAmount} onChange={setOppAmount} required />
+              <FloatingInput label={t('leads.expectedCloseDateReq') || 'Ngày dự kiến chốt (Expected Close Date) *'} type="date" value={expectedCloseDate} onChange={setExpectedCloseDate} required />
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
+                  {t('leads.serviceType') || 'Loại dịch vụ'}
+                </label>
+                <Select
+                  value={serviceType}
+                  onChange={setServiceType}
+                  options={[
+                    { value: 'WEBSITE', label: t('leads.optionWebsite') || 'Thiết kế Website' },
+                    { value: 'APP_MVP', label: t('leads.optionAppMvp') || 'Xây dựng Mobile App / MVP' },
+                    { value: 'BRANDING', label: t('leads.optionBranding') || 'Bộ nhận diện Thương hiệu' },
+                    { value: 'UI_UX', label: t('leads.optionUiUx') || 'Thiết kế UI/UX' },
+                    { value: 'CUSTOM', label: t('leads.optionCustom') || 'Dịch vụ Tùy chỉnh' },
+                  ]}
+                  className="w-full h-11"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-xl space-y-1">
+               <span className="text-[11px] text-[var(--color-muted-fg)] block">
+                 Bạn đã chọn không tạo Opportunity.
+               </span>
+               <span className="text-[11px] text-[var(--color-muted-fg)] block">
+                 Hệ thống sẽ chỉ tạo Khách hàng (Customer) và Người liên hệ (Contact) để đưa vào danh bạ lưu trữ.
+               </span>
+            </div>
+          )}
         </div>
 
       </div>
@@ -190,11 +223,11 @@ export function LeadStepConvert({
           type="primary"
           onClick={() => handleTriggerConvert(false)}
           loading={isConverting}
-          className="flex items-center gap-2 h-11 px-8 rounded-xl cursor-pointer bg-purple-600 hover:bg-purple-700 border-none font-semibold text-sm shadow-md"
+          className="flex items-center gap-2 h-10 px-6 rounded-xl cursor-pointer"
         >
-          <Sparkles size={18} />
-          <span>{t('leads.performLeadConversion') || 'Thực hiện Chuyển đổi Lead'}</span>
-          <ArrowRight size={18} />
+          <Sparkles size={16} />
+          <span>{t('leads.convertLeadAction') || 'Chuyển đổi'}</span>
+          <ArrowRight size={16} />
         </Button>
       </div>
 

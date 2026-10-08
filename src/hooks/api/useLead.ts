@@ -87,7 +87,9 @@ export function useConvertLead(id: string) {
       message.success(i18n.t('hooks.lead.convertedSuccess'));
     },
     onError: (error: any) => {
-      message.error(error.response?.data?.message || i18n.t('hooks.lead.conversionFailed'));
+      const resMsg = error.response?.data?.message;
+      const parsedMsg = Array.isArray(resMsg) ? resMsg[0] : resMsg;
+      message.error(parsedMsg || i18n.t('hooks.lead.conversionFailed'));
     },
   });
 }

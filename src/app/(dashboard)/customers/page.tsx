@@ -341,12 +341,12 @@ export default function Customers() {
     }
 
     const payload = {
-      name: accountName,
-      email: accountEmail,
-      phone: accountPhone,
-      address: accountAddress,
-      taxCode: taxCodeVal,
-      website: websiteVal,
+      name: accountName.trim(),
+      email: accountEmail.trim(),
+      phone: accountPhone.trim(),
+      address: accountAddress.trim(),
+      taxCode: taxCodeVal.trim(),
+      website: websiteVal.trim(),
       industry: industryVal,
       clientType: clientTypeVal as any,
       status: accountStatus as any,
@@ -390,12 +390,12 @@ export default function Customers() {
     }
 
     const payload = {
-      firstName: contactFirstName,
-      lastName: contactLastName,
-      email: contactEmail,
-      phone: contactPhone,
+      firstName: contactFirstName.trim(),
+      lastName: contactLastName.trim(),
+      email: contactEmail.trim(),
+      phone: contactPhone.trim(),
       role: contactRoleVal,
-      jobTitle: contactJobTitle,
+      jobTitle: contactJobTitle.trim(),
       isPrimary: contactIsPrimary,
       accountId: contactCompanyId,
     };
@@ -833,7 +833,7 @@ export default function Customers() {
               {errors.accountEmail && <p className="text-red-500 text-[10px] mt-1">{errors.accountEmail}</p>}
             </div>
             <div>
-              <FloatingInput label={t('customers.phoneNumber')} value={accountPhone} onChange={setAccountPhone} required />
+              <FloatingInput label={t('customers.phoneNumber')} type="tel" value={accountPhone} onChange={setAccountPhone} required />
               {errors.accountPhone && <p className="text-red-500 text-[10px] mt-1">{errors.accountPhone}</p>}
             </div>
           </div>
@@ -886,7 +886,7 @@ export default function Customers() {
               {errors.contactEmail && <p className="text-red-500 text-[10px] mt-1">{errors.contactEmail}</p>}
             </div>
             <div>
-              <FloatingInput label={t('customers.phoneNumber')} value={contactPhone} onChange={setContactPhone} required />
+              <FloatingInput label={t('customers.phoneNumber')} type="tel" value={contactPhone} onChange={setContactPhone} required />
               {errors.contactPhone && <p className="text-red-500 text-[10px] mt-1">{errors.contactPhone}</p>}
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button, Select, Progress, Modal, message } from 'antd';
-import { Bot, Plus, ArrowRight, ShieldCheck, XCircle, MessageSquare } from 'lucide-react';
+import { Bot, Plus, ArrowRight, ShieldCheck, XCircle, MessageSquare, Save } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FloatingInput } from '@/components/FloatingInput';
 
@@ -49,16 +49,16 @@ export function LeadStepBant({
     }
   };
 
-  const handleMarkQualified = async () => {
+  const handleSaveBant = async () => {
     try {
       await onUpdateLead({
         budget: Number(budget) || 0,
         need,
         timeline,
+        authorityMarker: authorityConfirmed === 'YES',
         bantScore: Math.max(lead.bantScore || 50, 75),
-        status: 'QUALIFIED',
       });
-      onAdvanceToNextStep();
+      message.success(t('leads.bantSaved') || 'Đã lưu thông tin BANT');
     } catch (err: any) {
       // Handled by hook
     }
@@ -78,7 +78,7 @@ export function LeadStepBant({
       <div className="border-b border-[var(--color-border)]/40 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-sm font-bold text-[var(--color-fg)]">
-            {t('leads.step2Title') || 'Bước 2: Tương tác & Đánh giá Tiêu chuẩn BANT'}
+            {t('leads.step2Title') || 'Tương tác & Đánh giá Tiêu chuẩn BANT'}
           </h3>
           <p className="text-xs text-[var(--color-muted-fg)] mt-0.5">
             {t('leads.step2Desc') || 'Ghi nhận lịch sử làm việc và xác minh các tham số Ngân sách, Thẩm quyền, Nhu cầu & Thời gian.'}
@@ -180,7 +180,7 @@ export function LeadStepBant({
       </div>
 
       {/* Footer Action Toolbar */}
-      <div className="pt-6 border-t border-[var(--color-border)]/40 flex justify-between items-center">
+      <div className="pt-6 border-t border-[var(--color-border)]/40 flex flex-col sm:flex-row justify-between items-center gap-4">
         <Button
           danger
           onClick={handleMarkUnqualified}
@@ -191,16 +191,26 @@ export function LeadStepBant({
           <span>{t('leads.unqualify') || 'Không đạt chuẩn (Unqualify)'}</span>
         </Button>
 
-        <Button
-          type="primary"
-          onClick={handleMarkQualified}
-          loading={isUpdating}
-          className="flex items-center gap-2 h-10 px-6 rounded-xl cursor-pointer bg-green-600 hover:bg-green-700 border-none font-semibold"
-        >
-          <ShieldCheck size={16} />
-          <span>{t('leads.nextStep') || 'Next'}</span>
-          <ArrowRight size={16} />
-        </Button>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <Button
+            onClick={handleSaveBant}
+            loading={isUpdating}
+            className="flex items-center gap-2 h-10 px-6 rounded-xl cursor-pointer border-[var(--color-border)] text-[var(--color-fg)] flex-1 sm:flex-none justify-center"
+          >
+            <Save size={16} />
+            <span>{t('leads.saveBant') || 'Lưu BANT'}</span>
+          </Button>
+
+          <Button
+            type="primary"
+            onClick={onAdvanceToNextStep}
+            loading={isUpdating}
+            className="flex items-center gap-2 h-10 px-6 rounded-xl cursor-pointer flex-1 sm:flex-none justify-center"
+          >
+            <span>{t('common.continue') || 'Tiếp tục'}</span>
+            <ArrowRight size={16} />
+          </Button>
+        </div>
       </div>
 
       {/* Activity Modal */}

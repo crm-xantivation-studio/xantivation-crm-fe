@@ -213,7 +213,7 @@ export default function Opportunities() {
     }
 
     const payload = {
-      name,
+      name: name.trim(),
       customerId: companyId,
       contactId: contactId || undefined,
       amount: Number(amount),
@@ -221,7 +221,7 @@ export default function Opportunities() {
       probability,
       closeDate: closeDate,
       serviceInterest: serviceInterest as any,
-      description,
+      description: description.trim(),
       assignedToId: assignedTo || undefined,
     };
 

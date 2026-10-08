@@ -64,10 +64,16 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
   // Sync active step based on lead status
   useEffect(() => {
     if (lead) {
-      if (lead.status === 'NEW') setActiveStep(1);
-      else if (lead.status === 'CONTACTED') setActiveStep(2);
-      else if (lead.status === 'QUALIFIED' || (lead.status as string) === 'CONVERTED') setActiveStep(4);
-      else if (lead.status === 'UNQUALIFIED') setActiveStep(1);
+      if (lead.status === 'NEW') {
+        setActiveStep(1);
+      } else if (lead.status === 'CONTACTED') {
+        // Prevent resetting to step 2 if the user locally advanced to step 3 (Convert)
+        setActiveStep((prev) => (prev === 3 ? 3 : 2));
+      } else if (lead.status === 'QUALIFIED' || (lead.status as string) === 'CONVERTED') {
+        setActiveStep(4); // 4 = Completed (visually Step 3 done)
+      } else if (lead.status === 'UNQUALIFIED') {
+        setActiveStep(1);
+      }
     }
   }, [lead?.status]);
 
@@ -114,8 +120,8 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header Breadcrumb & Title */}
-      <div className="flex justify-between items-start shrink-0">
-        <div>
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center shrink-0 gap-4">
+        <div className="flex-1">
           <div className="text-xs text-[var(--color-muted-fg)] flex items-center gap-1.5 mb-2 font-mono">
             <Link href="/leads" className="hover:underline flex items-center gap-1">
               <ArrowLeft size={12} />
@@ -126,32 +132,30 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
           </div>
           <h1 className="text-base font-semibold tracking-tight text-[var(--color-fg)] flex items-center gap-3">
             <span>{lead.firstName} {lead.lastName}</span>
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+              lead.status === 'QUALIFIED' || (lead.status as string) === 'CONVERTED'
+                ? 'bg-green-500/10 text-green-500 border border-green-500/30'
+                : lead.status === 'UNQUALIFIED'
+                ? 'bg-red-500/10 text-red-500 border border-red-500/30'
+                : 'bg-blue-500/10 text-blue-500 border border-blue-500/30'
+            }`}>
+              {lead.status}
+            </span>
           </h1>
           <p className="text-xs text-[var(--color-muted-fg)] mt-1">
             {t('leads.refCode') || 'Ref Code'} {lead.leadCode} • {t('leads.source') || 'Nguồn'} {lead.source} • {t('leads.createdAt') || 'Ngày tạo'}: {lead.createdAt}
           </p>
         </div>
 
-        {/* Status Badge */}
-        <div className="flex items-center gap-3">
-          <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
-            lead.status === 'QUALIFIED' || (lead.status as string) === 'CONVERTED'
-              ? 'bg-green-500/10 text-green-500 border border-green-500/30'
-              : lead.status === 'UNQUALIFIED'
-              ? 'bg-red-500/10 text-red-500 border border-red-500/30'
-              : 'bg-blue-500/10 text-blue-500 border border-blue-500/30'
-          }`}>
-            {t('leads.status') || 'Trạng thái'}: {lead.status}
-          </span>
+        {/* Visual Timeline Stepper (Compact Right Side) */}
+        <div className="w-full xl:w-[480px] shrink-0 mt-4 xl:mt-0">
+          <LeadProgressStepper
+            status={lead.status}
+            bantScore={lead.bantScore}
+            activeStep={activeStep}
+          />
         </div>
       </div>
-
-      {/* Visual Timeline Stepper (1 -------- 2 -------- 3 -------- 4) */}
-      <LeadProgressStepper
-        status={lead.status}
-        bantScore={lead.bantScore}
-        activeStep={activeStep}
-      />
 
       {/* Unqualified Warning Alert */}
       {isUnqualified && (
@@ -178,7 +182,7 @@ export default function LeadDetail({ params }: { params: Promise<{ id: string }>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
         {/* Main Step Workspace Container (3 Cols) */}
-        <div className="lg:col-span-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-[5px] p-6 shadow-sm">
+        <div className="lg:col-span-3 space-y-6">
           {activeStep === 1 && (
             <LeadStepIntake
               lead={lead}

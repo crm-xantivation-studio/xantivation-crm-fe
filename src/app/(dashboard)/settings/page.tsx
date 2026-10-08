@@ -52,7 +52,7 @@ export default function Settings() {
   const settings = useSettingsStore();
 
   const [activeSubTab, setActiveSubTab] = useState('profile');
-  const [activeIntegrationTab, setActiveIntegrationTab] = useState('chatwoot');
+  const [activeIntegrationTab, setActiveIntegrationTab] = useState('docusign');
 
   // --- Profile State ---
   const [profileName, setProfileName] = useState('');
@@ -1044,7 +1044,6 @@ export default function Settings() {
               {/* Left Navigation Menu */}
               <div className="w-1/4 flex flex-col gap-1 border-r border-[var(--color-border)] pr-6">
                 {[
-                  { id: 'chatwoot', name: 'Chatwoot Inbox', icon: MessageSquare, desc: 'Omnichannel Inbox' },
                   { id: 'docusign', name: 'DocuSign Signature', icon: PenTool, desc: 'E-Signature Hub' },
                   { id: 'resend', name: 'Resend SMTP', icon: Mail, desc: 'Mail Gateway' },
                   { id: 'erp', name: 'ERP Sync', icon: RefreshCw, desc: 'XML-RPC Connection' },
@@ -1069,26 +1068,7 @@ export default function Settings() {
 
               {/* Right Panel Content */}
               <div className="w-3/4 pl-2 space-y-6">
-                {/* Chatwoot Content */}
-                {activeIntegrationTab === 'chatwoot' && (
-                  <div className="space-y-4 max-w-xl bg-[var(--color-surface)]/50 p-6 border border-[var(--color-border)] rounded-[5px]">
-                    <div className="flex items-center gap-3">
-                      <MessageSquare className="text-[var(--color-accent)]" size={24} />
-                      <div>
-                        <h4 className="font-bold text-sm text-[var(--color-fg)]">Cấu Hình Chatwoot Omnichannel</h4>
-                        <p className="text-xs text-[var(--color-muted-fg)]">Toàn bộ cài đặt kết nối Chatwoot, công tắc Bật/Tắt AI và quản lý Kênh đã được di chuyển về trung tâm quản trị Messaging.</p>
-                      </div>
-                    </div>
-                    <div className="pt-2">
-                      <a
-                        href="/messaging/configuration"
-                        className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-[var(--color-accent)] text-white hover:opacity-90 transition-all cursor-pointer"
-                      >
-                        <span>Đi tới Cấu hình Kênh Tương Tác (/messaging/configuration)</span>
-                      </a>
-                    </div>
-                  </div>
-                )}
+                {/* Chatwoot Content removed as part of SCRUM-68 */}
 
                 {/* DocuSign Content */}
                 {activeIntegrationTab === 'docusign' && (

@@ -31,6 +31,7 @@
     "back": "Quay lại",
     "next": "Tiếp theo",
     "prev": "Trước",
+    "continue": "Tiếp tục",
     "saveChanges": "Lưu thay đổi",
     "confirmDelete": "Xác nhận xóa",
     "confirmDeleteMsg": "Bạn có chắc chắn muốn xóa mục này? Hành động này không thể hoàn tác.",
@@ -660,6 +661,11 @@
     "voidContract": "Vô hiệu hợp đồng"
   },
   "leads": {
+    "step1": "1. Tiếp nhận Lead",
+    "step2": "2. Tương tác & BANT",
+    "step3": "3. Chuyển đổi Lead",
+    "step4": "Đã Chuyển đổi",
+    "unqualifiedStatus": "Không đạt chuẩn (Unqualified)",
     "title": "Quản lý Đầu mối (Leads)",
     "subtitle": "Quản lý danh sách đầu mối kinh doanh, đánh giá điểm BANT và phân bổ tự động.",
     "searchPlaceholder": "Tìm kiếm theo tên, email, công ty, mã lead...",
@@ -821,6 +827,8 @@
     "step3Title": "Bước 3: Thiết lập Chuyển đổi Lead (Conversion Wizard)",
     "step3Desc": "Xác định loại Khách hàng (Business / Individual) và thông số Cơ hội kinh doanh để thực hiện Convert.",
     "step4Title": "Đã chuyển đổi Lead thành công!",
+    "saveBant": "Lưu BANT",
+    "convertLeadAction": "Chuyển đổi",
     "step4Desc": "Đầu mối đã hoàn tất quy trình phễu và tạo Hồ sơ Khách hàng.",
     "step4LockedNotice": "Theo quy tắc nghiệp vụ (Mục 3.3 flow.md), Lead ở trạng thái CONVERTED bị khóa dữ liệu toàn bộ ở chế độ Read-Only để đảm bảo tính toàn vẹn báo cáo KPI.",
     "aiAutoQualify": "AI Auto-Qualify",

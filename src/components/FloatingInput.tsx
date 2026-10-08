@@ -35,7 +35,13 @@ export function FloatingInput({
       <input
         type={type}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          let val = e.target.value;
+          if (type === 'tel') {
+            val = val.replace(/[^0-9+()\s-]/g, '');
+          }
+          onChange(val);
+        }}
         onFocus={() => setFocused(true)}
         onBlur={handleBlur}
         required={required}

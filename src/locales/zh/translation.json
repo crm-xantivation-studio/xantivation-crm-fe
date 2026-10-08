@@ -666,6 +666,11 @@
     "voidContract": "作废合同"
   },
   "leads": {
+    "step1": "1. 接收潜在客户",
+    "step2": "2. 互动 & BANT",
+    "step3": "3. 转化设置",
+    "step4": "4. 已转化",
+    "unqualifiedStatus": "不合格 (Unqualified)",
     "loading": "加载线索详情中...",
     "notFound": "未找到线索",
     "notEvaluated": "此线索尚未被 AI 自动评估。",
