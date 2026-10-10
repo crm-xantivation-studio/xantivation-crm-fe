@@ -2,8 +2,9 @@
 
 import React, { useState, use } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Button, Steps, Select, Modal, Progress, message, Spin } from 'antd';
+import { Button, Steps, Modal, Progress, message, Spin } from 'antd';
 import { User, Briefcase, Mail, Phone, Calendar, Plus, ArrowRight, UserCheck, FileText, AlertTriangle, Trash2, HelpCircle, Bot, Zap } from 'lucide-react';
+import { FormSelect } from '@/components/FormSelect';
 import { useOpportunity, useUpdateOpportunity, useCloseLostOpportunity, useDeleteOpportunity } from '@/hooks/api/useOpportunity';
 import { useAuthStore } from '@/stores/auth.store';
 import { useUsers } from '@/hooks/api/useUser';
@@ -107,18 +108,50 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
     return <div className="p-8 text-center text-red-500 font-bold">{t('opportunities.notFound')}</div>;
   }
 
+  const getStageLabel = (st: string) => {
+    switch (st) {
+      case OpportunityStage.QUALIFICATION:
+      case 'QUALIFICATION':
+        return t('opportunities.stageQualification');
+      case OpportunityStage.PROPOSAL:
+      case 'PROPOSAL':
+        return t('opportunities.stageProposal');
+      case OpportunityStage.NEGOTIATION:
+      case 'NEGOTIATION':
+        return t('opportunities.stageNegotiation');
+      case OpportunityStage.CLOSED_WON:
+      case 'CLOSED_WON':
+      case 'WON':
+        return t('opportunities.stageWon');
+      case OpportunityStage.CLOSED_LOST:
+      case 'CLOSED_LOST':
+      case 'LOST':
+        return t('opportunities.stageLost');
+      case OpportunityStage.PROSPECTING:
+      case 'PROSPECTING':
+        return 'Prospecting';
+      default:
+        return st;
+    }
+  };
+
   const handleStageChange = async (newStage: any) => {
-    if (newStage === OpportunityStage.CLOSED_LOST) {
+    if (newStage === OpportunityStage.CLOSED_LOST || newStage === 'CLOSED_LOST' || newStage === 'LOST') {
       setLostReason('');
       setLostModalOpen(true);
       return;
     }
 
-    let prob = 10;
-    if (newStage === OpportunityStage.CLOSED_WON) prob = 100;
-    else if (newStage === 'NEGOTIATION') prob = 80;
-    else if (newStage === 'PROPOSAL') prob = 50;
-    else if (newStage === 'QUALIFICATION') prob = 20;
+    let prob = 20;
+    if (newStage === OpportunityStage.CLOSED_WON || newStage === 'CLOSED_WON' || newStage === 'WON') {
+      prob = 100;
+    } else if (newStage === OpportunityStage.NEGOTIATION || newStage === 'NEGOTIATION') {
+      prob = 80;
+    } else if (newStage === OpportunityStage.PROPOSAL || newStage === 'PROPOSAL') {
+      prob = 50;
+    } else if (newStage === OpportunityStage.QUALIFICATION || newStage === 'QUALIFICATION') {
+      prob = 20;
+    }
 
     try {
       await updateMutation.mutateAsync({
@@ -128,6 +161,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
           probability: prob,
         },
       });
+      message.success(t('opportunities.statusChanged', { stage: getStageLabel(newStage) }) || `Chuyển giai đoạn: ${getStageLabel(newStage)}`);
     } catch (err) {
       // Handled
     }
@@ -145,6 +179,7 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
         lostReason,
       });
       setLostModalOpen(false);
+      message.success(t('opportunities.statusChanged', { stage: getStageLabel(OpportunityStage.CLOSED_LOST) }) || 'Đã đóng - Mất cơ hội');
     } catch (err) {
       // Handled
     }
@@ -174,31 +209,20 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
         id: opp.id,
         dto: { assignedToId },
       });
+      message.success(t('opportunities.saveChanges') || 'Cập nhật thành công');
     } catch (err) {
       // Handled
     }
   };
 
   // Convert stage list to index for visual Stepper
-  const stagesOrder = ['QUALIFICATION', 'PROPOSAL', 'NEGOTIATION', 'WON'];
-  const currentStep = stagesOrder.indexOf(opp.stage === OpportunityStage.CLOSED_LOST ? 'WON' : opp.stage);
-
-  const getStageLabel = (st: string) => {
-    switch (st) {
-      case 'QUALIFICATION':
-        return t('opportunities.stageQualification');
-      case 'PROPOSAL':
-        return t('opportunities.stageProposal');
-      case 'NEGOTIATION':
-        return t('opportunities.stageNegotiation');
-      case 'WON':
-        return t('opportunities.stageWon');
-      case 'LOST':
-        return t('opportunities.stageLost');
-      default:
-        return st;
-    }
-  };
+  const stagesOrder = [
+    OpportunityStage.QUALIFICATION,
+    OpportunityStage.PROPOSAL,
+    OpportunityStage.NEGOTIATION,
+    OpportunityStage.CLOSED_WON,
+  ];
+  const currentStep = stagesOrder.indexOf(opp.stage);
 
   const ownerName = opp.assignedTo ? `${opp.assignedTo.firstName || ''} ${opp.assignedTo.lastName || ''}`.trim() : t('opportunities.systemAdmin');
 
@@ -220,9 +244,9 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
 
         <div className="flex items-center gap-3">
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            opp.stage === OpportunityStage.CLOSED_WON ? 'bg-green-500/10 text-green-500' :
-            opp.stage === OpportunityStage.CLOSED_LOST ? 'bg-red-500/10 text-red-500' :
-            'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+            opp.stage === OpportunityStage.CLOSED_WON ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
+            opp.stage === OpportunityStage.CLOSED_LOST ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
+            'bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20'
           }`}>
             {t('opportunities.stage')}: {getStageLabel(opp.stage)}
           </span>
@@ -234,7 +258,14 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
         <div className="bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 px-5 py-3 rounded-lg shadow-sm">
           <Steps
             size="small"
-            current={currentStep}
+            current={currentStep >= 0 ? currentStep : 0}
+            onChange={(stepIdx) => {
+              const target = stagesOrder[stepIdx];
+              if (target && target !== opp.stage) {
+                handleStageChange(target);
+              }
+            }}
+            className="cursor-pointer select-none"
             items={[
               { title: t('opportunities.stepQualification'), description: t('opportunities.prob20') },
               { title: t('opportunities.stepProposal'), description: t('opportunities.prob50') },
@@ -436,36 +467,26 @@ export default function OpportunityDetail({ params }: { params: Promise<{ id: st
             </h3>
 
             {/* Change Stage */}
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.salesStageSetting')}
-              </label>
-              <Select
-                value={opp.stage}
-                onChange={handleStageChange}
-                options={[
-                  { value: 'QUALIFICATION', label: t('opportunities.stageQualification') },
-                  { value: 'PROPOSAL', label: t('opportunities.stageProposal') },
-                  { value: 'NEGOTIATION', label: t('opportunities.stageNegotiation') },
-                  { value: 'WON', label: t('opportunities.stageWon') },
-                  { value: 'LOST', label: t('opportunities.stageLost') },
-                ]}
-                className="w-full h-10"
-              />
-            </div>
+            <FormSelect
+              label={t('opportunities.salesStageSetting')}
+              value={opp.stage}
+              onChange={(val) => handleStageChange(val as string)}
+              options={[
+                { value: OpportunityStage.QUALIFICATION, label: `${t('opportunities.stageQualification')} (20%)` },
+                { value: OpportunityStage.PROPOSAL, label: `${t('opportunities.stageProposal')} (50%)` },
+                { value: OpportunityStage.NEGOTIATION, label: `${t('opportunities.stageNegotiation')} (80%)` },
+                { value: OpportunityStage.CLOSED_WON, label: `${t('opportunities.stageWon')} (100%)` },
+                { value: OpportunityStage.CLOSED_LOST, label: `${t('opportunities.stageLost')} (0%)` },
+              ]}
+            />
 
             {/* Change Owner */}
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.assignedOwner')}
-              </label>
-              <Select
-                value={opp.assignedTo?.id || ''}
-                onChange={handleOwnerChange}
-                options={realUsers.map(u => ({ value: u.id, label: u.name }))}
-                className="w-full h-10"
-              />
-            </div>
+            <FormSelect
+              label={t('opportunities.assignedOwner')}
+              value={opp.assignedTo?.id || ''}
+              onChange={(val) => handleOwnerChange(val as string)}
+              options={realUsers.map(u => ({ value: u.id, label: u.name }))}
+            />
 
             {/* Delete Option */}
             <div className="pt-4 border-t border-[var(--color-border)]/50">

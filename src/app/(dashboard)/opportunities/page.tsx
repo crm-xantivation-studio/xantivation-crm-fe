@@ -7,6 +7,7 @@ import { Plus, Search, Layers, List, ChevronRight, CheckCircle2, XCircle, AlertC
 import SharedTable from '@/components/SharedTable';
 import type { ColumnProps } from '@/components/SharedTable';
 import { FloatingInput } from '@/components/FloatingInput';
+import { FormSelect } from '@/components/FormSelect';
 import Link from 'next/link';
 import { useOpportunities, useCreateOpportunity, useUpdateOpportunity, useCloseLostOpportunity } from '@/hooks/api/useOpportunity';
 import { useCustomers, useContacts } from '@/hooks/api/useCustomer';
@@ -650,79 +651,58 @@ export default function Opportunities() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.customerAccount')} <span className="text-red-500 font-bold">*</span>
-              </label>
-              <Select
-                value={companyId}
-                onChange={handleCompanyChange}
-                options={realAccounts.map(a => ({ value: a.id, label: a.name }))}
-                className="w-full h-11"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.contactPerson')}
-              </label>
-              <Select
-                value={contactId}
-                onChange={setContactId}
-                options={realContacts
-                  .filter((c: any) => {
-                    if (!companyId) return true;
-                    const accId = c.accountId || c.customerId || c.account?.id || c.customer?.id || c.account_id || c.customer_id;
-                    return accId === companyId;
-                  })
-                  .map((c: any) => ({
-                    value: c.id,
-                    label: c.name || c.fullName || `${c.firstName || ''} ${c.lastName || ''}`.trim() || c.email || 'Unnamed Contact',
-                  }))}
-                className="w-full h-11"
-              />
-            </div>
+            <FormSelect
+              label={t('opportunities.customerAccount')}
+              required
+              value={companyId}
+              onChange={handleCompanyChange}
+              options={realAccounts.map(a => ({ value: a.id, label: a.name }))}
+            />
+            <FormSelect
+              label={t('opportunities.contactPerson')}
+              value={contactId}
+              onChange={(val) => setContactId(val as string)}
+              placeholder="Select contact..."
+              options={realContacts
+                .filter((c: any) => {
+                  if (!companyId) return true;
+                  const accId = c.accountId || c.customerId || c.account?.id || c.customer?.id || c.account_id || c.customer_id;
+                  return accId === companyId;
+                })
+                .map((c: any) => ({
+                  value: c.id,
+                  label: c.name || c.fullName || `${c.firstName || ''} ${c.lastName || ''}`.trim() || c.email || 'Unnamed Contact',
+                }))}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.salesStage')} <span className="text-red-500 font-bold">*</span>
-              </label>
-              <Select
-                value={stage}
-                onChange={handleStageChange}
-                options={[
-                  { value: 'QUALIFICATION', label: 'Qualification (20%)' },
-                  { value: 'PROPOSAL', label: 'Proposal (50%)' },
-                  { value: 'NEGOTIATION', label: 'Negotiation (75%)' },
-                ]}
-                className="w-full h-11"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('opportunities.serviceInterest')}
-              </label>
-              <Select
-                value={serviceInterest}
-                onChange={setServiceInterest}
-                options={serviceOptions}
-                className="w-full h-11"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-              {t('opportunities.owner')} <span className="text-red-500 font-bold">*</span>
-            </label>
-            <Select
-              value={assignedTo}
-              onChange={setAssignedTo}
-              options={realUsers.map(u => ({ value: u.id, label: u.name }))}
-              className="w-full h-11"
+            <FormSelect
+              label={t('opportunities.salesStage')}
+              required
+              value={stage}
+              onChange={(val) => handleStageChange(val as any)}
+              options={[
+                { value: 'QUALIFICATION', label: 'Qualification (20%)' },
+                { value: 'PROPOSAL', label: 'Proposal (50%)' },
+                { value: 'NEGOTIATION', label: 'Negotiation (75%)' },
+              ]}
+            />
+            <FormSelect
+              label={t('opportunities.serviceInterest')}
+              value={serviceInterest}
+              onChange={(val) => setServiceInterest(val as string)}
+              options={serviceOptions}
             />
           </div>
+
+          <FormSelect
+            label={t('opportunities.owner')}
+            required
+            value={assignedTo}
+            onChange={(val) => setAssignedTo(val as string)}
+            options={realUsers.map(u => ({ value: u.id, label: u.name }))}
+          />
 
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">

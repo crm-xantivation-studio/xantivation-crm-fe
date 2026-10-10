@@ -100,13 +100,30 @@ export function WebIcon({ className = '', size = 16 }: IconProps) {
   );
 }
 
+export function LinkedInIcon({ className = '', size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
+      <rect width="24" height="24" rx="4" fill="#0A66C2" />
+      <path
+        d="M7.5 9.5V17.5M7.5 6.5V6.6M11.5 17.5V12.5C11.5 11 12.5 10 14 10C15.5 10 16.5 11 16.5 12.5V17.5M11.5 12.5V17.5"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ChannelLogo({ channel, size = 16, className = '' }: { channel?: string; size?: number; className?: string }) {
   const ch = (channel || '').toLowerCase();
   if (ch.includes('telegram')) return <TelegramIcon size={size} className={className} />;
   if (ch.includes('facebook') || ch.includes('messenger')) return <FacebookIcon size={size} className={className} />;
+  if (ch.includes('linkedin')) return <LinkedInIcon size={size} className={className} />;
   if (ch.includes('zalo')) return <ZaloIcon size={size} className={className} />;
   if (ch.includes('instagram')) return <InstagramIcon size={size} className={className} />;
   if (ch.includes('whatsapp')) return <WhatsAppIcon size={size} className={className} />;
   if (ch.includes('email') || ch.includes('mail')) return <EmailIcon size={size} className={className} />;
   return <WebIcon size={size} className={className} />;
 }
+

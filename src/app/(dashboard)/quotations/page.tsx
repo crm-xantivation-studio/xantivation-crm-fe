@@ -295,14 +295,14 @@ export default function Quotations() {
       adjustmentReason: adjustmentType ? adjustmentReason.trim() : undefined,
       taxPercent: Number(vatRate),
       timeline: timeline.trim(),
-      revisionLimit: revisionLimit.trim(),
+      revisionLimit: Number(revisionLimit) || 0,
       paymentTerms: paymentTerms.trim(),
       termsConditions: termsConditions.trim(),
       notes: notes.trim(),
       validUntil,
       items: items.map(i => ({
         itemName: i.itemName.trim(),
-        description: i.description.trim(),
+        description: i.description ? i.description.trim() : '',
         fixedPrice: Number(i.fixedPrice),
         estimatedEffort: i.estimatedEffort,
         deliverables: i.deliverables,
@@ -646,12 +646,10 @@ export default function Quotations() {
           {/* Part 3: Pricing Summary */}
           <div className="space-y-4 bg-[var(--color-surface)]/40 p-4 border border-[var(--color-border)] rounded-[5px]">
             <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] font-bold">3. Pricing Adjustment & VAT Summary</h4>
-            <div className="grid grid-cols-3 gap-4 items-start">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                  Adjustment Type
-                </label>
-                <Select
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+              <div>
+                <FormSelect
+                  label="Adjustment Type"
                   value={adjustmentType || 'NONE'}
                   onChange={(val) => setAdjustmentType(val === 'NONE' ? undefined : val as any)}
                   options={[
@@ -660,29 +658,33 @@ export default function Quotations() {
                     { value: 'RUSH_FEE', label: 'Rush fee (+)' },
                     { value: 'OTHER', label: 'Other adjustments (+)' },
                   ]}
-                  className="w-full h-12"
                 />
               </div>
               {adjustmentType && (
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] opacity-0 select-none">
-                    Adjustment Amount
-                  </label>
-                  <FloatingInput label="Adjustment Amount (VND)" type="number" value={adjustmentAmount} onChange={setAdjustmentAmount} required />
-                  {errors.adjustmentAmount && <p className="text-red-500 text-[10px] mt-1">{errors.adjustmentAmount}</p>}
+                <div>
+                  <FloatingInput
+                    label="Adjustment Amount (VND)"
+                    type="number"
+                    value={adjustmentAmount}
+                    onChange={setAdjustmentAmount}
+                    required
+                    error={errors.adjustmentAmount}
+                  />
                 </div>
               )}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] opacity-0 select-none">
-                  VAT Rate
-                </label>
+              <div>
                 <FloatingInput label="VAT Rate (%)" type="number" value={vatRate} onChange={setVatRate} required />
               </div>
             </div>
             {adjustmentType && (
               <div>
-                <FloatingInput label="Reason for adjustment" value={adjustmentReason} onChange={setAdjustmentReason} required />
-                {errors.adjustmentReason && <p className="text-red-500 text-[10px] mt-1">{errors.adjustmentReason}</p>}
+                <FloatingInput
+                  label="Reason for adjustment"
+                  value={adjustmentReason}
+                  onChange={setAdjustmentReason}
+                  required
+                  error={errors.adjustmentReason}
+                />
               </div>
             )}
 
@@ -711,18 +713,13 @@ export default function Quotations() {
           {/* Part 4: Terms & Signatures */}
           <div className="space-y-4">
             <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--color-accent)] font-bold">4. Timeline & payment terms</h4>
-            <div className="grid grid-cols-2 gap-4 items-start">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)] opacity-0 select-none">
-                  Delivery Timeline
-                </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+              <div>
                 <FloatingInput label="Project delivery timeline" value={timeline} onChange={setTimeline} />
               </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                  Revision limits (times)
-                </label>
-                <Select
+              <div>
+                <FormSelect
+                  label="Revision limits (times)"
                   value={revisionLimit}
                   onChange={setRevisionLimit}
                   options={[
@@ -732,7 +729,6 @@ export default function Quotations() {
                     { value: 5, label: '5 revisions' },
                     { value: 10, label: '10 revisions' },
                   ]}
-                  className="w-full h-12"
                 />
               </div>
             </div>
