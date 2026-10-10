@@ -8,6 +8,8 @@ import { Plus, Search, Upload, AlertTriangle, SlidersHorizontal } from 'lucide-r
 import SharedTable from '@/components/SharedTable';
 import type { ColumnProps } from '@/components/SharedTable';
 import { FloatingInput } from '@/components/FloatingInput';
+import { FormSelect } from '@/components/FormSelect';
+import { useDuplicateValidator } from '@/hooks/useDuplicateValidator';
 import Link from 'next/link';
 
 interface LeadRecord {
@@ -86,28 +88,32 @@ export default function Leads() {
   // Validation errors
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-
+  // Real-time debounced duplicate validator (SCRUM-70, SCRUM-80)
+  const {
+    duplicateErrors,
+    hasDuplicate,
+    setFieldValue: setDuplicateFieldValue,
+    clearDuplicates,
+    validateAll: validateDuplicateAll,
+  } = useDuplicateValidator<LeadRecord>({
+    records: leads,
+    currentId: editingLead?.id,
+    rules: [
+      {
+        field: 'email',
+        label: 'Email',
+        matcher: (item, val) => item.email.toLowerCase() === val.toLowerCase(),
+      },
+      {
+        field: 'phone',
+        label: 'Số điện thoại',
+        matcher: (item, val) => item.phone.trim() === val.trim(),
+      },
+    ],
+  });
 
   // Bulk action state
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-  // Trigger duplicate check on blur (Strict block - SCRUM-56)
-  const handleCheckDuplicate = (field: 'email' | 'phone', val: string) => {
-    if (!val) return;
-    const exists = leads.find((l) => (field === 'email' ? l.email === val : l.phone === val) && l.id !== editingLead?.id);
-    if (exists) {
-      const errMsg = `Trùng lặp ${field === 'email' ? 'Email' : 'Số điện thoại'}: Đã tồn tại dưới Lead ${exists.leadCode} (${exists.firstName} ${exists.lastName})`;
-      setErrors((prev) => ({ ...prev, [field]: errMsg }));
-      setDuplicateMessage(errMsg);
-      setDuplicateWarningOpen(true);
-    } else {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[field];
-        return next;
-      });
-    }
-  };
 
   const columns: ColumnProps<LeadRecord>[] = [
     {
@@ -183,6 +189,7 @@ export default function Leads() {
     setNeed('');
     setTimeline('');
     setErrors({});
+    clearDuplicates();
     setModalOpen(true);
   };
 
@@ -202,6 +209,7 @@ export default function Leads() {
     setNeed(rec.need);
     setTimeline(rec.timeline);
     setErrors({});
+    clearDuplicates();
     setModalOpen(true);
   };
 
@@ -213,20 +221,14 @@ export default function Leads() {
     if (!phone.trim()) newErrors.phone = 'Please enter a valid phone number';
     if (!source) newErrors.source = 'Please select a lead source';
 
-    // Strict duplicate check on submission (SCRUM-56)
-    const duplicateEmail = email.trim() ? leads.find((l) => l.email.toLowerCase() === email.trim().toLowerCase() && l.id !== editingLead?.id) : null;
-    const duplicatePhone = phone.trim() ? leads.find((l) => l.phone.trim() === phone.trim() && l.id !== editingLead?.id) : null;
-
-    if (duplicateEmail) {
-      newErrors.email = `Email đã tồn tại dưới Lead ${duplicateEmail.leadCode} (${duplicateEmail.firstName} ${duplicateEmail.lastName})`;
-    }
-    if (duplicatePhone) {
-      newErrors.phone = `Số điện thoại đã tồn tại dưới Lead ${duplicatePhone.leadCode} (${duplicatePhone.firstName} ${duplicatePhone.lastName})`;
+    // Duplicate check on submission
+    if (hasDuplicate) {
+      message.error('Vui lòng giải quyết các cảnh báo trùng lặp trước khi lưu');
+      return;
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-
       return;
     }
 
@@ -537,39 +539,45 @@ export default function Leads() {
       >
         <div className="space-y-3.5 pt-1 max-h-[75vh] overflow-y-auto px-0.5">
           <div className="grid grid-cols-2 gap-3.5">
-            <div>
-              <FloatingInput label={t('leads.firstName')} value={firstName} onChange={setFirstName} required />
-              {errors.firstName && <p className="text-red-500 text-[10px] mt-0.5">{errors.firstName}</p>}
-            </div>
-            <div>
-              <FloatingInput label={t('leads.lastName')} value={lastName} onChange={setLastName} required />
-              {errors.lastName && <p className="text-red-500 text-[10px] mt-0.5">{errors.lastName}</p>}
-            </div>
+            <FloatingInput
+              label={t('leads.firstName')}
+              value={firstName}
+              onChange={setFirstName}
+              required
+              error={errors.firstName}
+            />
+            <FloatingInput
+              label={t('leads.lastName')}
+              value={lastName}
+              onChange={setLastName}
+              required
+              error={errors.lastName}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3.5">
-            <div>
-              <FloatingInput
-                label={t('leads.emailAddress')}
-                type="email"
-                value={email}
-                onChange={setEmail}
-                required
-                onBlur={() => handleCheckDuplicate('email', email)}
-              />
-              {errors.email && <p className="text-red-500 text-[10px] mt-0.5">{errors.email}</p>}
-            </div>
-            <div>
-              <FloatingInput
-                label={t('leads.phoneNumber')}
-                type="tel"
-                value={phone}
-                onChange={setPhone}
-                required
-                onBlur={() => handleCheckDuplicate('phone', phone)}
-              />
-              {errors.phone && <p className="text-red-500 text-[10px] mt-0.5">{errors.phone}</p>}
-            </div>
+            <FloatingInput
+              label={t('leads.emailAddress')}
+              type="email"
+              value={email}
+              onChange={(val) => {
+                setEmail(val);
+                setDuplicateFieldValue('email', val);
+              }}
+              required
+              error={duplicateErrors.email || errors.email}
+            />
+            <FloatingInput
+              label={t('leads.phoneNumber')}
+              type="tel"
+              value={phone}
+              onChange={(val) => {
+                setPhone(val);
+                setDuplicateFieldValue('phone', val);
+              }}
+              required
+              error={duplicateErrors.phone || errors.phone}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3.5">
@@ -578,73 +586,59 @@ export default function Leads() {
           </div>
 
           <div className="grid grid-cols-2 gap-3.5 pt-1">
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
-                {t('leads.leadSource')}
-              </label>
-              <Select
-                value={source}
-                onChange={setSource}
-                options={[
-                  { value: 'WEBSITE', label: 'Website' },
-                  { value: 'FACEBOOK', label: 'Facebook' },
-                  { value: 'INSTAGRAM', label: 'Instagram' },
-                  { value: 'LINKEDIN', label: 'LinkedIn' },
-                  { value: 'X', label: 'X (Twitter)' },
-                  { value: 'YOUTUBE', label: 'YouTube' },
-                  { value: 'TIKTOK', label: 'TikTok' },
-                  { value: 'ZALO', label: 'Zalo' },
-                  { value: 'GMAIL', label: 'Gmail' },
-                  { value: 'REFERRAL', label: 'Referral' },
-                  { value: 'EVENT', label: 'Event' },
-                  { value: 'PORTFOLIO', label: 'Portfolio' },
-                  { value: 'TELEGRAM', label: 'Telegram' },
-                  { value: 'MANUAL', label: 'Manual' },
-                  { value: 'XANT', label: 'Xantivation' },
-                  { value: 'XZ', label: 'Xaniz' },
-                ]}
-                className="w-full h-9 text-xs"
-              />
-              {errors.source && <p className="text-red-500 text-[10px]">{errors.source}</p>}
-            </div>
+            <FormSelect
+              label={t('leads.leadSource')}
+              value={source}
+              onChange={setSource}
+              required
+              error={errors.source}
+              options={[
+                { value: 'WEBSITE', label: 'Website' },
+                { value: 'FACEBOOK', label: 'Facebook' },
+                { value: 'INSTAGRAM', label: 'Instagram' },
+                { value: 'LINKEDIN', label: 'LinkedIn' },
+                { value: 'X', label: 'X (Twitter)' },
+                { value: 'YOUTUBE', label: 'YouTube' },
+                { value: 'TIKTOK', label: 'TikTok' },
+                { value: 'ZALO', label: 'Zalo' },
+                { value: 'GMAIL', label: 'Gmail' },
+                { value: 'REFERRAL', label: 'Referral' },
+                { value: 'EVENT', label: 'Event' },
+                { value: 'PORTFOLIO', label: 'Portfolio' },
+                { value: 'TELEGRAM', label: 'Telegram' },
+                { value: 'MANUAL', label: 'Manual' },
+                { value: 'XANT', label: 'Xantivation' },
+                { value: 'XZ', label: 'Xaniz' },
+              ]}
+            />
 
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
-                {t('leads.serviceInterest')}
-              </label>
-              <Select
-                value={serviceInterest}
-                onChange={setServiceInterest}
-                options={[
-                  { value: 'WEBSITE', label: 'Website Design' },
-                  { value: 'APP_MVP', label: 'App MVP Building' },
-                  { value: 'BRANDING', label: 'Branding Identity' },
-                  { value: 'UI_UX', label: 'UI/UX Design System' },
-                  { value: 'SOCIAL_KIT', label: 'Social Media Kit' },
-                  { value: 'MAINTENANCE', label: 'Maintenance SLA' },
-                  { value: 'CUSTOM', label: 'Custom Requirement' },
-                ]}
-                className="w-full h-9 text-xs"
-              />
-            </div>
+            <FormSelect
+              label={t('leads.serviceInterest')}
+              value={serviceInterest}
+              onChange={setServiceInterest}
+              options={[
+                { value: 'WEBSITE', label: 'Website Design' },
+                { value: 'APP_MVP', label: 'App MVP Building' },
+                { value: 'BRANDING', label: 'Branding Identity' },
+                { value: 'UI_UX', label: 'UI/UX Design System' },
+                { value: 'SOCIAL_KIT', label: 'Social Media Kit' },
+                { value: 'MAINTENANCE', label: 'Maintenance SLA' },
+                { value: 'CUSTOM', label: 'Custom Requirement' },
+              ]}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3.5">
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-mono uppercase tracking-tight text-[var(--color-muted-fg)] font-medium">
-                {t('leads.assignedOwner')}
-              </label>
-              <Select
-                value={assignedOwner}
-                onChange={setAssignedOwner}
-                options={[
-                  { value: 'System Admin', label: 'System Admin' },
-                  { value: 'Jane Smith', label: 'Jane Smith' },
-                  { value: 'John Doe', label: 'John Doe' },
-                ]}
-                className="w-full h-9 text-xs"
-              />
-            </div>
+            <FormSelect
+              label={t('leads.assignedOwner')}
+              value={assignedOwner}
+              onChange={setAssignedOwner}
+              options={[
+                { value: 'System Admin', label: 'System Admin' },
+                { value: 'Jane Smith', label: 'Jane Smith' },
+                { value: 'John Doe', label: 'John Doe' },
+              ]}
+            />
 
             <div className="pt-2">
               <FloatingInput label={t('leads.timeline')} value={timeline} onChange={setTimeline} />
@@ -692,6 +686,8 @@ export default function Leads() {
             <Button
               type="primary"
               onClick={handleSave}
+              disabled={hasDuplicate || createMutation.isPending || updateMutation.isPending}
+              loading={createMutation.isPending || updateMutation.isPending}
               className="rounded-xl"
             >
               {t('common.saveChanges')}

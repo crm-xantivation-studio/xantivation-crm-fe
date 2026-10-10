@@ -8,6 +8,8 @@ import { Plus, Search, Download, Check, SlidersHorizontal } from 'lucide-react';
 import SharedTable from '@/components/SharedTable';
 import type { ColumnProps } from '@/components/SharedTable';
 import { FloatingInput } from '@/components/FloatingInput';
+import { FormSelect } from '@/components/FormSelect';
+import { useDuplicateValidator } from '@/hooks/useDuplicateValidator';
 import Link from 'next/link';
 
 interface ContactRecord {
@@ -217,6 +219,57 @@ export default function Customers() {
   // Validation errors
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Real-time debounced duplicate validator for Accounts (SCRUM-70, SCRUM-80)
+  const {
+    duplicateErrors: accountDuplicateErrors,
+    hasDuplicate: hasAccountDuplicate,
+    setFieldValue: setAccountDuplicateField,
+    clearDuplicates: clearAccountDuplicates,
+  } = useDuplicateValidator<AccountRecord>({
+    records: accounts,
+    currentId: editingAccount?.id,
+    rules: [
+      {
+        field: 'email',
+        label: 'Email',
+        matcher: (item, val) => Boolean(item.email && item.email.toLowerCase() === val.toLowerCase()),
+      },
+      {
+        field: 'phone',
+        label: 'Số điện thoại',
+        matcher: (item, val) => Boolean(item.phone && item.phone.trim() === val.trim()),
+      },
+      {
+        field: 'taxCode',
+        label: 'Mã số thuế',
+        matcher: (item, val) => Boolean(item.taxCode && item.taxCode.trim() === val.trim()),
+      },
+    ],
+  });
+
+  // Real-time debounced duplicate validator for Contacts (SCRUM-70, SCRUM-80)
+  const {
+    duplicateErrors: contactDuplicateErrors,
+    hasDuplicate: hasContactDuplicate,
+    setFieldValue: setContactDuplicateField,
+    clearDuplicates: clearContactDuplicates,
+  } = useDuplicateValidator<ContactRecord>({
+    records: contacts,
+    currentId: editingContact?.id,
+    rules: [
+      {
+        field: 'email',
+        label: 'Email',
+        matcher: (item, val) => Boolean(item.email && item.email.toLowerCase() === val.toLowerCase()),
+      },
+      {
+        field: 'phone',
+        label: 'Số điện thoại',
+        matcher: (item, val) => Boolean(item.phone && item.phone.trim() === val.trim()),
+      },
+    ],
+  });
+
   // Bulk selection states
   const [selectedAccountKeys, setSelectedAccountKeys] = useState<React.Key[]>([]);
   const [selectedContactKeys, setSelectedContactKeys] = useState<React.Key[]>([]);
@@ -323,16 +376,9 @@ export default function Customers() {
       newErrors.taxCode = 'Invalid tax code format (10 or 13 digits)';
     }
 
-    // Duplicate check for Account (SCRUM-70, SCRUM-80)
-    const duplicateEmail = accounts.find(a => a.email && a.email.toLowerCase() === accountEmail.trim().toLowerCase() && a.id !== editingAccount?.id);
-    if (duplicateEmail) newErrors.accountEmail = `Email đã tồn tại dưới doanh nghiệp "${duplicateEmail.name}" (${duplicateEmail.code})`;
-
-    const duplicatePhone = accounts.find(a => a.phone && a.phone.trim() === accountPhone.trim() && a.id !== editingAccount?.id);
-    if (duplicatePhone) newErrors.accountPhone = `Số điện thoại đã tồn tại dưới doanh nghiệp "${duplicatePhone.name}" (${duplicatePhone.code})`;
-
-    if (taxCodeVal) {
-      const duplicateTax = accounts.find(a => a.taxCode && a.taxCode.trim() === taxCodeVal.trim() && a.id !== editingAccount?.id);
-      if (duplicateTax) newErrors.taxCode = `Mã số thuế đã tồn tại dưới doanh nghiệp "${duplicateTax.name}" (${duplicateTax.code})`;
+    if (hasAccountDuplicate) {
+      message.error('Vui lòng giải quyết các cảnh báo trùng lặp trước khi lưu');
+      return;
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -377,12 +423,10 @@ export default function Customers() {
     if (!contactEmail.trim() || !contactEmail.includes('@')) newErrors.contactEmail = 'Please enter a valid email address';
     if (!contactPhone.trim()) newErrors.contactPhone = 'Please enter a valid phone number';
 
-    // Duplicate check for Contact (SCRUM-70, SCRUM-80)
-    const duplicateContactEmail = contacts.find(c => c.email && c.email.toLowerCase() === contactEmail.trim().toLowerCase() && c.id !== editingContact?.id);
-    if (duplicateContactEmail) newErrors.contactEmail = `Email đã tồn tại dưới liên hệ "${duplicateContactEmail.name || duplicateContactEmail.firstName}" (${duplicateContactEmail.companyName})`;
-
-    const duplicateContactPhone = contacts.find(c => c.phone && c.phone.trim() === contactPhone.trim() && c.id !== editingContact?.id);
-    if (duplicateContactPhone) newErrors.contactPhone = `Số điện thoại đã tồn tại dưới liên hệ "${duplicateContactPhone.name || duplicateContactPhone.firstName}" (${duplicateContactPhone.companyName})`;
+    if (hasContactDuplicate) {
+      message.error('Vui lòng giải quyết các cảnh báo trùng lặp trước khi lưu');
+      return;
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -451,6 +495,7 @@ export default function Customers() {
     setClientTypeVal('BUSINESS');
     setAccountStatus('ACTIVE');
     setErrors({});
+    clearAccountDuplicates();
     setAccountModalOpen(true);
   };
 
@@ -466,6 +511,7 @@ export default function Customers() {
     setClientTypeVal(rec.clientType);
     setAccountStatus(rec.status);
     setErrors({});
+    clearAccountDuplicates();
     setAccountModalOpen(true);
   };
 
@@ -480,6 +526,7 @@ export default function Customers() {
     setContactIsPrimary(false);
     setContactCompanyId(accounts[0]?.id || '');
     setErrors({});
+    clearContactDuplicates();
     setContactModalOpen(true);
   };
 
@@ -494,6 +541,7 @@ export default function Customers() {
     setContactIsPrimary(rec.isPrimary);
     setContactCompanyId(rec.companyId);
     setErrors({});
+    clearContactDuplicates();
     setContactModalOpen(true);
   };
 
@@ -794,59 +842,76 @@ export default function Customers() {
       >
         <div className="space-y-6 pt-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('customers.clientType')}
-              </label>
-              <Select
-                value={clientTypeVal}
-                onChange={setClientTypeVal}
-                options={[
-                  { value: 'BUSINESS', label: t('customers.businessB2b') },
-                  { value: 'INDIVIDUAL', label: t('customers.individualB2c') },
-                ]}
-                className="w-full h-11"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('customers.accountStatus')}
-              </label>
-              <Select
-                value={accountStatus}
-                onChange={setAccountStatus}
-                options={[
-                  { value: 'ACTIVE', label: t('customers.active') },
-                  { value: 'INACTIVE', label: t('customers.inactive') },
-                ]}
-                className="w-full h-11"
-              />
-            </div>
+            <FormSelect
+              label={t('customers.clientType')}
+              value={clientTypeVal}
+              onChange={(val: any) => setClientTypeVal(val)}
+              options={[
+                { value: 'BUSINESS', label: t('customers.businessB2b') },
+                { value: 'INDIVIDUAL', label: t('customers.individualB2c') },
+              ]}
+            />
+            <FormSelect
+              label={t('customers.accountStatus')}
+              value={accountStatus}
+              onChange={(val: any) => setAccountStatus(val)}
+              options={[
+                { value: 'ACTIVE', label: t('customers.active') },
+                { value: 'INACTIVE', label: t('customers.inactive') },
+              ]}
+            />
           </div>
 
-          <FloatingInput label={t('customers.companyAccountName')} value={accountName} onChange={setAccountName} required />
-          {errors.accountName && <p className="text-red-500 text-[10px] mt-1">{errors.accountName}</p>}
+          <FloatingInput
+            label={t('customers.companyAccountName')}
+            value={accountName}
+            onChange={setAccountName}
+            required
+            error={errors.accountName}
+          />
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <FloatingInput label={t('customers.emailAddress')} type="email" value={accountEmail} onChange={setAccountEmail} required />
-              {errors.accountEmail && <p className="text-red-500 text-[10px] mt-1">{errors.accountEmail}</p>}
-            </div>
-            <div>
-              <FloatingInput label={t('customers.phoneNumber')} type="tel" value={accountPhone} onChange={setAccountPhone} required />
-              {errors.accountPhone && <p className="text-red-500 text-[10px] mt-1">{errors.accountPhone}</p>}
-            </div>
+            <FloatingInput
+              label={t('customers.emailAddress')}
+              type="email"
+              value={accountEmail}
+              onChange={(val) => {
+                setAccountEmail(val);
+                setAccountDuplicateField('email', val);
+              }}
+              required
+              error={accountDuplicateErrors.email || errors.accountEmail}
+            />
+            <FloatingInput
+              label={t('customers.phoneNumber')}
+              type="tel"
+              value={accountPhone}
+              onChange={(val) => {
+                setAccountPhone(val);
+                setAccountDuplicateField('phone', val);
+              }}
+              required
+              error={accountDuplicateErrors.phone || errors.accountPhone}
+            />
           </div>
 
           {clientTypeVal === 'BUSINESS' && (
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <FloatingInput label={t('customers.taxCodeMst')} value={taxCodeVal} onChange={setTaxCodeVal} required />
-                {errors.taxCode && <p className="text-red-500 text-[10px] mt-1">{errors.taxCode}</p>}
-              </div>
-              <div>
-                <FloatingInput label={t('customers.industrySector')} value={industryVal} onChange={setIndustryVal} />
-              </div>
+              <FloatingInput
+                label={t('customers.taxCodeMst')}
+                value={taxCodeVal}
+                onChange={(val) => {
+                  setTaxCodeVal(val);
+                  setAccountDuplicateField('taxCode', val);
+                }}
+                required
+                error={accountDuplicateErrors.taxCode || errors.taxCode}
+              />
+              <FloatingInput
+                label={t('customers.industrySector')}
+                value={industryVal}
+                onChange={setIndustryVal}
+              />
             </div>
           )}
 
@@ -855,7 +920,15 @@ export default function Customers() {
 
           <div className="flex justify-end gap-3 pt-4">
             <Button onClick={() => setAccountModalOpen(false)} className="rounded-xl">{t('customers.cancel')}</Button>
-            <Button type="primary" onClick={handleSaveAccount} className="rounded-xl">{t('customers.saveChanges')}</Button>
+            <Button
+              type="primary"
+              onClick={handleSaveAccount}
+              disabled={hasAccountDuplicate || createCustomerMutation.isPending || updateCustomerMutation.isPending}
+              loading={createCustomerMutation.isPending || updateCustomerMutation.isPending}
+              className="rounded-xl"
+            >
+              {t('customers.saveChanges')}
+            </Button>
           </div>
         </div>
       </Modal>
@@ -871,47 +944,57 @@ export default function Customers() {
       >
         <div className="space-y-6 pt-4">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <FloatingInput label={t('customers.firstName')} value={contactFirstName} onChange={setContactFirstName} />
-            </div>
-            <div>
-              <FloatingInput label={t('customers.lastName')} value={contactLastName} onChange={setContactLastName} required />
-              {errors.contactLastName && <p className="text-red-500 text-[10px] mt-1">{errors.contactLastName}</p>}
-            </div>
+            <FloatingInput
+              label={t('customers.firstName')}
+              value={contactFirstName}
+              onChange={setContactFirstName}
+            />
+            <FloatingInput
+              label={t('customers.lastName')}
+              value={contactLastName}
+              onChange={setContactLastName}
+              required
+              error={errors.contactLastName}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <FloatingInput label={t('customers.emailAddress')} type="email" value={contactEmail} onChange={setContactEmail} required />
-              {errors.contactEmail && <p className="text-red-500 text-[10px] mt-1">{errors.contactEmail}</p>}
-            </div>
-            <div>
-              <FloatingInput label={t('customers.phoneNumber')} type="tel" value={contactPhone} onChange={setContactPhone} required />
-              {errors.contactPhone && <p className="text-red-500 text-[10px] mt-1">{errors.contactPhone}</p>}
-            </div>
+            <FloatingInput
+              label={t('customers.emailAddress')}
+              type="email"
+              value={contactEmail}
+              onChange={(val) => {
+                setContactEmail(val);
+                setContactDuplicateField('email', val);
+              }}
+              required
+              error={contactDuplicateErrors.email || errors.contactEmail}
+            />
+            <FloatingInput
+              label={t('customers.phoneNumber')}
+              type="tel"
+              value={contactPhone}
+              onChange={(val) => {
+                setContactPhone(val);
+                setContactDuplicateField('phone', val);
+              }}
+              required
+              error={contactDuplicateErrors.phone || errors.contactPhone}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <FloatingInput label={t('customers.jobTitle')} value={contactJobTitle} onChange={setContactJobTitle} />
-            </div>
-            <div>
-              <FloatingInput label={t('customers.internalRoleNotes')} value={contactRoleVal} onChange={setContactRoleVal} />
-            </div>
+            <FloatingInput label={t('customers.jobTitle')} value={contactJobTitle} onChange={setContactJobTitle} />
+            <FloatingInput label={t('customers.internalRoleNotes')} value={contactRoleVal} onChange={setContactRoleVal} />
           </div>
 
           <div className="grid grid-cols-2 gap-4 pt-2">
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                {t('customers.associatedAccount')}
-              </label>
-              <Select
-                value={contactCompanyId}
-                onChange={setContactCompanyId}
-                options={accounts.map(a => ({ value: a.id, label: a.name }))}
-                className="w-full h-11"
-              />
-            </div>
+            <FormSelect
+              label={t('customers.associatedAccount')}
+              value={contactCompanyId}
+              onChange={(val: any) => setContactCompanyId(val)}
+              options={accounts.map(a => ({ value: a.id, label: a.name }))}
+            />
             
             <label className="flex items-center gap-3 cursor-pointer group mt-6 pl-4">
               <input
@@ -926,7 +1009,15 @@ export default function Customers() {
 
           <div className="flex justify-end gap-3 pt-4">
             <Button onClick={() => setContactModalOpen(false)} className="rounded-xl">{t('customers.cancel')}</Button>
-            <Button type="primary" onClick={handleSaveContact} className="rounded-xl">{t('customers.saveChanges')}</Button>
+            <Button
+              type="primary"
+              onClick={handleSaveContact}
+              disabled={hasContactDuplicate || createContactMutation.isPending || updateContactMutation.isPending}
+              loading={createContactMutation.isPending || updateContactMutation.isPending}
+              className="rounded-xl"
+            >
+              {t('customers.saveChanges')}
+            </Button>
           </div>
         </div>
       </Modal>

@@ -5,6 +5,7 @@ import { Button, Select, Modal, message, Checkbox } from 'antd';
 import { Building2, User, DollarSign, Calendar, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FloatingInput } from '@/components/FloatingInput';
+import { FormSelect } from '@/components/FormSelect';
 
 interface LeadStepConvertProps {
   lead: any;
@@ -182,26 +183,21 @@ export function LeadStepConvert({
 
           {createOpportunity ? (
             <div className="space-y-3">
-              <FloatingInput label={t('leads.oppAmountReq') || 'Giá trị Cơ hội ước tính (VND) *'} type="number" value={oppAmount} onChange={setOppAmount} required />
-              <FloatingInput label={t('leads.expectedCloseDateReq') || 'Ngày dự kiến chốt (Expected Close Date) *'} type="date" value={expectedCloseDate} onChange={setExpectedCloseDate} required />
+              <FloatingInput label={t('leads.oppAmountReq') || 'Giá trị Cơ hội ước tính (VND)'} type="number" value={oppAmount} onChange={setOppAmount} required />
+              <FloatingInput label={t('leads.expectedCloseDateReq') || 'Ngày dự kiến chốt (Expected Close Date)'} type="date" value={expectedCloseDate} onChange={setExpectedCloseDate} required />
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-muted-fg)]">
-                  {t('leads.serviceType') || 'Loại dịch vụ'}
-                </label>
-                <Select
-                  value={serviceType}
-                  onChange={setServiceType}
-                  options={[
-                    { value: 'WEBSITE', label: t('leads.optionWebsite') || 'Thiết kế Website' },
-                    { value: 'APP_MVP', label: t('leads.optionAppMvp') || 'Xây dựng Mobile App / MVP' },
-                    { value: 'BRANDING', label: t('leads.optionBranding') || 'Bộ nhận diện Thương hiệu' },
-                    { value: 'UI_UX', label: t('leads.optionUiUx') || 'Thiết kế UI/UX' },
-                    { value: 'CUSTOM', label: t('leads.optionCustom') || 'Dịch vụ Tùy chỉnh' },
-                  ]}
-                  className="w-full h-11"
-                />
-              </div>
+              <FormSelect
+                label={t('leads.serviceType') || 'Loại dịch vụ'}
+                value={serviceType}
+                onChange={setServiceType}
+                options={[
+                  { value: 'WEBSITE', label: t('leads.optionWebsite') || 'Thiết kế Website' },
+                  { value: 'APP_MVP', label: t('leads.optionAppMvp') || 'Xây dựng Mobile App / MVP' },
+                  { value: 'BRANDING', label: t('leads.optionBranding') || 'Bộ nhận diện Thương hiệu' },
+                  { value: 'UI_UX', label: t('leads.optionUiUx') || 'Thiết kế UI/UX' },
+                  { value: 'CUSTOM', label: t('leads.optionCustom') || 'Dịch vụ Tùy chỉnh' },
+                ]}
+              />
             </div>
           ) : (
             <div className="p-3 bg-[var(--color-bg-tint)] border border-[var(--color-border)]/40 rounded-xl space-y-1">
